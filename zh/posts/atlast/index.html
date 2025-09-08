@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+  
+    
+      <title>Atlast 手册 | BH1PHL 的 Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/zh/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/zh/"><h1>BH1PHL 的 Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/zh/"><b>Home</b></a>
+      
+         | 
+        <a href="/zh/about"><b>About</b></a>
+      
+         | 
+        <a href="/zh/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/zh/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/zh/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/"><b>English</b></a>
+      
+	
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">Atlast 手册</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2025-09-08</time>
+    
+    
+  </strong>
+  <span> • 19176 words</span>
+  <span> • 39 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/zh/tags/atlast">Atlast</a>, 
+        <a href="/zh/tags/forth">Forth</a>
+    </div>
+  
+</div>
+
+      <div class="content"><p>按：Atlast 是 Autodesk 公司创始人、AutoCAD 原作者之一 John Walker 开发的工具包，用于给普通的应用增加可编程能力。本文是 <a href="https://www.fourmilab.ch/atlast/">Atlast</a> 1.2 版（32 位）<a href="https://www.fourmilab.ch/atlast/atlast.html">手册</a>的中文版，在公有领域发布。</p>
+<hr>
+<p>Atlast 是一项旨在使软件组件技术和开放式架构应用在主流软件市场普及的尝试。它既是一个可轻松集成到现有应用中的软件组件，为其提供现成的宏语言及用户扩展与定制功能；同时也是一个基础平台，能以开放、面向组件的方式构建新应用。</p>
+<p>Atlast 是 Autodesk 穿线式语言应用系统工具包（Autodesk Threaded Language Application System Toolkit）的缩写。该工具包由 John Walker 在 Autodesk 公司期间开发。在 1991 年，Autodesk 公司将 Atlast 的版权归还给了原作者，作者将其在公有领域发布。Atlast 与 Autodesk 只有历史性联系：Autodesk 公司既不为其背书，也未实际使用它，更不对其提供技术支持。</p>
+<p>Atlast 基于 FORTH-83 语言，但进行了大量扩展和修改，以更好地实现其作为开放式可编程应用嵌入式工具包的使命。该实现采用单文件便携式 C 语言编写，已移植到多种计算机和操作系统，包括 MS-DOS、OS/2、Macintosh 及各类 Unix 机器等。Atlast 原生支持浮点数、类 C 字符串、Unix 兼容文件访问，以及丰富的应用嵌入功能。整数为 32 位（64 位版本中为 64 位），标识符最长 127 个字符；提供全面的栈和堆指针检查以辅助调试。编译时可配置仅包含特定应用所需功能，从而节省内存并提升执行速度（当关闭错误检查时）。</p>
+<hr>
+<blockquote>
+<p>“<em>开放、可编程的产品优于甚至能取代设计最精良的封闭式应用程序。通过单个可移植的 C 文件实现的穿线式语言，几乎能让任何现有或新开发的程序变得可编程、可扩展，并向用户增强开放。</em>”<br>
+—— John Walker，1990 年 3 月 9 日</p></blockquote>
+<p>您或许以为我们早已吸取教训。从诞生之初，Autodesk 就将 AutoCAD® 定位为开放可扩展的系统。我们历经五年艰难斗争，才让这一离经叛道的理念最终获胜。如今，几乎所有行业分析人士都认同：AutoCAD 的成功及 Autodesk 取得的成就，其开放架构的贡献远超设计中的任何其他单一因素。</p>
+<p>然而时至今日，我们仍在编写一个又一个封闭程序——用户无法编程，不修改源代码就无法扩展。如果我们基于对市场激励机制的理解，从理性上相信开放系统更优，并通过 AutoCAD 的成功验证了这一假设，那么唯一剩下的问题就是：<strong>为什么?</strong> 为何不让每个程序都成为开放程序？</p>
+<p>答案很简单：因为<strong>这很难</strong>！传统上，编写封闭程序在开发周期的每个阶段都省力得多：设计更简单、代码量更少、文档更精简、测试阶段考量因素大幅减少。此外，封闭产品被认为对支持的要求更低——尽管后文将论证这一假设可能并不成立。</p>
+<h3 id="通往可编程性的痛苦之路">通往可编程性的痛苦之路</h3>
+<p>大多数程序最初都是不可编程的封闭应用，随后艰难地通过引入有限的脚本或宏功能迈向可编程，继而发展出日益复杂的解释型宏语言。这种语言随着用户需求的增长而野蛮生长，缺乏连贯设计。最终，程序或许会配备与 C 等现有语言的绑定接口。</p>
+<p>另一种方案是采用标准语言作为产品的宏语言。在经历了至今仍困扰我们的糟糕菜单宏语言初期尝试后，AutoCAD 选择了整合 David Betz 的 XLISP——一个简单的 Lisp 解释器。Autodesk 随后对其扩展，增加了浮点数支持、大量 Common Lisp 函数，并最终实现了对 AutoCAD 数据库的访问。</p>
+<p>这种方案优势显著：首先，选择标准语言让用户可利用现有书籍和培训资源进行基础学习；而专用宏语言的开发者必须从头创建所有资料。其次，解释型语言的所有程序都以 ASCII 码表示，这使其天然具备跨计算机和操作系统的可移植性。只要解释器能在新系统运行，其支持的程序基本都能正常工作。第三，多数现有语言已发展至设计棱角被磨平的阶段。与沿袭语言设计者思路进行扩展相比，通过零散功能临时堆砌宏语言很容易酿成难以理解的灾难。</p>
+<p>但解释器实在<strong>太慢了</strong>。简单计算每条程序指令所需的额外指令开销就能明白：没有解释器适合严肃计算。当解释器仅作为宏语言使用时，这可能无关紧要。例如早期 AutoLISP® 程序大部分时间都通过 <code>(command)</code> 函数向 AutoCAD 提交命令，程序执行时间完全由 AutoCAD 执行命令的耗时主导，而非 AutoLISP 构建与提交命令的时间。然而当应用需要大量计算时（如 AutoCAD AEC 中的参数化对象计算），AutoLISP 的开销就变成了近乎难以承受的沉重负担。显然的替代方案是提供编译型语言——但这同样存在问题。</p>
+<h2 id="atlast-简介">Atlast 简介</h2>
+<p>Atlast™ 是一套让应用程序具备可编程能力的工具包。它经过精心设计，能轻松集成到现有程序或新开发项目中，只需开发者付出极少显性努力，即可为任何引入它的程序带来可编程性的核心优势。事实上，当你开始在设计周期中“以 Atlast 思维”思考时，很可能会发现自己的程序设计构建方式发生了根本性转变。我逐渐将 Atlast 视为“以程序为食的怪兽”——因为将其纳入程序后，往往能大幅减少原本需要编写的专用代码量，同时使最终应用具备开放性、可扩展性，更易适配事件驱动范式等其他运行环境。</p>
+<p>这种可移植工具包的理念——集成到各类产品中，使其共享统一编程语言——在权衡其优势后显得理所当然。令人惊讶的是，此类方案在业界并不常见。实际上，在我曲折的行业生涯中，Atlast 唯一真正的前身是 1970 年代中期由马里兰大学的 Kern Sibbald 和 Ben Cranston 开发的通用宏包。该方案在 Univac 主机上实现，为文本编辑器、调试器、文件转储器和排版语言等学校里使用的众多工具提供了共享宏语言。尽管 Atlast 在结构和运行方式上与这个解释型字符串语言截然不同，但跨产品宏语言的概念及其价值认知，都可追溯至这一源头。</p>
+<p>那么 Atlast 究竟是什么？本质上&hellip;它就是 Forth 的变体。我深知提及 Forth 会引发强烈排斥反应——其剧烈程度或许仅次于令人闻风丧胆的“LISP”一词。事实上，在初次接触 Forth 十二年后，我才真正开始“领悟”其本质：理解其核心思想、真实优劣势，以及它能提供独特解决方案的场合。PostScript 以及我 1988 年分离 AutoCAD 用户界面与几何引擎的失败尝试（Leto 协议项目），促使我重新审视 Forth。Leto 项目让我意识到：要创建不会无限膨胀、复杂难懂且性能低下的界面，必须在核心嵌入可编程性——提供一组可由用户界面模块组合成高阶操作的原语，通过组件间链接调用。这种可编程性必须以可移植形式实现，且不涉及将用户代码连接到 AutoCAD 核心。</p>
+<p>在寻找类似解决方案时，PostScript 展现出相似的动机与成效。（尽管有人批评其性能，但我认为问题更多源于图形原语执行速度和低效 ASCII 输入，而非语言本身。）PostScript 确实轻松击败了 Impress、DDL 等竞争对手，其成功再次证明：开放可编程产品总能战胜“功能全面”但不可扩展的方案。</p>
+<p>研究 PostScript 必然回溯至其灵感来源——Forth。尽管 Forth 以晦涩著称，且吸引了不少偏执追随者，但其诸多特质使其成为实现应用程序可编程化的理想候选：</p>
+<ul>
+<li>
+<p><strong>小巧</strong>。Forth 最小实现极其精简，因为大部分语言可用少量基础原语自我定义。即便是包含浮点运算、数学函数、字符串、文件 I/O、编译器工具、用户定义对象、数组、调试工具和运行时检测的完整实现，其源代码行数仍仅为内置函数少得多的 Lisp 解释器的五分之一，目标代码体积不足 70%。运行时内存需求通常仅为 Lisp 的 1%-2%，甚至经常远低于 C 等编译语言。令人震惊的是，包含浮点运算、C 语言全部数学函数、文件 I/O 和字符串等功能的解释/编译混合语言，竟能构建成仅 50,964 字节的 DOS 大模式可执行文件。</p>
+</li>
+<li>
+<p><strong>快速</strong>。Forth 作为穿线式语言，程序执行不依赖源码级别的解释，而是简单的内存加载与间接跳转。即便对计算密集型代码，其速度损失通常仅为原生编译器的 5-8 倍。虽然看似代价高昂，但相比逐记号解释的 Lisp 解释器 60-70 倍的性能损失，以及许多应用程序宏语言源码解释器的更差表现，这已属优异。多数场景下，Forth 与编译代码执行速度基本相当——尤其当 Forth 主要作为宏语言调用编译语言编写的应用原语时。</p>
+</li>
+<li>
+<p><strong>可移植</strong>。只要在实现中严格规范内存架构与数据类型（这几乎不影响速度），Forth 程序可实现 100% 跨实现兼容。程序能以 ASCII 文件形式在系统间通用交换。借助 Forth 创建对象的能力，应用中定义的数据类型可以自动继承其底层数据类型的可移植性。</p>
+</li>
+<li>
+<p><strong>易扩展</strong>。得益于极简底层架构（与诸如 Lisp 解释器的复杂结构截然不同），任何合格的 C 程序员稍加培训即可在数小时内为 C 实现的 Forth 添加用 C 编写的原语。这些原语能以全速运行，同时可以用于构建任何 Forth 程序，支持参数化、在定义中使用、循环调用等等。这催生了全新的应用构建方式：不再将结构与原语作为统一过程编程，而是先构建应用专属原语并交互测试，再根据效率、安全性及原语开放程度等考量，用 Forth 或 C 编写的胶水代码组装应用。与传统开发不同，这些决策不是非此即彼的选择，而是允许产品沿连续谱定位，后续根据市场反馈调整。</p>
+</li>
+<li>
+<p><strong>交互性</strong>。虽然 Forth 程序中的大部分会编译成与机器码同等紧凑高效的形态，但只需将用户键盘连接至解释器，即可随时提供直接交互（或反之，不需要直接交互时，可以随时切断连接）。相比传统的“编辑—编译—连接—调试”循环，这种交互性显著加速开发进程。Forth 能在不牺牲执行速度的前提下实现这一点，正是其核心吸引力之一所在。</p>
+</li>
+<li>
+<p><strong>支持多范式操作</strong>。掌握在 Forth 环境中封装产品功能的技巧后，就能构建这样的程序：核心功能（如数据库访问、几何计算、图形结果显示、质量属性计算等）可组合成序列，通过程序调用、命令行交互、菜单选择或对话框按钮触发等任意方式激活。由于任何影响程序的激励都只是执行 Forth 词（word），而这些词可用少量 Forth 文本重定义，设计者可自由选择让实现者、第三方开发者或用户编程控制这些操作模式。</p>
+</li>
+<li>
+<p><strong>出人意料的现代性</strong>。尽管 Forth 看似 64K 计算机和电传打字机时代的遗物，但用现代眼光审视，其诸多概念仍极具前瞻性。例如，很少有语言能像它那样定义新基础数据类型及操作方法。Forth 的多词典机制支持创建默认继承父属性的对象，并以高效方式实现这类结构。</p>
+</li>
+</ul>
+<h3 id="atlast-与-forth">Atlast 与 Forth</h3>
+<p>尽管具备上述优势，Forth 在现代编程环境中仍存在一些显著缺陷。在设计 Atlast 时，我尽可能遵循 Forth 的规范，同时坚持核心目标：创建一个能让开发者从应用程序中剥离可编程性，并将其交由标准模块管理的系统——正如 C 程序员将 I/O 和数学函数求值委托给专用库例程那样。</p>
+<p>Atlast 基于 FORTH-83 标准，并整合了该标准中许多可选的扩展和补充词。掌握标准 Forth 与 Atlast 的基本差异后，用户可借助标准 Forth 的参考手册完成大多数 Atlast 编程任务。FORTH-83 与 Atlast 的主要区别如下：</p>
+<ul>
+<li>
+<p><strong>32 位整数</strong>：在 1990 年推出另一种受限于 16 位整数的语言是不可想象的。我们正快速进入一个时代：绝大多数 C 语言环境已达成共识将 <code>int</code> 类型定为 32 位，应用软件也将迅速适配这一标准。因此 Atlast 中所有整数均为 32 位，不提供 <code>short</code> 类型。需注意这并不与 16 位 <code>int</code> 的 C 环境冲突——例如 Atlast 能完美兼容 MS-DOS 的 Turbo C 和 OS/2 的 Microsoft C，因为所有整数均显式声明为 <code>long</code> 类型。</p>
+</li>
+<li>
+<p><strong>任意长度标识符</strong>：Atlast 消除了 Forth 程序员在内存效率与标识符唯一性之间的权衡困境。标识符长度仅受内置的记号缓冲区大小的限制（默认 128 字符），且所有字符均有效。这一改变使 Atlast 更符合现代语言设计理念。借助底层的 C 运行时环境，ATLAST 的符号名称不放在 Forth 堆内，而放在动态分配的缓冲区中。这简化了堆大小调整（同时改变了某些涉及系统底层结构的细节），不过 Forth 能实现的功能在 Atlast 中均可实现，只是方式略有不同。</p>
+</li>
+<li>
+<p><strong>浮点支持</strong>：提供浮点常量、变量、运算符、输入输出工具及丰富数学函数作为原语（不需要时可在编译时关闭）。与 C 兼容，默认浮点类型为 64 位双精度数。Atlast 对浮点格式的唯一假设是其大小为整型的两倍。未实现 Forth 的有理数功能。</p>
+</li>
+<li>
+<p><strong>增强的字符串支持</strong>：Atlast 的字符串支持层级远高于 Forth。Atlast 采用通用且显式的方式提供字符串字面量，转义字符的语法与 C 语言相同，同时提供与 C 高度一致的字符串处理函数集（<code>STRCPY</code>、<code>STRCAT</code>、<code>STRLEN</code> 等）。循环分配的临时字符串缓冲区机制为交互式输入提供更灵活的字符串操作。字符串仍遵循 C 与 Forth 共用的指针-缓冲区模型，字符串密集型程序的运行速度与 C 或 Forth 版本相当。</p>
+</li>
+<li>
+<p><strong>调试工具</strong>：Atlast 可在编译时根据应用集成需求和产品开发阶段配置不同级别的错误检查与调试支持。开发测试阶段可启用：逐原语跟踪执行的 <code>TRACE</code> 功能、错误时打印活动词栈的 <code>WALKBACK</code>、对求值栈和返回栈的精确溢出检测、以及近乎防弹的指针检查（捕获对堆外区域的存取）。即便在 MS-DOS 等无保护环境中，能绕过检查造成破坏的错误也极为罕见。结合 Atlast 的交互特性，形成了友好的调试环境。所有运行时检查均可适时关闭以降低开销。</p>
+</li>
+<li>
+<p><strong>遵循 C/Unix 文件输入输出规范</strong>：Forth 诞生于标准化操作系统时代之前，早期其本身就是许多小微型机的操作系统。如今 Unix 文件系统接口已成为事实工业标准，Atlast 遵循这一模型：<code>FILE</code> 变量对应 C 的文件描述符，<code>FOPEN</code>、<code>FCLOSE</code>、<code>FREAD</code> 及 <code>FSEEK</code> 等原语用法与 C 一致。Atlast 提供行级 I/O 支持，可以像 AutoCAD 一样自动识别各类行尾格式的 ASCII 文件。</p>
+</li>
+<li>
+<p><strong>深度嵌入支持</strong>：与 Forth 不同，Atlast 的设计初衷是隐形地嵌入到应用程序中。除了为可编程性和扩展性提供通用框架外，应用程序仍保持其原有外观，而非呈现 Atlast 或 Forth 的特征。因此，Atlast 并不像 Forth 系统的主循环那样“掌控全局”，而是作为从属角色，由应用程序在适当时机调用。实现这一目标需要反转典型 Forth 系统的控制结构，并提供一套完整的 C 语言可调用接口，供应用程序与 Atlast 交互。此外，系统还提供了有助于根据宿主程序精确需求定制 Atlast 的原语。开发者可以监控内存使用情况，记录哪些原语被使用或闲置，并配置出完美契合宿主程序需求及运行环境的定制版 Atlast。</p>
+</li>
+</ul>
+<h3 id="关于后续内容的说明">关于后续内容的说明</h3>
+<p>本文后续将通过大量 Atlast 代码示例进行说明。具备 Forth 基础的读者结合文末的原语定义应能理解示例内容。若初次接触 Forth，示例可能看似天书。不必担忧——掌握要领后（或参考优秀 Forth 书籍，如《<a href="https://archive.org/details/mastering-Forth-by-anderson-anita-tracy-martin-z-lib.org">Mastering Forth</a>》），自会豁然开朗。</p>
+<p>在此之前，请勿因示例却步。您可先略读这些代码，权当已理解其意。您仍能领略该 Atlast 的特质、其与应用程序的整合方式以及可实现的功能。我曾幻想能让大脑和手指通宵工作，次日清晨便能在计算机上看到一本独立成册的完整 Atlast 参考手册。可惜我缺乏夜间批量处理的能力，目前也无暇在黄金时段完成这项工程。现决定以这种非常规的残缺形式提供文档，旨在向能理解要义的读者传递核心内容，而非等到我能完成上百页——实则大部分重复 Forth 参考手册内容——的完整文档后再行发布。</p>
+<h2 id="交互式-atlast">交互式 Atlast</h2>
+<p>尽管 Atlast 的设计初衷是嵌入应用程序中，但为了学习它本身、试验小程序或将其用作桌面计算器，拥有一个独立的交互式版本非常方便。Atlast 源码包中包含一个主程序 atlmain.c，可与 Atlast 连接生成此类工具。该可执行文件在 Unix 下名为 <code>atlast</code>，在 MS-DOS 下为 <code>atlast.exe</code>，并启用了所有错误检查功能以辅助程序开发。</p>
+<p>要体验 Atlast，请运行交互程序：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">atlast
+</span></span></code></pre></div><p>当 Atlast 处于解释状态时，您会看到提示符：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">-&gt;</span>
+</span></span></code></pre></div><p>例如，您可以加载 Atlast 并尝试 π 的不同有理数近似值：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">%</span> <span class="nf">atlast</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">22</span><span class="kt">.0</span> <span class="mi">7</span><span class="kt">.0</span> <span class="k">f/ f.
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">3</span><span class="kt">.14286</span> <span class="nf">-&gt;</span> <span class="mi">377</span><span class="kt">.0</span> <span class="mi">120</span><span class="kt">.0</span> <span class="k">f/ f.
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">3</span><span class="kt">.14167</span> <span class="nf">-&gt;</span> <span class="nf">^D</span>
+</span></span><span class="line"><span class="cl"><span class="nf">%</span>
+</span></span></code></pre></div><p>注意：Atlast 输出后不会自动换行，如需换行请使用 <code>CR</code> 原语。与其手动打印每个数并与 π 对比，我们可以定义 π 的常量值和一个新词（或函数），用于计算与 π 的误差并打印残差。示例如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">%</span> <span class="nf">atlast</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">1</span><span class="kt">.0</span> <span class="nf">atan</span> <span class="mi">4</span><span class="kt">.0</span> <span class="k">f* 2constant </span><span class="nf">pi</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="kn">:</span> <span class="nc">pierr</span>
+</span></span><span class="line"><span class="cl"><span class="nf">:&gt;</span>   <span class="nf">pi</span> <span class="k">f- fabs f. cr
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">:&gt;</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">-&gt;</span> <span class="mi">3</span><span class="kt">.0</span> <span class="nf">pierr</span>
+</span></span><span class="line"><span class="cl"><span class="kt">.141593</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">22</span><span class="kt">.0</span> <span class="mi">7</span><span class="kt">.0</span> <span class="k">f/ </span><span class="nf">pierr</span>
+</span></span><span class="line"><span class="cl"><span class="mi">0</span><span class="kt">.00126449</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">355</span><span class="kt">.0</span> <span class="mi">113</span><span class="kt">.0</span> <span class="k">f/ </span><span class="nf">pierr</span>
+</span></span><span class="line"><span class="cl"><span class="mi">2</span><span class="kt">.66764</span><span class="nf">e-07</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="nf">^D</span> 
+</span></span><span class="line"><span class="cl"><span class="nf">%</span>  
+</span></span></code></pre></div><p>我们还可以将文件中的程序加载到交互式 Atlast 中。假设要研究莱布尼茨 1673 年提出的著名级数（该级数以极其缓慢的速度收敛于 π）：</p>
+<p>π/4 = 1 − 1/3 + 1/5 − 1/7 + 1/9 − …</p>
+<p>用文本编辑器创建包含以下内容的文件：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="c1">\   Series approximations of Pi
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">\   Leibniz: pi/4 = 1 - 1/3 + 1/5 - 1/7 ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">leibniz</span>      <span class="c1">( n -- fpi )</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">1</span><span class="kt">.0</span> <span class="mi">1</span><span class="kt">.0</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">4</span> <span class="k">pick </span><span class="mi">1</span> <span class="k">do
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="mi">2</span><span class="kt">.0</span> <span class="k">f+ </span> <span class="c1">\ denom += 2
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">2dup
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="k">i </span><span class="mi">1</span> <span class="k">and if
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>            <span class="k">fnegate
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="k">then
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="mi">1</span><span class="kt">.0</span> <span class="k">2swap f/
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="k">2rot f+
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="k">2swap
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="k">loop
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="k">2drop
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="k">rot drop
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="mi">4</span><span class="kt">.0</span> <span class="k">f*
+</span></span></span><span class="line"><span class="cl"><span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">\   Reference value of Pi
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="mi">1</span><span class="kt">.0</span> <span class="nf">atan</span> <span class="mi">4</span><span class="kt">.0</span> <span class="k">f* 2constant </span><span class="nf">pi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">\ Calculate and print error
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">pierr</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">pi</span> <span class="k">f- fabs f. cr
+</span></span></span><span class="line"><span class="cl"><span class="k">;
+</span></span></span></code></pre></div><p>若这段代码看似天书，别担心！回想您初次接触 Lisp 或 C 程序时的感受。若想在学习语言前解析部分结构，可参考手册末尾的 Atlast 原语定义，记住 Atlast 是逆波兰表达式的栈语言，且 “<code>\</code>” 是行注释符，“<code>(</code>” 会忽略后续文本直到 “<code>)</code>”。</p>
+<p>将文件保存为 <code>leibniz.atl</code> 后，可通过命令加载到交互式 Atlast：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">atlast -ileibniz
+</span></span></code></pre></div><p>Atlast 会编译文件中的程序，报告错误，若无错误则进入交互解释模式。<code>leibniz</code> 根据栈顶数字执行指定次数的迭代，并将 π 的级数逼近结果留在栈顶。</p>
+<p>测试示例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">%</span> <span class="nf">atlast</span> <span class="nf">-ileibniz</span>
+</span></span><span class="line"><span class="cl"><span class="mi">10</span> <span class="nf">leibniz</span> <span class="k">f.
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">3</span><span class="kt">.04184</span> <span class="nf">-&gt;</span> <span class="mi">100</span> <span class="nf">leibniz</span> <span class="k">f.
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">3</span><span class="kt">.13159</span> <span class="nf">-&gt;</span> <span class="mi">1000</span> <span class="nf">leibniz</span> <span class="k">f.
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">3</span><span class="kt">.14059</span> <span class="nf">-&gt;</span> <span class="mi">10000</span> <span class="nf">leibniz</span> <span class="k">f.
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">3</span><span class="kt">.14149</span> <span class="nf">-&gt;</span>
+</span></span></code></pre></div><p>可见收敛速度确实缓慢。由于支持即时定义新编译词，我们可以临时编写一个打印每 10,000 次迭代结果及误差的程序：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="kn">:</span> <span class="nc">itest</span> <span class="mi">0</span> <span class="k">do i 1+ </span><span class="mi">10000</span> <span class="k">* dup .
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">:&gt;</span> <span class="nf">leibniz</span> <span class="k">2dup f. </span><span class="nf">pierr</span>  <span class="k">loop ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">-&gt;</span> <span class="mi">5</span> <span class="nf">itest</span>
+</span></span><span class="line"><span class="cl"><span class="mi">10000</span> <span class="mi">3</span><span class="kt">.14149</span> <span class="mi">0</span><span class="kt">.0001</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">20000</span> <span class="mi">3</span><span class="kt">.14154</span> <span class="mi">5</span><span class="nf">e-05</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">30000</span> <span class="mi">3</span><span class="kt">.14156</span> <span class="mi">3</span><span class="kt">.33333</span><span class="nf">e-05</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">40000</span> <span class="mi">3</span><span class="kt">.14157</span> <span class="mi">2</span><span class="kt">.5</span><span class="nf">e-05</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">50000</span> <span class="mi">3</span><span class="kt">.14157</span> <span class="mi">2</span><span class="nf">e-05</span> 
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="nf">^D</span>
+</span></span><span class="line"><span class="cl"><span class="nf">%</span>
+</span></span></code></pre></div><p>（即使不理解代码）可以看到我们无缝混合了已经编译的代码、解释执行代码，以及即时定义并编译的函数。</p>
+<p>通过命令行指定文件名可直接以批处理模式运行 Atlast 程序。例如在 <code>leibniz.atl</code> 末尾添加：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="c1">\   Run iteration vs. error report
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">itest</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">0</span> <span class="k">do </span>
+</span></span><span class="line"><span class="cl">        <span class="k">i 1+ </span><span class="mi">10000</span> <span class="k">* dup . </span><span class="nf">leibniz</span>
+</span></span><span class="line"><span class="cl">        <span class="k">2dup f. </span><span class="nf">pierr</span>
+</span></span><span class="line"><span class="cl">    <span class="k">loop
+</span></span></span><span class="line"><span class="cl"><span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>
+</span></span><span class="line"><span class="cl"><span class="mi">10</span> <span class="nf">itest</span>  
+</span></span></code></pre></div><p>另存为 <code>leibbat.atl</code> 后，批处理执行结果如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">%</span> <span class="nf">atlast</span> <span class="nf">leibbat</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">10000</span> <span class="mi">3</span><span class="kt">.14149</span> <span class="mi">0</span><span class="kt">.0001</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">20000</span> <span class="mi">3</span><span class="kt">.14154</span> <span class="mi">5</span><span class="nf">e-05</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">30000</span> <span class="mi">3</span><span class="kt">.14156</span> <span class="mi">3</span><span class="kt">.33333</span><span class="nf">e-05</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">40000</span> <span class="mi">3</span><span class="kt">.14157</span> <span class="mi">2</span><span class="kt">.5</span><span class="nf">e-05</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">50000</span> <span class="mi">3</span><span class="kt">.14157</span> <span class="mi">2</span><span class="nf">e-05</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">60000</span> <span class="mi">3</span><span class="kt">.14158</span> <span class="mi">1</span><span class="kt">.66667</span><span class="nf">e-05</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">70000</span> <span class="mi">3</span><span class="kt">.14158</span> <span class="mi">1</span><span class="kt">.42857</span><span class="nf">e-05</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">80000</span> <span class="mi">3</span><span class="kt">.14158</span> <span class="mi">1</span><span class="kt">.25</span><span class="nf">e-05</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">90000</span> <span class="mi">3</span><span class="kt">.14158</span> <span class="mi">1</span><span class="kt">.11111</span><span class="nf">e-05</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">100000</span> <span class="mi">3</span><span class="kt">.14158</span> <span class="mi">1</span><span class="nf">e-05</span> 
+</span></span><span class="line"><span class="cl"><span class="nf">%</span> 
+</span></span></code></pre></div><p>（显然这不是计算 π 的高效方法！若需精确计算 π，可尝试以下田村—金田快速 π 算法：）</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="c1">\   Tamura-Kanada fast Pi algorithm
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="k">2variable </span><span class="nf">a</span>
+</span></span><span class="line"><span class="cl"><span class="k">2variable </span><span class="nf">b</span>
+</span></span><span class="line"><span class="cl"><span class="k">2variable </span><span class="nf">c</span>
+</span></span><span class="line"><span class="cl"><span class="k">2variable </span><span class="nf">y</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">tamura-kanada</span> <span class="c1">( n -- fpi )</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">1</span><span class="kt">.0</span> <span class="nf">a</span> <span class="k">2!
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="mi">1</span><span class="kt">.0</span> <span class="mi">2</span><span class="kt">.0</span> <span class="nf">sqrt</span> <span class="k">f/ </span><span class="nf">b</span> <span class="k">2!
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="mi">0</span><span class="kt">.25</span> <span class="nf">c</span> <span class="k">2!
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="mi">1</span><span class="kt">.0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">rot </span><span class="mi">1</span> <span class="k">do
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="nf">a</span> <span class="k">2@ 2dup </span><span class="nf">y</span> <span class="k">2!
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="nf">b</span> <span class="k">2@ f+ </span><span class="mi">2</span><span class="kt">.0</span> <span class="k">f/ </span><span class="nf">a</span> <span class="k">2!
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="nf">b</span> <span class="k">2@ </span><span class="nf">y</span> <span class="k">2@ f* </span><span class="nf">sqrt</span> <span class="nf">b</span> <span class="k">2!
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="nf">c</span> <span class="k">2@ 2over </span><span class="nf">a</span> <span class="k">2@ </span><span class="nf">y</span> <span class="k">2@ f-
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="k">2dup f* f* f- </span><span class="nf">c</span> <span class="k">2! </span><span class="mi">2</span><span class="kt">.0</span> <span class="k">f*
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="k">loop
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="k">2drop
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="nf">a</span> <span class="k">2@ </span><span class="nf">b</span> <span class="k">2@ f+ 2dup f* </span><span class="mi">4</span><span class="kt">.0</span> <span class="nf">c</span> <span class="k">2@ f* f/
+</span></span></span><span class="line"><span class="cl"><span class="k">;
+</span></span></span></code></pre></div><h2 id="调试">调试</h2>
+<p>作为一门交互式语言，Atlast 自然提供了调试支持。您可以通过启用 <code>TRACE</code> 功能逐词追踪程序执行过程。要开启追踪，请输入以下命令：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">1</span> <span class="nf">trace</span>
+</span></span></code></pre></div><p>如果您已加载如下阶乘函数定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">factorial</span>
+</span></span><span class="line"><span class="cl">        <span class="k">dup 0= if
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>           <span class="k">drop </span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>           <span class="k">dup 1- </span><span class="nf">factorial</span> <span class="k">*
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="k">then
+</span></span></span><span class="line"><span class="cl"><span class="k">;
+</span></span></span></code></pre></div><p>并在追踪模式下执行，您将看到如下输出：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">%</span> <span class="nf">atlast</span> <span class="nf">-ifact</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">1</span> <span class="nf">trace</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">3</span> <span class="nf">factorial</span> <span class="k">.
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="nf">FACTORIAL</span> 
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">DUP </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">0= </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="nf">?BRANCH</span> 
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">DUP </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">1- </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="nf">FACTORIAL</span> 
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">DUP </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">0= </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="nf">?BRANCH</span> 
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">DUP </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">1- </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="nf">FACTORIAL</span> 
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">DUP </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">0= </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="nf">?BRANCH</span> 
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">DUP </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">1- </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="nf">FACTORIAL</span> 
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">DUP </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">0= </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="nf">?BRANCH</span> 
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">DROP </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="nf">(LIT)</span> <span class="mi">1</span> 
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="nf">BRANCH</span> 
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">EXIT </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">* </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">EXIT </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">* </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">EXIT </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">* </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">EXIT </span>
+</span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">. </span><span class="mi">6</span> <span class="nf">-&gt;</span> <span class="nf">^D</span>
+</span></span><span class="line"><span class="cl"><span class="nf">%</span>
+</span></span></code></pre></div><p>可以用“<code>0 trace</code>”关闭追踪功能。</p>
+<p>当错误发生时，系统通常会打印回溯信息，列出从错误发生点开始的活跃词，沿着嵌套层级直至最外层的解释层级。若配置了 <code>WALKBACK</code> 包，默认会打印回溯信息。用“<code>0 walkback</code>”禁用该功能。以下是错误回溯报告的示例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">%</span> <span class="nf">atlast</span> <span class="nf">-ileibniz</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="nf">leibniz</span>
+</span></span><span class="line"><span class="cl"><span class="nf">Stack</span> <span class="nf">underflow.</span>
+</span></span><span class="line"><span class="cl"><span class="nf">Walkback:</span>
+</span></span><span class="line"><span class="cl">   <span class="k">ROT
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="nf">LEIBNIZ</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span>
+</span></span></code></pre></div><h2 id="集成-atlast">集成 Atlast</h2>
+<p>与大多数语言不同，Atlast 并非作为主程序构建，而是一个子例程。您可以在应用程序中随时随地调用它，根据需要提供或多或少的可编程性。在深入探讨应用程序与 Atlast 的接口细节前，通过示例展示一个能访问前述所有 Atlast 功能的简单程序很有意义。以下主程序与 Atlast 目标模块连接后，即构成一个功能完整的交互式 Atlast 解释器。它虽缺少交互式 Atlast 的增强功能（如控制台中断处理、批处理模式、加载定义文件、编译状态提示等），但通过输入重定向提交的任何能被交互式 Atlast 运行的程序，该程序均可执行。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;atlast.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">t</span><span class="p">[</span><span class="mi">132</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">atl_init</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="nf">printf</span><span class="p">(</span><span class="s">&#34;-&gt; &#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">           <span class="nf">fgets</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">132</span><span class="p">,</span> <span class="n">stdin</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">atl_eval</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="配置-atlastc">配置 atlast.c</h3>
+<p>集成 Atlast 的第一步是构建适合与应用程序链接的 <code>atlast.c</code> 版本。为此需选择 Atlast 的构建模式，这些模式通常通过 C 编译器命令行提供的编译时定义指定。除非单独配置 Atlast 子包，否则将构建全功能版本。此时只需关注以下编译时 C 预处理器宏的设置：</p>
+<ul>
+<li>
+<p><code>ALIGNMENT</code><br>
+若双精度浮点数需按 8 字节边界对齐内存，则定义 <code>ALIGNMENT</code>。未定义时，Atlast 默认 4 字节对齐足够。（<code>atldef.h</code> 中的条件代码会尝试在需要对齐的处理器上定义ALIGNMENT，但可能遗漏某些机型。）</p>
+</li>
+<li>
+<p><code>COPYRIGHT</code><br>
+若需将 Atlast 的公有领域声明嵌入二进制程序，则定义 <code>COPYRIGHT</code>。否则不定义以节省空间。</p>
+</li>
+<li>
+<p><code>EXPORT</code><br>
+若仅将 Atlast 作为宏引擎调用且无需访问其内部数据结构，则保持 <code>EXPORT</code> 未定义。若需添加应用专用原语（多数情况如此），则定义 <code>EXPORT</code> 并在所有需访问的模块中包含<code>atldef.h</code> 文件。此时栈、返回栈和堆指针将转为外部可见，Atlast 内部符号名将重命名为以 <code>atl_</code> 开头的特殊名称以避免冲突，同时启用额外接口代码使原语能完全访问Atlast运行时环境。</p>
+</li>
+<li>
+<p><code>MEMSTAT</code><br>
+若需启用运行时内存使用监控（通过 <code>MEMSTAT</code> 原语或 <code>atl_memstat()</code> 函数访问），则定义 <code>MEMSTAT</code>。</p>
+</li>
+<li>
+<p><code>NOMEMCHECK</code><br>
+定义 <code>NOMEMCHECK</code> 可禁用所有运行时栈、堆和指针检查。这将显著提升执行速度，但仅应在确保所有错误已排除的封闭应用中启用。启用 <code>NOMEMCHECK</code> 后，Atlast 程序的安全性将不高于普通 C 程序。</p>
+</li>
+<li>
+<p><code>READONLYSTRINGS</code><br>
+启用 <code>WORDSUSED</code> 包时，Atlast 会追踪程序中使用的原语和用户定义词，以便确定所需包及测试覆盖率。此功能通过修改词定义标志实现，对内置原语需修改 C 常量字符串。若C实现不允许此操作，则定义 <code>READONLYSTRINGS</code> 将预定义词复制到可修改的动态分配缓冲区中。注意此功能仅在启用 <code>WORDSUSED</code> 包时生效。</p>
+</li>
+</ul>
+<p>在 MS-DOS 或 16 位 OS/2 上构建 Atlast 时，必须使用大模式（32 位数据地址）。Atlast 将所有整数视为 32 位并假定数据指针长度至少为此值。尝试用 16 位数据地址构建将引发违反设计假设的编译错误。</p>
+<h3 id="初始化atl_init">初始化：<code>atl_init()</code></h3>
+<p>在应用程序调用其他 Atlast 功能前，必须调用 <code>atl_init()</code> 初始化动态存储并创建用于求值的数据结构。</p>
+<p>使用默认内存配置初始化 Atlast 只需调用：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">atl_init</span><span class="p">();</span>
+</span></span></code></pre></div><p>此时将创建栈、返回栈、堆和初始词典，Atlast 进入可执行状态。通过在调用 <code>atl_init()</code> 前设置以下变量（定义于 <code>atlast.h</code> 中）可调整内存分配大小：</p>
+<ul>
+<li>
+<p><code>atl_stklen</code>
+求值（数据）栈长度，以 4 字节栈项为单位。默认 100。</p>
+</li>
+<li>
+<p><code>atl_rstklen</code>
+返回栈长度，以 4 字节返回栈指针项为单位。默认 100。</p>
+</li>
+<li>
+<p><code>atl_heaplen</code>
+堆长度，以 4 字节栈项为单位。默认 1000。</p>
+</li>
+<li>
+<p><code>atl_ltempstr</code>
+临时字符串缓冲区长度，用于解释模式下输入的字符串及某些原语创建的字符串。默认 256。</p>
+</li>
+<li>
+<p><code>atl_ntempstr</code>
+临时字符串数量。临时字符串循环使用，若未保存旧结果时超出此数量，最早的结果将被覆盖。默认 4。</p>
+</li>
+</ul>
+<p>应用程序可通过 <code>PROLOGUE</code> 包允许加载的 Atlast 程序覆盖默认内存分配设置。深度嵌入式应用（如烧录至 ROM 的程序）可将 Atlast 动态存储区分配给预定义内存区域而非 <code>malloc()</code> 申请。若在调用 <code>atl_init()</code> 前将某区域基地址指针设为非零值，则使用指定地址且不分配缓冲区。使用此功能时请仔细阅读 <code>atlast.c</code> 中 <code>atl_init()</code> 的代码，确保提供的内存区域符合各长度单元要求。特别注意系统状态字、临时字符串缓冲区和堆会被合并为连续内存区域。</p>
+<h3 id="求值atl_eval">求值：<code>atl_eval()</code></h3>
+<p>要对包含 Atlast 程序文本的字符串进行求值，调用：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">stat</span> <span class="o">=</span> <span class="nf">atl_eval</span><span class="p">(</span><span class="n">string</span><span class="p">);</span>
+</span></span></code></pre></div><p>其中 <code>string</code> 是待求值的字符串，<code>stat</code> 为整数，表示求值器的状态。状态码的助记符定义于 <code>atlast.h</code> 中，其含义如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>状态码</th>
+          <th>意义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>ATL_SNORM</code></td>
+          <td>无错误</td>
+      </tr>
+      <tr>
+          <td><code>ATL_STACKOVER</code></td>
+          <td>栈溢出</td>
+      </tr>
+      <tr>
+          <td><code>ATL_STACKUNDER</code></td>
+          <td>栈下溢</td>
+      </tr>
+      <tr>
+          <td><code>ATL_RSTACKOVER</code></td>
+          <td>返回栈溢出</td>
+      </tr>
+      <tr>
+          <td><code>ATL_RSTACKUNDER</code></td>
+          <td>返回栈下溢</td>
+      </tr>
+      <tr>
+          <td><code>ATL_HEAPOVER</code></td>
+          <td>堆溢出</td>
+      </tr>
+      <tr>
+          <td><code>ATL_BADPOINTER</code></td>
+          <td>无效堆指针</td>
+      </tr>
+      <tr>
+          <td><code>ATL_UNDEFINED</code></td>
+          <td>未定义词</td>
+      </tr>
+      <tr>
+          <td><code>ATL_FORGETPROT</code></td>
+          <td>尝试 <code>FORGET</code> 受保护符号</td>
+      </tr>
+      <tr>
+          <td><code>ATL_NOTINDEF</code></td>
+          <td>只能在编译模式下使用的词在定义之外出现</td>
+      </tr>
+      <tr>
+          <td><code>ATL_RUNSTRING</code></td>
+          <td>字符串没有结束符</td>
+      </tr>
+      <tr>
+          <td><code>ATL_RUNCOMM</code></td>
+          <td>文件中的注释没有结束符</td>
+      </tr>
+      <tr>
+          <td><code>ATL_BREAK</code></td>
+          <td>接收到异步中断信号</td>
+      </tr>
+      <tr>
+          <td><code>ATL_DIVZERO</code></td>
+          <td>尝试除以零</td>
+      </tr>
+  </tbody>
+</table>
+<p>除这些状态码外，调用 <code>atl_eval()</code> 的程序可通过检查外部变量确定 Atlast 的当前状态。若正在等待以“<code>)</code>”终止的多行注释，<code>atl_comment</code> 非零。若当前有待处理的词定义（冒号定义），变量 <code>state</code>（仅在定义了 <code>EXPORT</code> 且包含 <code>atldef.h</code> 时可访问）非零。</p>
+<h3 id="加载文件atl_load">加载文件：<code>atl_load()</code></h3>
+<p>要加载包含 Atlast 程序文本的整个文件，调用：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">stat</span> <span class="o">=</span> <span class="nf">atl_load</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+</span></span></code></pre></div><p>其中 <code>file</code> 为 C 文件描述符（类型 <code>FILE *</code> ），指向已打开且位于待加载程序首字节前的文件。程序被读取后，<code>stat</code> 为该文件加载并执行 Atlast 程序的结果状态。状态码与上述 <code>atl_eval()</code> 函数相同。<code>atl_load()</code> 函数可读取 AutoCAD 能够识别的任何行尾约定的文本文件；任何 Atlast 实现均可加载这些格式的 ASCII 文件。若宿主系统要求在文件打开时标识二进制文件，需通过 <code>atl_load()</code> 加载的 Atlast 程序文件（即使只包含 ASCII 文本）也应以二进制模式打开。二进制模式能正确解析 AutoCAD 接受的所有行尾分隔符。</p>
+<p><code>atl_load()</code> 函数使用 <code>atl_mark()</code> 保存加载前的运行时状态。若发生错误，函数尝试通过执行 <code>atl_unwind()</code> 恢复原状。若加载的文件包含修改堆上既有对象的解释模式代码，加载过程中出错时这些更改不会被撤销。</p>
+<h3 id="标记atl_mark">标记：<code>atl_mark()</code></h3>
+<p>应用程序可能需执行一系列可能导致运行时求值错误的 Atlast 操作。此时，程序通常希望撤销出错程序进行的定义。为在运行高风险 Atlast 程序前标记当前位置，使用：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">atl_statemark</span> <span class="n">mk</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nf">atl_mark</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mk</span><span class="p">);</span>
+</span></span></code></pre></div><p>栈、返回栈、堆和词典的当前位置将保存于 <code>atl_statemark</code> 结构中。后续的 <code>atl_unwind()</code> 调用会将各动态存储区域回滚至 <code>atl_mark</code> 标记的位置。</p>
+<h3 id="撤销更改atl_unwind">撤销更改：<code>atl_unwind()</code></h3>
+<p>要回滚栈、返回栈、堆分配和词典的所有更改至通过 <code>atl_mark()</code> 保存在 <code>atl_statemark</code> 类型对象中的状态，调用：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">//atl_statemark mk;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">atl_unwind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mk</span><span class="p">);</span>
+</span></span></code></pre></div><p>所有存储区域的分配指针会被重置为调用 <code>atl_mark()</code> 时的位置，但通过指针在 <code>atl_mark()</code> 之后对堆变量进行的存储更改不会撤销。</p>
+<h3 id="异步中断atl_break">异步中断：<code>atl_break()</code></h3>
+<p>Atlast 的交互式应用必须允许用户跳出无限循环或其他意外触发的长时间计算。若系统支持响应用户中断请求，Atlast 可通过 <code>atl_break()</code> 机制终止其控制下的程序执行。</p>
+<p>若编译时定义了 <code>BREAK</code>，则启用 <code>atl_break()</code> 函数及异步中断支持。当应用收到异步中断时，应调用 <code>atl_break()</code> 通知当前运行的 Atlast 程序中断信号。若信号触发时无 Atlast 程序运行，调用无害。应用中处理中断的例程应始终调用 <code>atl_break()</code>，而非尝试判断 Atlast 是否活跃。若中断信号触发时有 Atlast 程序正在执行，宿主应用无论是通过 <code>atl_eval()</code>、<code>atl_load()</code> 还是 <code>atl_exec()</code> 调用 Atlast 程序，都将通过返回的 <code>ATL_BREAK</code> 状态获知异常终止。</p>
+<p><code>atl_break()</code> 函数仅设置一个由 Atlast 解释器内循环检查的标志，并不实际终止执行。因此可安全地在任意时刻调用，甚至可在硬件中断服务例程中调用。</p>
+<h3 id="显示内存状态atl_memstat">显示内存状态：<code>atl_memstat()</code></h3>
+<p>在优化集成 Atlast 的应用并准备发布的最后阶段，可能需要调整内存分配参数以消除浪费空间，同时为发布后的用户扩展预留合理余量。明智设置参数需了解应用的基础内存使用情况。若编译 <code>atlast.c</code> 时定义了 <code>MEMSTAT</code>，可通过执行 Atlast 程序内的 <code>MEMSTAT</code> 原语或应用中在适当时机调用 <code>atl_memstat()</code> 函数获取该信息。两种方式均会向标准输出流写入类似下例的内存使用报告：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl">                 <span class="nf">Memory</span> <span class="nf">Usage</span> <span class="nf">Summary</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">                  <span class="nf">Current</span>  <span class="nf">Maximum</span>  <span class="nf">Items</span>   <span class="nf">Percent</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">Memory</span> <span class="nf">Area</span>    <span class="nf">usage</span>    <span class="nf">used</span>  <span class="nf">allocated</span> <span class="nf">in</span> <span class="nf">use</span> 
+</span></span><span class="line"><span class="cl">     <span class="nf">Stack</span>            <span class="mi">0</span>        <span class="mi">9</span>     <span class="mi">100</span>       <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">     <span class="nf">Return</span> <span class="nf">stack</span>     <span class="mi">0</span>        <span class="mi">4</span>     <span class="mi">100</span>       <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">     <span class="nf">Heap</span>           <span class="mi">227</span>      <span class="mi">227</span>    <span class="mi">1000</span>      <span class="mi">22</span>
+</span></span></code></pre></div><hr>
+<p><strong>注意：使用下面的函数前，必须用 <code>EXPORT</code> 定义编译 <code>atlast.c</code> 及调用它们的模块，并在调用文件中包含头文件 <code>atldef.h</code>。</strong></p>
+<h3 id="查找词atl_lookup">查找词：<code>atl_lookup()</code></h3>
+<p>应用可通过以下调用按解释器相同的搜索顺序查询 Atlast 词典中的词：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">dictword</span> <span class="o">*</span><span class="n">dw</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">dw</span> <span class="o">=</span> <span class="nf">atl_lookup</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+</span></span></code></pre></div><p>由于 Atlast 匹配名称时不区分字母大小写，<code>name</code> 可包含任意大小写组合。若词已定义，则返回其词典条目。<code>dictword</code> 结构定义于 <code>atldef.h</code> 中。若词未定义，则返回 NULL。一个词可能存在多重定义；此时仅返回最近的定义（活跃定义）。仅凭 <code>atl_lookup()</code> 无法定位被隐藏的定义。</p>
+<h3 id="访问词的主体部分atl_body">访问词的主体部分：<code>atl_body()</code></h3>
+<p>Atlast 词定义由多个组件构成，包括其名称和实现该词的 C 编码方法。对于与 Atlast 交互的应用程序而言，最值得关注的是词的<strong>主体部分</strong>。对于变量或常量，主体部分即存储其值的空间。要获取由 <code>atl_lookup()</code> 返回或通过 <code>atl_vardef()</code> 创建的词典项（见下文）的主体部分的地址（体地址），可使用 <code>atl_body()</code>。其调用方式如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">dictword</span> <span class="o">*</span><span class="n">dw</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">stackitem</span> <span class="o">*</span><span class="n">si</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">si</span> <span class="o">=</span> <span class="nf">atl_body</span><span class="p">(</span><span class="n">dw</span><span class="p">);</span>
+</span></span></code></pre></div><p>该调用将词典项 <code>dw</code> 的体地址存入变量 <code>si</code>。若需在 Atlast 词的主体部分中存储非默认类型 <code>stackitem</code>（其定义为 <code>long</code>）的数据，需将指针转换为正确的指针类型。下文<code>atl_vardef()</code> 的示例展示了如何使用 <code>atl_body()</code> 创建并初始化浮点变量。</p>
+<h3 id="定义变量atl_vardef">定义变量：<code>atl_vardef()</code></h3>
+<p>共享变量是实现宿主应用与 Atlast 间交互的便捷方式。通过使应用的状态对 Atlast 程序可见且可修改，程序既能获取所需信息，又能指导应用程序行为。共享变量是由应用程序定义的 Atlast 变量，其地址通过词典被 Atlast 知晓，同时通过创建时返回的指针被应用程序掌握。创建共享变量的调用如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">dictword</span> <span class="o">*</span><span class="n">var</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">var</span> <span class="o">=</span> <span class="nf">atl_vardef</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+</span></span></code></pre></div><p>其中 <code>name</code> 为指向变量名称的字符指针，<code>size</code> 为指定变量字节大小的整数。注意：创建标准 Atlast 整型变量时 <code>size</code> 应为 4；浮点变量则为 8 字节。变量存储空间分配在 Atlast 堆上。若堆空间不足则返回 <code>NULL</code>，否则返回变量词典条目的地址。需注意：词典条目并非变量值的存储地址，获取后者需调用前述 <code>atl_body()</code>。</p>
+<p>例如，以下代码创建了一个存储 π 的粗略近似值的浮点变量：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">dictword</span> <span class="o">*</span><span class="n">pi</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">pi</span> <span class="o">=</span> <span class="nf">atl_vardef</span><span class="p">(</span><span class="s">&#34;Pi&#34;</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">pi</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Can&#39;t atl_vardef PI.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="o">*</span><span class="p">((</span><span class="kt">double</span> <span class="o">*</span><span class="p">)</span> <span class="nf">atl_body</span><span class="p">(</span><span class="n">pi</span><span class="p">))</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">        <span class="mf">3.141596235</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>随后可通过运行以下 Atlast 程序打印该值：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">pi</span> <span class="k">2@ f.
+</span></span></span></code></pre></div><h3 id="执行词atl_exec">执行词：<code>atl_exec()</code></h3>
+<p>若已获取 Atlast 词定义的词典条目地址，应用程序可通过以下方式执行它：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">dictword</span> <span class="o">*</span><span class="n">dw</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">stat</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">stat</span> <span class="o">=</span> <span class="nf">atl_exec</span><span class="p">(</span><span class="n">dw</span><span class="p">);</span>
+</span></span></code></pre></div><p>返回的状态码 <code>stat</code> 与 <code>atl_eval()</code> 相同。<code>atl_eval()</code> 与 <code>atl_exec()</code> 的区别微妙但关键——它可能显著影响应用性能。若已知 Atlast 词名称，可通过两种方式执行：向<code>atl_eval()</code> 传递包含名称的字符串，或将词典地址保存至变量后直接用 <code>atl_exec()</code> 执行。两种操作结果相同，但使用 <code>atl_eval()</code> 时，Atlast 需扫描字符串、解析字符串内容为表示词的记号、查词典后执行。若已知词典条目地址，使用 <code>atl_exec()</code> 可跳过这些耗时步骤。</p>
+<p>巧妙结合 <code>atl_lookup()</code> 与 <code>atl_exec()</code> 能极大增强应用程序的灵活性。若应用程序执行明确任务，可在主循环前通过 <code>atl_lookup()</code> 检查用户是否定义了特定系列的词。若存在定义，则将词典地址保存至应用代码的指针中。随后在执行的每个关键节点，应用程序只需检测该节点关联的词是否被定义，若存在则用 <code>atl_exec()</code> 执行。若默认处理逻辑已通过<code>atl_primdef()</code>（见下文）定义为 Atlast 原语，Atlast 程序可轻松在“挂钩点”检查数据、执行定制逻辑，或通过调用已定义的原语继承默认处理行为。用户未定义特殊处理时，应用程序仅需进行一次 <code>NULL</code> 指针比对。相比开放架构的优势，这一开销微不足道。</p>
+<p>向 <code>atl_exec()</code> 调用的定义传递参数有两种方式：存入 <code>atl_vardef()</code> 创建的共享变量，或在执行前压入栈中（这是更推荐的方式）。关于从 C 语言访问栈的细节，请参阅下文<code>atl_primdef()</code> 的讨论。</p>
+<h3 id="定义原语atl_primdef">定义原语：<code>atl_primdef()</code></h3>
+<p>Atlast 的强大之处主要源于其能轻松将 C 语言编写的原语添加到语言中。一旦集成，这些原语可以与现有的循环、条件执行等功能结合使用。Atlast 经过精心设计，使得添加原语变得简单且安全——完全不像在 AutoLISP 中添加函数那样充满风险。尽管如此，扩展任何语言都需要了解其内存架构和控制结构。因此，请仔细听讲，跟随示例操作，很快你就能像专业人士一样添加原语了。</p>
+<p>Atlast 原语是一个 C 函数。执行原语时，该函数被调用，并可以执行任意操作。原语可以简单到丢弃栈顶元素，也可以复杂到从三维几何模型生成光线追踪位图。大多数原语通过栈相互通信，部分原语还会访问堆中存储的变量。极少数原语会操作返回栈上的数据（ Atlast 用返回栈跟踪执行的嵌套）。用户定义的原语很少需要访问返回栈。<code>atldef.h</code> 中的定义简化了对这些内存区域的访问。让我们逐一来看。</p>
+<h4 id="访问栈">访问栈</h4>
+<p>栈指针变量名为 <code>stk</code>，始终指向下一个可用的栈项（数据类型为 <code>long</code>）。原语很少直接引用 <code>stk</code>，因为使用隐藏了栈索引复杂性的定义通常更方便。以下是 Atlast 提供的栈访问工具：</p>
+<ul>
+<li>
+<p><code>Sl(n)</code><br>
+在访问栈上任何项之前，必须确认栈中至少有需要访问的那么多项，否则需报告栈下溢。在原语开头使用语句“<code>Sl(n);</code>”，其中 n 为原语中将要使用的栈项数。例如，若使用栈顶两项 <code>S0</code> 和 <code>S1</code>，则写“<code>Sl(2);</code>”。务必使用该定义而非直接检查栈限制——若后续构建应用时关闭栈检查，<code>Sl()</code> 语句将不生成代码，自动优化原语速度。</p>
+</li>
+<li>
+<p><code>So(n)</code><br>
+在压入新项前，必须确保栈不会溢出。若可能溢出，需报告栈溢出。在原语开头使用“<code>So(n);</code>”，n 为待压入的新项数。例如，压入一个整型项则写“<code>So(1);</code>”。使用该定义而非直接检查栈限制的原因同上——关闭栈检查时 <code>So()</code> 不生成代码。</p>
+</li>
+<li>
+<p><code>S0</code>–<code>S5</code><br>
+<code>S0</code> 至 <code>S5</code> 提供对栈顶 6 个整型项的直接访问。<code>S0</code> 为栈顶项，<code>S1</code> 为次顶项，以此类推。这些定义可用于赋值语句左右两侧。</p>
+</li>
+<li>
+<p><code>Pop</code><br>
+作为语句使用。“<code>Pop;</code>”丢弃栈顶项。</p>
+</li>
+<li>
+<p><code>Pop2</code><br>
+作为语句使用。“<code>Pop2;</code>”丢弃栈顶两项。</p>
+</li>
+<li>
+<p><code>Npop(n)</code><br>
+丢弃栈顶 n 项。</p>
+</li>
+<li>
+<p><code>Push</code><br>
+用于赋值左侧时，将右侧值存入下一个空闲栈项并递增栈指针。</p>
+</li>
+<li>
+<p><code>Realsize</code><br>
+对使用浮点数的原语，<code>Realsize</code> 表示一个浮点数占用的栈项数。若原语需栈上两个浮点参数并保留它们，同时新增一个浮点结果，应以“<code>Sl(2*Realsize); So(Realsize);</code>”开头。</p>
+</li>
+<li>
+<p><code>REAL0</code>–<code>REAL2</code><br>
+这些定义提供对栈顶三个浮点数的只读访问，栈项自动转换为 <code>double</code> 类型。必须以此方式访问浮点值——某些计算机要求 <code>double</code> 按 8 字节对齐，<code>REALn</code> 定义会根据机器需求自动对齐变量。</p>
+</li>
+<li>
+<p><code>SREAL0(f)</code>, <code>SREAL1(f)</code><br>
+作为函数使用时，这些定义将浮点参数存入栈顶（<code>SREAL0</code>）或次顶（<code>SREAL1</code>）浮点项。由于需补偿机器对齐限制，<code>REALn</code> 定义不可用于赋值左侧，应改用这些函数。</p>
+</li>
+<li>
+<p><code>Realpop</code><br>
+弹出栈顶浮点值，等效于 <code>Npop(Realsize)</code>。</p>
+</li>
+<li>
+<p><code>Realpop2</code><br>
+弹出栈顶两个浮点值，等效于 <code>Npop(2*Realsize)</code>。</p>
+</li>
+</ul>
+<p>“<em>他说这很简单！</em>” 请耐心些——实际使用远比解释起来更简单（也更紧凑）。若难以忍受，可直接跳至示例原语定义自行体会。好了，欢迎回来。你为 Atlast 添加的 95% 的原语可能仅涉及栈访问。堆和返回栈访问极少见（可能预示设计不佳）。如需操作，方法如下。</p>
+<h4 id="访问堆内存">访问堆内存</h4>
+<p>堆是用于分配静态对象的内存池。大部分堆空间由 Atlast 的定义词分配，例如 <code>VARIABLE</code>、<code>CONSTANT</code> 以及用于定义新可执行词的冒号（<code>:</code>），这些定义词本身也存储在堆中。Atlast 能够直接创建新数据类型的定义词是其最强大的特性之一，这减少了用户原语操作堆的需求。堆通过一组与栈操作类似的定义进行访问。堆指针本身命名为 <code>hptr</code>，但很少被显式引用。</p>
+<ul>
+<li><code>Ho(n)</code><br>
+在堆上存储新数据前，必须确认该操作不会导致堆超过其分配的最大容量。这种情况称为堆溢出，<code>Ho(n)</code> 函数会检查此情况并在溢出发生时终止程序执行。参数 <code>n</code> 表示您计划分配的堆空间量，以栈项为单位（每项 4 字节）。若需按字节数分配，必须将其向上取整至 4 的倍数。可移植的实现方式是使用表达式：<code>((x+(sizeof(stackitem)−1))/sizeof(stackitem))</code>，其中 x 为所需堆空间的字节数。若关闭堆栈检查以追求最高性能，<code>Ho(n)</code> 不会生成任何代码。</li>
+<li><code>Hpc(ptr)</code><br>
+堆存储通常通过栈传递的指针访问。由于栈包含多种数据类型，意外将非指针值作为堆地址使用可能导致灾难性后果。在使用任何值作为堆指针前，应调用 <code>Hpc(ptr)</code> 进行验证（<code>ptr</code> 为待检查指针）。若指针不在堆范围内，将报告错误指针并终止执行。若关闭堆栈检查，<code>Hpc(ptr)</code> 不会生成任何代码。</li>
+<li><code>Hstore</code><br>
+用于赋值语句左侧，将右侧的长整型值存入下一个可用堆单元，并推进堆分配指针。</li>
+</ul>
+<h4 id="访问返回栈">访问返回栈</h4>
+<p>返回栈记录定义间的调用关系、跟踪循环控制索引，并存储解释器内部的其他数据。随意操作返回栈通常极为危险。此处说明主要是为了保持文档完整性及为 <code>atlast.c</code> 中维护返回栈的代码提供文档，而非鼓励使用返回栈。返回栈指针变量名为 <code>rstk</code>，始终指向下一个可用返回栈项。返回栈项类型为 <code>**dictword</code>（理解了吗？），该类型也被 <code>typedef</code> 为 <code>rstackitem</code>。</p>
+<p>原语很少直接引用 <code>rstk</code>，因为使用封装了返回栈索引复杂度的定义更为便捷。以下工具提供返回栈访问功能：</p>
+<ul>
+<li>
+<p><code>Rsl(n)</code><br>
+访问返回栈项前，必须确认栈中至少有 n 个可用项。否则需报告返回栈下溢错误。在原语起始处使用语句“<code>Rsl(n);</code>”，其中 n 为需引用的返回栈项数。例如引用顶层两项 <code>R0</code> 和 <code>R1</code> 时，应使用 <code>Rsl(2)</code>。务必使用该定义而非直接检查返回栈限制——若后续构建应用程序时关闭栈检查，<code>Rsl()</code> 语句不会生成代码，自动实现原语最高速运行。</p>
+</li>
+<li>
+<p><code>Rso(n)</code><br>
+向返回栈压入新项前，必须确认添加后不会超出分配空间。否则需报告返回栈溢出错误。在原语起始处使用语句“<code>Rso(n);</code>”，其中 n 为待压入的新项数。例如压入一项时使用<code>Rso(1)</code>。务必使用该定义而非直接检查返回栈限制——若后续构建应用程序时关闭栈检查，<code>Rso()</code> 语句不会生成代码，自动实现原语最高速运行。</p>
+</li>
+<li>
+<p><code>R0</code>–<code>R2</code><br>
+定义<code>R0</code>、<code>R1</code> 和 <code>R2</code> 提供对返回栈顶层三项的直接访问。<code>R0</code> 为栈顶项，<code>R1</code> 为次顶项，<code>R2</code> 为第三项。这些定义可用于赋值语句的任意一侧。</p>
+</li>
+<li>
+<p><code>Rpop</code><br>
+作为语句使用。“<code>Rpop;</code>”移除返回栈顶项。</p>
+</li>
+<li>
+<p><code>Rpush</code><br>
+用于赋值语句左侧，将右侧值存入下一个空闲返回栈项，并递增返回栈指针。</p>
+</li>
+</ul>
+<h4 id="实现原语">实现原语</h4>
+<p>每个原语都由声明为 “<code>static void</code>” 的 C 函数实现。头文件 <code>atldef.h</code> 将“<code>prim</code>”定义为该类型，以更明确地标识实现原语的函数。</p>
+<p>以一个简单原语为例，我们添加获取 Unix 格式日期时间的能力，并从 Unix 日期字中提取小时、分钟和秒。我们将向 Atlast 添加两个新原语：<code>TIME</code>，它在栈顶留下自 1970 年 1 月 1 日午夜以来的秒数；以及 <code>HHMMSS</code>，输入为 <code>TIME</code> 返回的值，在栈顶三个位置留下该时间表示的小时、分钟和秒，其中秒位于最顶部。</p>
+<p>以下是实现 <code>TIME</code> 原语的 C 函数：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">prim</span> <span class="nf">ptime</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">So</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Push</span> <span class="o">=</span> <span class="nf">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>由于要在栈上放置一个新项，因此调用 <code>So(1)</code> 检查栈溢出。完成后，我们只需在赋值左侧使用 <code>Push</code> 来存储 Unix 兼容的 <code>time()</code> 函数返回的长整型时间值（大多数非 Unix C 库也支持此函数）。</p>
+<p><code>HHMMSS</code> 原语稍微复杂一些。它使用 Unix 兼容的 <code>localtime()</code> 函数，该函数输入一个指向包含 <code>time()</code> 返回格式的时间值的指针，返回一个指向内部静态结构的指针，该结构的字段给出该时间表示的日、月、年、小时、分钟、秒等。原语的定义如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">prim</span> <span class="nf">phhmmss</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">tm</span> <span class="o">*</span><span class="n">lt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">Sl</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">So</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">lt</span> <span class="o">=</span> <span class="nf">localtime</span><span class="p">(</span><span class="o">&amp;</span><span class="n">S0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">S0</span> <span class="o">=</span> <span class="n">lt</span><span class="o">-&gt;</span><span class="n">tm_hour</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Push</span> <span class="o">=</span> <span class="n">lt</span><span class="o">-&gt;</span><span class="n">tm_min</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Push</span> <span class="o">=</span> <span class="n">lt</span><span class="o">-&gt;</span><span class="n">tm_sec</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>此原语期望栈上有一个参数（时间值），因此它以 <code>Sl(1)</code> 开始以验证其存在。它将用小时替换该值，并为分钟和秒向栈添加两个新项，因此接下来使用 <code>So(2)</code> 确保这些添加不会导致栈溢出。现在它可以开始工作。它调用 <code>localtime()</code>，传递第一个栈项（时间词）的地址，然后将小时存储回该词，并使用 <code>Push</code> 两次添加分钟和秒。</p>
+<p>通过将编码完成的函数列在原语定义表中并调用 <code>atl_primdef()</code> 函数向 Atlast 注册该表，原语正式添加到 Atlast 中。两个新原语的定义表如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">primfcn</span> <span class="n">timep</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="s">&#34;0TIME&#34;</span><span class="p">,</span>   <span class="n">ptime</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="s">&#34;0HHMMSS&#34;</span><span class="p">,</span> <span class="n">phhmmss</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="nb">NULL</span><span class="p">,</span>      <span class="p">(</span><span class="n">codeptr</span><span class="p">)</span> <span class="mi">0</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p><code>primfcn</code> 结构在 <code>atldef.h</code> 中声明。您可以在表中列出任意数量的原语，表的末尾以 <code>NULL</code> 代替原语名称的条目标记。对于每个原语，需创建一个包含两个部分的条目：第一个部分为一字符串，若原语为普通词则以“0”开头，若为编译时立即词则以“1”开头，其余部分为全大写的原语名称；第二个部分是实现该原语的函数名称。通过调用 <code>atl_primdef()</code> 并传递表地址来定义表中的原语，如下所示：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">atl_primdef</span><span class="p">(</span><span class="n">timep</span><span class="p">);</span>
+</span></span></code></pre></div><p>（给 MS-DOS 用户的注意事项：为节省内存，Atlast 会使用您在原语表中声明的实际静态字符串作为其创建的词典条目的一部分。由于 Atlast 词典将包含指向这些编译时字符串的指针，因此切勿将原语表的数据放置在可能被交换出的覆盖区中，否则当 Atlast 后续尝试搜索词典时可能无法访问。如果您的程序未使用覆盖数据段的技巧，则无需担心此问题。）</p>
+<p>可以在调用 <code>atl_init()</code> 之后的任何时间调用 <code>atl_primdef()</code>，并且可以使用不同的<code>primfcn</code> 表多次调用它。如果 <code>primfcn</code> 表中的名称与内置 Atlast 原语或先前通过<code>atl_primdef()</code> 调用定义的原语名称重复，则先前的定义将被隐藏且无法访问。</p>
+<p>安装这些新原语后，现在可以从 Atlast 交互式地试用它们。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">%</span> <span class="nf">atlast</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="nf">time</span> <span class="k">.
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">634539503</span> <span class="nf">-&gt;</span> <span class="nf">time</span> <span class="k">.
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">634539505</span> <span class="nf">-&gt;</span> <span class="nf">time</span> <span class="k">.
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">634539508</span> <span class="nf">-&gt;</span> <span class="nf">time</span> <span class="k">.s
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">Stack:</span> <span class="mi">634539512</span> <span class="nf">-&gt;</span> <span class="nf">hhmmss</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="k">.s
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">Stack:</span> <span class="mi">20</span> <span class="mi">58</span> <span class="mi">32</span> <span class="nf">-&gt;</span> <span class="nf">clear</span> <span class="nf">time</span> <span class="nf">hhmmss</span> <span class="k">.s
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">Stack:</span> <span class="mi">20</span> <span class="mi">58</span> <span class="mi">44</span> <span class="nf">-&gt;</span> <span class="nf">clear</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="nf">time</span> <span class="nf">hhmmss</span> <span class="k">.s
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">Stack:</span> <span class="mi">20</span> <span class="mi">58</span> <span class="mi">52</span> <span class="nf">-&gt;</span> <span class="nf">^D</span>
+</span></span><span class="line"><span class="cl"><span class="nf">%</span>
+</span></span></code></pre></div><p>一切似乎都按预期运行。我们的新原语起作用了！</p>
+<p>最后，让我们看一个更复杂的涉及浮点数的原语。再次回到 π 的莱布尼茨级数，这里是一个用于计算它的原语函数的 C 语言定义。该函数与我们之前在 Atlast 中实现的函数兼容：它期望堆栈顶部有项数，并将 π 的近似值作为浮点值返回到堆栈顶部的两个项中。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">prim</span> <span class="nf">pleibniz</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="n">nterms</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">sum</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">           <span class="n">numer</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">           <span class="n">denom</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">Sl</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nterms</span> <span class="o">=</span> <span class="n">S0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Pop</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">So</span><span class="p">(</span><span class="n">Realsize</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Push</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Push</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="n">nterms</span><span class="o">--</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sum</span> <span class="o">+=</span> <span class="n">numer</span> <span class="o">/</span> <span class="n">denom</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">numer</span> <span class="o">=</span> <span class="o">-</span><span class="n">numer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">denom</span> <span class="o">+=</span> <span class="mf">2.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">SREAL0</span><span class="p">(</span><span class="n">sum</span> <span class="o">*</span> <span class="mf">4.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>该函数首先使用 <code>Sl(1)</code> 验证项数参数存在于栈上。它加载该参数（<code>S0</code>）并将其保存在循环计数 <code>nterms</code> 中。然后使用 <code>Pop</code> 从栈中丢弃它。接下来，<code>So(Realsize)</code> 验证在压入实数结果时栈不会溢出（回想一下，<code>Realsize</code> 是每个浮点结果占用的栈项数——始终为 2，但使用该定义使代码更易读）。我们随即利用 <code>Realsize</code> 为 2 的特性，通过两次 <code>Push</code> 操作为结果分配栈空间并将其清零。完成后，函数进入循环，对请求的级数项数进行求和。最后，使用 <code>SREAL0()</code> 将结果存储到栈顶部的浮点值中：即我们通过两次 <code>Push</code> 创建的那个值。</p>
+<p>该原语通过以下序列在 <code>Atlast</code> 中声明并注册：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">primfcn</span> <span class="n">pip</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="s">&#34;0LEIBNIZ&#34;</span><span class="p">,</span> <span class="n">pleibniz</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="nb">NULL</span><span class="p">,</span> <span class="p">(</span><span class="n">codeptr</span><span class="p">)</span> <span class="mi">0</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="nf">atl_primdef</span><span class="p">(</span><span class="n">pip</span><span class="p">);</span>
+</span></span></code></pre></div><p>通过 C 语言实现的原语，我们可以探索这个糟糕级数的极限。例如，这里用它来打印前五十万项后的误差：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">%</span> <span class="nf">atlast</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="k">2variable </span><span class="nf">pi</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">1</span><span class="kt">.0</span> <span class="nf">atan</span> <span class="mi">4</span><span class="kt">.0</span> <span class="k">f* </span><span class="nf">pi</span> <span class="k">2!
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">-&gt;</span> <span class="nf">pi</span> <span class="k">2@ f. </span><span class="nf">c</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">3</span><span class="kt">.14159</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">500000</span> <span class="nf">leibniz</span> <span class="nf">pi</span> <span class="k">2@ f- f. cr
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">-2</span><span class="nf">e-06</span>
+</span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="nf">^D</span>
+</span></span><span class="line"><span class="cl"><span class="nf">%</span>
+</span></span></code></pre></div><p>从这些示例原语的简洁性和直接性可以看出，向 Atlast 添加原语并不复杂或困难。从 Atlast 执行原语函数而非从 C 程序调用它，其开销仅涉及几条指令。若需实现与 Atlast 以更复杂方式交互的原语，最佳信息来源是 <code>atlast.c</code> 的源代码；找到一个参数和结果与你计划添加的原语类似的标准原语，查阅其实现函数。这应能消除关于栈和堆操作细节的任何困惑。</p>
+<h2 id="包配置">包配置</h2>
+<p>除了全局配置参数外，您可以通过创建名为 <code>custom.h</code> 的自定义配置文件，并使用 <code>-DCUSTOM</code> 编译器标志编译 <code>atlast.c</code>，精确选择构建应用程序版本时要包含的 Atlast 组件。自定义配置文件的格式如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#define INDIVIDUALLY
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define Package_1
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define Package_2
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>              <span class="err">⋮</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#define Package_n
+</span></span></span></code></pre></div><p><code>Package_i</code> 定义用于选择您希望在应用程序中包含的 Atlast 子包。各个子包将在以下段落中描述。作为 <code>WORDSUSED</code> 包的一部分提供的 <code>WORDSUSED</code> 和 <code>WORDSUNUSED</code> 原语，可让您确定 Atlast 程序中使用了哪些原语，从而确定执行该程序需要哪些包。</p>
+<ul>
+<li>
+<p><code>ARRAY</code> 包<br>
+提供任意数据类型的 n 维数组声明以及此类数组的运行时下标计算。<br>
+原语：<code>ARRAY</code>。</p>
+</li>
+<li>
+<p><code>BREAK</code> 包<br>
+通过 <code>atl_break()</code> 函数启用异步中断处理。禁用此包可节省非常少量的内存，并将执行速度提高约 10%。<br>
+原语：无。</p>
+</li>
+<li>
+<p><code>COMPILERW</code> 包<br>
+启用用于定义新编译器词的原语。<br>
+原语：<code>[COMPILE]</code>、<code>LITERAL</code>、<code>COMPILE</code>、<code>&lt;MARK</code>、<code>&lt;RESOLVE</code>、<code>&gt;MARK</code>、<code>&gt;RESOLVE</code>。</p>
+</li>
+<li>
+<p><code>CONIO</code> 包<br>
+启用显示交互式输出的原语。在不提供用户交互的应用程序中可以禁用这些原语。<br>
+原语：<code>.</code>、<code>?</code>、<code>CR</code>、<code>.S</code>、<code>.&quot;</code>、<code>.(</code>、<code>TYPE</code>、<code>WORDS</code>。</p>
+</li>
+<li>
+<p><code>DEFFIELDS</code> 包<br>
+启用用于操作词典项的低级原语。这些原语很少使用，除非有要用 Atlast 语言本身编写复杂语言扩展的雄心壮志。<br>
+原语：<code>FIND</code>、<code>&gt;NAME</code>、<code>&gt;LINK</code>、<code>BODY&gt;</code>、<code>NAME&gt;</code>、<code>LINK&gt;</code>、<code>N&gt;LINK</code>、<code>L&gt;NAME</code>、<code>NAME&gt;S!</code>、<code>S&gt;NAME!</code>。</p>
+</li>
+<li>
+<p><code>DOUBLE</code> 包<br>
+启用双字操作。这些操作可用于任何栈数据，但在浮点代码中大量使用，因为浮点数占用 2 个栈项。<br>
+原语：<code>2DUP</code>、<code>2DROP</code>、<code>2SWAP</code>、<code>2OVER</code>、<code>2ROT</code>、<code>2VARIABLE</code>、<code>2CONSTANT</code>、<code>2!</code>、<code>2@</code>。</p>
+</li>
+<li>
+<p><code>FILEIO</code> 包<br>
+启用类似 C 语言的文件操作原语。如果您的应用不需要访问文件，可以禁用此包。<br>
+原语：<code>FILE</code>、<code>FOPEN</code>、<code>FCLOSE</code>、<code>FDELETE</code>、<code>FGETS</code>、<code>FPUTS</code>、<code>FREAD</code>、<code>FWRITE</code>、<code>FGETC</code>、<code>FPUTC</code>、<code>FTELL</code>、<code>FSEEK</code>、<code>FLOAD</code>。<br>
+此外，还定义了 <code>FILE</code> 变量 <code>STDIN</code>、<code>STDOUT</code> 和 <code>STDERR</code>，自动绑定到同名的 Unix I/O 流。</p>
+</li>
+<li>
+<p><code>MATH</code> 包<br>
+启用数学函数。只有在 <code>REAL</code> 也启用时才能启用 <code>MATH</code>。<br>
+原语：<code>ACOS</code>、<code>ASIN</code>、<code>ATAN</code>、<code>ATAN2</code>、<code>COS</code>、<code>EXP</code>、<code>LOG</code>、<code>POW</code>、<code>SIN</code>、<code>SQRT</code>、<code>TAN</code>。</p>
+</li>
+<li>
+<p><code>MEMMESSAGE</code> 包<br>
+控制是否在发生运行时错误（如栈溢出和下溢、错误指针等）时打印消息。禁用这些消息不会节省时间或大量内存：它适用于只将错误状态返回给 <code>atl_eval()</code> 或 <code>atl_exec()</code> 的调用者就足够了的深度嵌入式应用程序。<br>
+原语：无。</p>
+</li>
+<li>
+<p><code>PROLOGUE</code> 包<br>
+允许调整分配给栈、返回栈、堆及临时字符串缓冲区的内存大小。启用该包后，Atlast 程序文本可覆盖默认配置。若启用此包，解释器会在首行可执行 Atlast 代码前识别以下特殊格式的声明（称作序言）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="c1">\ *area size
+</span></span></span></code></pre></div><p>为了允许处理序言，请勿显式调用 <code>atl_init()</code>，该函数会在序言解析后由<code>atl_eval()</code> 自动触发。序言中支持以下区域定义：</p>
+<table>
+  <thead>
+      <tr>
+          <th>区域</th>
+          <th>意义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>STACK</code></td>
+          <td>栈的尺寸（<code>long</code> 类型的栈项个数）</td>
+      </tr>
+      <tr>
+          <td><code>RSTACK</code></td>
+          <td>返回栈的尺寸（返回栈指针项的个数）</td>
+      </tr>
+      <tr>
+          <td><code>HEAP</code></td>
+          <td>堆的尺寸（<code>long</code> 类型的项目个数）</td>
+      </tr>
+      <tr>
+          <td><code>TEMPSTRL</code></td>
+          <td>临时字符串缓冲区的长度（字符个数）</td>
+      </tr>
+      <tr>
+          <td><code>TEMPSTRN</code></td>
+          <td>临时字符串缓冲区的数量</td>
+      </tr>
+  </tbody>
+</table>
+</li>
+<li>
+<p><code>REAL</code> 包<br>
+启用浮点运算功能。建议同时启用 <code>DOUBLE</code> 包以增强功能。<br>
+原语：<code>(FLIT)</code>、<code>F+</code>、<code>F-</code>、<code>F*</code>、<code>F/</code>、<code>FMIN</code>、<code>FMAX</code>、<code>FNEGATE</code>、<code>FABS</code>、<code>F=</code>、<code>F&lt;&gt;</code>、 <code>F&gt;</code>、<code>F&lt;</code>、<code>F&gt;=</code>、<code>F&lt;=</code>、<code>F.</code>、<code>FLOAT</code>、<code>FIX</code>。</p>
+</li>
+<li>
+<p><code>SHORTCUTA</code> 包<br>
+启用快捷整数算术运算。<br>
+原语：<code>1+</code>、<code>2+</code>、<code>1-</code>、<code>2-</code>、<code>2*</code>、<code>2/</code>。</p>
+</li>
+<li>
+<p><code>SHORTCUTC</code> 包<br>
+启用快捷整数比较运算。<br>
+原语：<code>0=</code>、<code>0&lt;&gt;</code>、<code>0&lt;</code>、<code>0&gt;</code>。</p>
+</li>
+<li>
+<p><code>STRING</code> 包<br>
+启用字符串操作功能。<br>
+原语：<code>(STRLIT)</code>、<code>STRING</code>、<code>STRCPY</code>、<code>S!</code>、<code>STRCAT</code>、<code>S+</code>、<code>STRLEN</code>、<code>STRCMP</code>、<code>STRCHAR</code>、<code>SUBSTR</code>、<code>COMPARE</code>、<code>STRFORM</code>、<code>STRINT</code>、<code>STRREAL</code>。<br>
+若同时启用 <code>REAL</code> 包，还可使用 <code>FSTRFORM</code> 原语。</p>
+</li>
+<li>
+<p><code>SYSTEM</code> 包<br>
+支持向操作系统提交字符串命令以执行。仅当构建 Atlast 的 C 语言实现提供 <code>system()</code> 函数时可用。<br>
+原语：<code>SYSTEM</code>。</p>
+</li>
+<li>
+<p><code>TRACE</code> 包<br>
+启用逐词追踪程序执行过程的功能。<br>
+原语：<code>TRACE</code>。</p>
+</li>
+<li>
+<p><code>WALKBACK</code> 包<br>
+启用出错时打印回溯信息的功能。<br>
+原语：<code>WALKBACK</code>。</p>
+</li>
+<li>
+<p><code>WORDSUSED</code> 包<br>
+启用程序用词分析功能，提供已使用/未使用词汇的统计。该功能可在 Atlast 应用开发阶段确定必需与非必需的功能包。<br>
+原语：<code>WORDSUSED</code>、<code>WORDSUNUSED</code>。</p>
+</li>
+</ul>
+<h2 id="基准测试">基准测试</h2>
+<p>为了大致了解 Atlast 在处理计算密集型任务时的性能表现，我将其与 C 语言和 AutoLISP 进行了两项基准测试，这两项测试均涉及平方根计算。</p>
+<p>第一项基准测试 <code>CSQRT</code> 采用 AutoCAD 的 <code>hmath.c</code> 模块中使用的牛顿-拉夫逊迭代算法计算 2 的平方根，该算法也用于 AutoLISP 示例程序 <code>sqr.lsp</code>。这项测试代表了极端计算密集型代码——这实际上是对宏语言的误用，此类计算通常应转移到用 C 编写的原生函数中。不过了解最坏情况下的表现仍具参考价值。</p>
+<p>第二项基准测试 <code>SSQRT</code> 与 <code>CSQRT</code> 相同，区别在于调用的是系统数学库的 <code>sqrt()</code> 函数而非测试语言自实现的函数。由于三种语言都调用相同的底层系统函数，该测试展示了在比典型宏语言应用更受计算限制、但语言开销低于 100% 的环境中的相对性能。所有测试均在 Sun 3/260 工作站（运行 SunOS 4.0.3 系统）上完成，测试程序清单附于本文末尾。Atlast 的计时数据来自使用“<code>-O4 -f68881</code>”编译选项并禁用堆栈检查的版本；C 程序同样采用“<code>-O4 -f68881</code>”编译；AutoLISP 测试则在 Z.0.65 非生产（<code>NONPRODUCTION</code>）版本（使用“<code>-O -f68881</code>”构建）上运行。下表所有时间数据均已标准化，以 C 语言执行时间为基准值 1。</p>
+<table>
+  <thead>
+      <tr>
+          <th></th>
+          <th>C 语言</th>
+          <th>Atlast</th>
+          <th>AutoLISP</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>CSQRT</code></td>
+          <td>1.00</td>
+          <td>7.41</td>
+          <td>67.08</td>
+      </tr>
+      <tr>
+          <td><code>SSQRT</code></td>
+          <td>1.00</td>
+          <td>1.00</td>
+          <td>1.52</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="总结与结论">总结与结论</h2>
+<p><strong>万物</strong>皆应可编程！我得出结论：以封闭方式编写几乎任何程序都是错误的，这会导致在其生命周期中耗费无数时间进行“增强”。后续的调整、“增加功能”和“修复”往往会使产品变得臃肿难懂，最终导致无法学习、无法维护乃至无法使用。</p>
+<p>更好的做法是前期投入精力创建足够灵活的产品，让用户能根据即时需求自由调整。如果产品采用可移植的开放形式实现可编程性，用户扩展就能被交换、比较、由开发者审核，并最终融入产品主线。</p>
+<p>拥有成千上万创造性用户以开发者未曾预料的方式拓展产品边界——实际上是在无偿为厂商工作，远比面对成千上万沮丧用户提交愿望清单，迫使厂商雇佣人力付费满足需求要好得多。开放架构与可编程性不仅惠及用户，不仅从技术和市场角度提升产品品质，更能为厂商带来直接经济优势——这种优势恰恰对应着封闭产品厂商的同等劣势。</p>
+<p>反对可编程性的主要论点是开发开放产品需要额外投入。Atlast 提供了一种构建开放产品的方法，耗时与开发封闭产品相当甚至更少。正如理智的 C 程序员不会在标准库中存在完善的带缓冲的文件 I/O 包时自行编写，当现成的宏语言工具具备近乎原生 C 代码的速度（除非极端滥用）、全功能启用仅占 51K 空间、通过重编译单个文件即可移植到任何支持 C 的机器、并能 15 分钟内集成到基础应用中时，为何还要重复发明轮子？</p>
+<p>我是在提议所有应用都变成 Forth 风格吗？当然不是——就像 PostScript 打印机输出不会呈现 PostScript 代码，80386 处理器上运行的应用也不会展现汇编语言。Atlast 是中间语言，仅由产品实现和扩展者接触。即便如此，通过合理定义词汇，Atlast 也能如同变色龙般呈现任何你想要的形态，甚至在解释器原始层面也是如此。</p>
+<p>我屡次面临这样的设计困境：明知需要可编程性，却缺乏时间、内存或勇气直面问题正确解决。最终只能制造临时方案，长期背负技术债务。这就像老派程序员因缺乏动态内存分配器或链表包而陷入噩梦的高级版本。可编程性虽是计算的“魔法烟雾”，但我们不该被“机器中的幽灵”吓退，也不应吝啬赋予用户这种能力。</p>
+<p>别把 Atlast 视为 Forth。甚至别把它当作语言。最佳理解方式是将 Atlast 看作提供<strong>可编程能力</strong>的库例程，就像其他库提供文件访问、窗口管理或图形功能那样。“预制可编程”的概念确实古怪——我花了两年才真正理解并驯服这个理念。仔细思考，动手实践，你或许能找到更好的应用构建方式。</p>
+<p>开放更好。Atlast 让你用比编写封闭程序更短的时间构建开放程序。继承 Atlast 开放架构的程序，将在整个产品线及所有支持硬件平台间共享统一、简洁、高效的用户扩展机制。其潜在效益不可估量。</p>
+<p><em>John Walker<br>
+加利福尼亚州缪尔海滩<br>
+1990 年 1 月 22 日 — 2 月 11 日<br>
+4072 行代码</em></p>
+<p>初始版本：1990 年 2 月<br>
+AMIX 1.0 版：1992 年 9 月<br>
+网页版 1.0：1995 年 8 月<br>
+网页版 1.1：2002 年 7 月<br>
+网页版 1.2：2007 年 10 月</p>
+<h2 id="按字母排列的-atlast-原语">按字母排列的 Atlast 原语</h2>
+<p>略，参见<a href="https://www.fourmilab.ch/atlast/atlast.html">原版</a>。</p>
+<h2 id="基准测试用程序">基准测试用程序</h2>
+<p>略，参见<a href="https://www.fourmilab.ch/atlast/atlast.html">原版</a>。</p>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2025
+    <a href="/zh/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (window.location.host !== 'qsl.net')
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

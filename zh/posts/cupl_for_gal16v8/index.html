@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+  
+    
+      <title>用于 GAL16V8 的 CUPL 语言概要 | BH1PHL 的 Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/zh/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/zh/"><h1>BH1PHL 的 Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/zh/"><b>Home</b></a>
+      
+         | 
+        <a href="/zh/about"><b>About</b></a>
+      
+         | 
+        <a href="/zh/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/zh/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/zh/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/"><b>English</b></a>
+      
+	
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">用于 GAL16V8 的 CUPL 语言概要</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2014-01-09</time>
+    
+    
+  </strong>
+  <span> • 2431 words</span>
+  <span> • 5 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/zh/tags/cupl">CUPL</a>, 
+        <a href="/zh/tags/gal16v8">GAL16V8</a>
+    </div>
+  
+</div>
+
+      <div class="content"><h2 id="安装">安装</h2>
+<p>首先去 Microchip 网站<a href="https://www.microchip.com/en-us/products/fpgas-and-plds/spld-cplds/pld-design-resources">下载 WinCupl</a> 并安装. 第一次运行时, 需要输入注册码 60008009 (这个是官方放出来的). 安装前注意备份用户的 PATH 环境变量的值, 因为 WinCupl 安装程序可能会把这个环境变量覆盖掉.</p>
+<h2 id="文件头">文件头</h2>
+<p>按照八股文格式写文件头( WinCupl 可以自动生成), 注意 <code>Device</code> 字段要写 &ldquo;<code>g16v8a</code>&rdquo;.</p>
+<h2 id="管脚定义">管脚定义</h2>
+<p>文件中首先要定义管脚, 如:</p>
+<pre tabindex="0"><code>/* *************** INPUT PINS *********************/
+pin [1,11]=[CLK, !OE]; pin 2=CIN; 
+/* *************** OUTPUT PINS *********************/ 
+pin 19=COUT; 
+pin [16..17]=[Q1..0]; 
+</code></pre><h3 id="管脚的输入与输出">管脚的输入与输出</h3>
+<p>注意内部的 8 个 D 触发器的时钟都连接在 1 脚, 输出使能都连接在 11 脚; 1~9 和 11 脚只能用作输入, 12~19 脚可以用作输入、组合逻辑的输出或 D 触发器的输出.</p>
+<h3 id="管脚的极性">管脚的极性</h3>
+<p>定义管脚时, 可以在前面用 <code>!</code> 指定极性. 如 11 脚为 <code>!OE</code>, 表明 11 脚接低电平时 OE 为 <code>'b'1</code>.</p>
+<h3 id="管脚定义的简写">管脚定义的简写</h3>
+<p>定义时可以简写, 如</p>
+<pre tabindex="0"><code>Pin [2..4] = [AD0..2];
+</code></pre><p>相当于</p>
+<pre tabindex="0"><code>Pin 2 = AD0;
+Pin 3 = AD1;
+Pin 4 = AD2;
+</code></pre><h3 id="管脚的方向">管脚的方向</h3>
+<p>12~19 脚的方向可以自动判别(逻辑表达式中写在左边就自动变成输出了).</p>
+<h3 id="管脚的序号">管脚的序号</h3>
+<p>管脚号和变量名称中的序号是十进制的.</p>
+<h2 id="组合逻辑">组合逻辑</h2>
+<p>实现组合逻辑时, 直接写逻辑表达式即可. 管脚名后面加 <code>.OE</code> 是输出作为组合逻辑使用时的输出使能信号, 12~19 脚作双向管脚或三态输出管脚使用时能够用得上. 对于单向应用, <code>.OE</code> 可以自动设置.</p>
+<p>如</p>
+<pre tabindex="0"><code>COUT=!CIN;
+</code></pre><p>逻辑表达式中等号左边的变量还可以加 <code>!</code> , 表示负逻辑.</p>
+<h3 id="变量的写法">变量的写法</h3>
+<p>等号左边的变量可以是真实管脚, 也可以是虚构的中间变量(当然等号右边的变量也可以是虚构的中间变量). 如果是后一种情况, 在用到时, 综合器会将其代入.</p>
+<p>逻辑表达式中的变量也可以简写, 如</p>
+<pre tabindex="0"><code>[D0..3] = &#39;b&#39;0010;
+[D0..3].oe = read;
+</code></pre><p>可以用 <code>FIELD</code> 将管脚框成一个字段, 如</p>
+<pre tabindex="0"><code>FIELD input = [in3..0];
+field ADDR = [VAR0, VAR1, VAR2];
+</code></pre><h3 id="逻辑运算符">逻辑运算符</h3>
+<p>逻辑运算符定义如下:</p>
+<pre tabindex="0"><code>!	NOT
+&amp;	AND
+\#	OR
+$	XOR
+</code></pre><h3 id="常数的格式">常数的格式</h3>
+<p>常数写类似 <code>'b'0</code>, <code>'o'663</code>, <code>'d'92</code>, <code>'h'ba</code> 的格式. 默认为 16 进制.</p>
+<h3 id="表达式的连接">表达式的连接</h3>
+<p>表达式可以用 <code>APPEND</code> 进行连接. 多个 <code>APPEND</code> 的结果是 <code>#</code> 在一起的, 如</p>
+<pre tabindex="0"><code>APPEND Y = A0 &amp; A1;
+APPEND Y = B0 &amp; B1;
+APPEND Y = C0 &amp; C1;
+</code></pre><p>相当于</p>
+<pre tabindex="0"><code>Y = (A0 &amp; A1) # (B0 &amp; B1) # (C0 &amp; C1);
+</code></pre><h3 id="相等算符">相等算符</h3>
+<p>逻辑表达式中还可以用相等算符 &ldquo;<code>:</code>&rdquo;. 如</p>
+<pre tabindex="0"><code>select = [A3..0]:&#39;h&#39;D;
+</code></pre><p>的意思是如果 <code>A3..0</code> 的值等于 <code>'h'D</code>, 那么 <code>select</code> 为真, 否则 <code>select</code> 为假. 由于 <code>'h'd</code> 等于 <code>'b'1101</code>, 所以上述表达式等价于</p>
+<pre tabindex="0"><code>select = A3 &amp; A2 &amp; !A1 &amp; A0 ;
+</code></pre><p>相等算符中的常数还可以出现 <code>X</code>, 表示某一部分不进行比较. 如</p>
+<pre tabindex="0"><code>select = [A3..0]:&#39;b&#39;1X0X;
+</code></pre><p>等价于</p>
+<pre tabindex="0"><code>select = A3 &amp; !A1;
+</code></pre><p>注意: 如果写</p>
+<pre tabindex="0"><code>FIELD ADDR = [VAR18, VAR17, VAR16];
+ROM_SEL = ADDR:3;
+</code></pre><p>那么 <code>ROM_SEL</code> 中比较的其实是 <code>ADDR</code> 的第 18、17 和 16 位. 所以</p>
+<pre tabindex="0"><code>PIN [3..6] = [A7..10];
+FIELD ioaddr = [A7..10];
+io_port = ioaddr:[400..6FF];
+</code></pre><p>展开化简的结果其实非常简单, 只有</p>
+<pre tabindex="0"><code>io_port = A10 &amp; !A9 # A10 &amp; A9 &amp; !A8 ;
+</code></pre><p>一句.</p>
+<p>写</p>
+<pre tabindex="0"><code>field ADDR = [VAR0, VAR1, VAR2];
+</code></pre><p>和</p>
+<pre tabindex="0"><code>field ADDR = [VAR2, VAR1, VAR0];
+</code></pre><p>在进行比较时是完全等价的. 这两种写法中,</p>
+<pre tabindex="0"><code>ROM_SEL = ADDR:3;
+</code></pre><p>都会展开成</p>
+<pre tabindex="0"><code>ROM_SEL = !VAR2 &amp; VAR1 &amp; VAR0; .
+</code></pre><h3 id="逻辑表达式的简写">逻辑表达式的简写</h3>
+<p>逻辑表达式的几种简写方式如下:</p>
+<ol>
+<li><code>[D0, D1, D2, D3] &amp; R</code> 等价于 <code>[D0 &amp; R, D1 &amp; R, D2 &amp; R, D3 &amp; R]</code>;</li>
+<li><code>[A, B, C, D] &amp; [W, X, Y, Z]</code> 等价于 <code>[A &amp; W, B &amp; X, C &amp; Y, D &amp; Z]</code>;</li>
+<li><code>[A3,A2,A1,A0]:&amp;</code> 等价于 <code>A3 &amp; A2 &amp; A1 &amp; A0</code>;</li>
+<li><code>adr:[C..F]</code> 等价于 <code>adr:C # adr:D # adr:E # adr:F</code>.</li>
+</ol>
+<h3 id="查找表">查找表</h3>
+<p>某些情况下用查找表 (<code>TABLE</code>) 的方式实现组合逻辑更方便, 如</p>
+<pre tabindex="0"><code>FIELD input = [in3..0];
+FIELD output = [out4..0];
+TABLE input =&gt; output {
+	0=&gt;00; 1=&gt;01; 2=&gt;02; 3=&gt;03;
+	4=&gt;04; 5=&gt;05; 6=&gt;06; 7=&gt;07;
+	8=&gt;08; 9=&gt;09; A=&gt;10; B=&gt;11;
+	C=&gt;12; D=&gt;13; E=&gt;14; F=&gt;15;
+}
+</code></pre><h3 id="条件判断">条件判断</h3>
+<p>还可以用条件判断 (<code>CONDITION</code>) 来写组合逻辑, 如</p>
+<pre tabindex="0"><code>PIN [1,2] = [A,B]; /* Data Inputs */
+PIN 3 = !enable; /* Enable Input */
+PIN [12..15] = [Y0..3]; /* Decoded Outputs */
+PIN 14 = no_match; /* Match Output */
+CONDITION {
+	IF enable &amp; !B &amp; !A OUT Y0;
+	IF enable &amp; !B &amp; A OUT Y1;
+	IF enable &amp; B &amp; !A OUT Y2;
+	IF enable &amp; B &amp; A OUT Y3;
+}
+</code></pre><p><code>CONDITION</code> 里面除了 <code>IF expr OUT var;</code> 之外, 还可以包含 <code>DEFAULT OUT var;</code> 语句. 使用 <code>DEFAULT</code> 这种写法时需要注意, 因为 <code>DEFAULT</code> 包含了与所有 IF 里面的逻辑表达式互补的情况, 所以可能会生成非常复杂的逻辑表达式.</p>
+<h2 id="时序逻辑">时序逻辑</h2>
+<p>如果要实现时序逻辑, 每个输出有一个D触发器可以用, 输出名字加<code>.D</code>是输入端.</p>
+<p>如:</p>
+<pre tabindex="0"><code>Q1.D=Q0;
+Q0.D=!Q1;
+</code></pre><h3 id="状态机">状态机</h3>
+<p>实现时序逻辑还可以用状态机的方式. 状态机的基本框架如下:</p>
+<pre tabindex="0"><code>SEQUENCE state_var_list {
+PRESENT state_n0
+	IF (condition1) NEXT state_n1;
+	IF (condition2) NEXT state_n2 OUT var;
+	DEFAULT NEXT state_n0;
+PRESENT state_n1
+	NEXT state_n2;
+ .
+ .
+PRESENT state_nn statements;
+}
+</code></pre><p>其中 <code>SEQUENCE</code> 后面跟一个变量列表. 这个变量列表一般是用 <code>FIELD</code> 定义的一系列作触发器使用的输出管脚. 每个 <code>PRESENT</code> 后面跟一种状态.</p>
+<h3 id="状态转移">状态转移</h3>
+<p>状态转移有两种写法: 无条件状态转移和条件状态转移.</p>
+<p>无条件状态转移写法如</p>
+<pre tabindex="0"><code>PRESENT &#39;b&#39;01
+	NEXT &#39;b&#39;10;
+</code></pre><p>意义自明. 注意这种情况下每个 <code>PRESENT</code> 只能配一个 <code>NEXT</code>. 条件状态转移写法如</p>
+<pre tabindex="0"><code>PRESENT &#39;b&#39;01
+	IF A &amp; B NEXT &#39;b&#39;10;
+	IF A &amp; !B NEXT &#39;b&#39;11;
+	DEFAULT NEXT &#39;b&#39;00;
+</code></pre><p><code>IF</code> 的格式与 <code>CONDITION</code> 里面类似. <code>DEFAULT</code> 的使用注意事项也与 <code>CONDITION</code> 中类似.</p>
+<h3 id="异步输出与同步输出">异步输出与同步输出</h3>
+<p>状态机中的每一个状态还可以有异步输出和同步输出, 和上面的两种状态转移一起, 就有四种输出方式: 无条件同步、无条件异步、条件同步、条件异步. 注意 GAL16V8 的状态机输出不支持低有效(如 <code>OUT !Y</code>)的写法.</p>
+<p>无条件同步输出的写法如</p>
+<pre tabindex="0"><code>PRESENT &#39;b&#39;01
+	NEXT &#39;b&#39;10 OUT Y OUT Z;
+</code></pre><p>意义自明.</p>
+<p>无条件异步输出的写法如</p>
+<pre tabindex="0"><code>PRESENT &#39;b&#39;01
+	OUT Y OUT Z;
+	NEXT &#39;b&#39;10;
+</code></pre><p>意义自明.</p>
+<p>条件同步输出的写法如</p>
+<pre tabindex="0"><code>PRESENT &#39;b&#39;01
+	IF INA NEXT &#39;b&#39;10 OUT Y;
+	IF !INA NEXT &#39;b&#39;11 OUT Z;
+</code></pre><p>意义自明.</p>
+<p>条件异步输出的写法如</p>
+<pre tabindex="0"><code>PRESENT &#39;b&#39;01
+	IF INA OUT Y;
+	IF !INA OUT Z;
+	NEXT &#39;b&#39;10;
+</code></pre><p>意义自明.</p>
+<p>条件输出语句中也可以包含 <code>DEFAULT</code>.</p>
+<p>助记法: 记住同步输出是 <code>NEXT</code> 之后输出, 异步输出与 <code>NEXT</code> 无关, 就全都明白了. 例如, 如果写成</p>
+<pre tabindex="0"><code>PRESENT 5
+	NEXT 6;
+	OUT DIVOUT;
+</code></pre><p>的形式, 是异步输出(注意 <code>NEXT</code> 后面有分号, 所以这个输出和 <code>NEXT</code> 无关); 写成</p>
+<pre tabindex="0"><code>PRESENT 5
+	NEXT 6 OUT DIVOUT;
+</code></pre><p>就是同步输出了. 异步输出到一个管脚的 <code>.D</code>, 也有同步输出的功效, 如</p>
+<pre tabindex="0"><code class="language-cupl" data-lang="cupl">PRESENT 5
+	NEXT 6;
+	OUT DIVOUT.D;
+</code></pre><h2 id="程序例子">程序例子</h2>
+<p>一个完整的包含状态机的程序例子(双向十进制计数器, 带同步清零和异步进位输出, 取自 WinCupl 的例子)如下:</p>
+<pre tabindex="0"><code>Name      Count10;
+Partno    CA0018;
+Date      12/19/99;
+Revision  02;
+Designer  Kahl;
+Company   Logical Devices, Inc.;
+Assembly  None;
+Location  None;
+Device    g16v8a;
+
+/****************************************************************/
+/* Compiling Note: For this Design , it will compile without any*/
+/* Errors if you Click on Options from the Main WInCUPL tool window */
+/* and Select Compiler option and set Minimization button to QUICK*/   
+/*                                                              */
+/* Decade Counter                                               */
+/*                                                              */
+/* This is a 4-bit up/down decade counter with synchronous      */
+/* clear capability.  An asynchronous ripple carry output is    */
+/* provided for cascading multiple devices.  CUPL state machine */
+/* syntax is used.                                              */
+/****************************************************************/
+
+/**  Inputs  **/
+
+Pin 1        = clk;             /* Counter clock                */
+Pin 2        = clr;             /* Counter clear input          */
+Pin 3        = dir;             /* Counter direction input      */
+Pin 11       = !oe;             /* Register output enable       */
+
+/**  Outputs  **/
+
+Pin [14..17] = [Q3..0];         /* Counter outputs              */
+Pin 18 = carry;                 /* Ripple carry out             */
+
+/** Declarations and Intermediate Variable Definitions **/
+
+field count = [Q3..0];          /* declare counter bit field */
+$define S0 &#39;b&#39;0000              /* define counter states */
+$define S1 &#39;b&#39;0001
+$define S2 &#39;b&#39;0010
+$define S3 &#39;b&#39;0011
+$define S4 &#39;b&#39;0100
+$define S5 &#39;b&#39;0101
+$define S6 &#39;b&#39;0110
+$define S7 &#39;b&#39;0111
+$define S8 &#39;b&#39;1000
+$define S9 &#39;b&#39;1001
+
+field mode = [clr,dir];         /* declare mode control field */
+up = mode:0;                    /* define count up mode */
+down = mode:1;                  /* define count down mode */
+clear = mode:[2..3];            /* define count clear mode */
+
+/** Logic Equations **/
+
+Sequenced count {                       /* free running counter */
+
+present S0      if up           next S1;
+                if down         next S9;
+                if clear        next S0;
+                if down         out carry;
+present S1      if up           next S2;
+                if down         next S0;
+                if clear        next S0;
+present S2      if up           next S3;
+                if down         next S1;
+                if clear        next S0;
+present S3      if up           next S4;
+                if down         next S2;
+                if clear        next S0;
+present S4      if up           next S5;
+                if down         next S3;
+                if clear        next S0;
+present S5      if up           next S6;
+                if down         next S4;
+                if clear        next S0;
+present S6      if up           next S7;
+                if down         next S5;
+                if clear        next S0;
+present S7      if up           next S8;
+                if down         next S6;
+                if clear        next S0;
+present S8      if up           next S9;
+                if down         next S7;
+                if clear        next S0;
+present S9      if up           next S0;
+                if down         next S8;
+                if clear        next S0;
+                if up           out carry;    /* assert carry output */
+}
+</code></pre><p>注意 <code>$DEFINE</code> 是预处理器指令, 功效与 C 的 <code>#define</code> 相同.</p>
+<h2 id="结语">结语</h2>
+<p>大概没了. 对这种简单可编程逻辑器件, 别的高级功能也没啥用. WinCupl 中自带的仿真工具 WinSim 使用很简单. 不明确的地方请参见 <a href="/a/cupl_for_gal16v8/CUPL_USERS_GUIDE.pdf">CUPL 用户手册</a>.</p>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2025
+    <a href="/zh/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (window.location.host !== 'qsl.net')
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+  
+    
+      <title>Forth 语言基础（二） | BH1PHL 的 Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/zh/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/zh/"><h1>BH1PHL 的 Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/zh/"><b>Home</b></a>
+      
+         | 
+        <a href="/zh/about"><b>About</b></a>
+      
+         | 
+        <a href="/zh/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/zh/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/zh/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/"><b>English</b></a>
+      
+	
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">Forth 语言基础（二）</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2025-02-04</time>
+    
+    
+  </strong>
+  <span> • 22862 words</span>
+  <span> • 46 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/zh/tags/my4th">My4TH</a>, 
+        <a href="/zh/tags/forth">Forth</a>
+    </div>
+  
+</div>
+
+      <div class="content"><p>本部分是一些方法论性质的材料，与语言本身的关系没有那么大，供感兴趣的读者阅读。这一部分主要来自 <a href="https://thinking-forth.sourceforge.net/thinking-forth-ans.pdf"><em>Thinking Forth</em></a> 的相关章节（但不是简单的翻译，部分内容经过了很激进的改编），有些例子也来自 <a href="https://www.forth.com/product/forth-programmers-handbook/"><em>Forth Programmer&rsquo;s Handbook 3rd ed</em></a> 以及 <a href="#ZgotmplZ"><em>Real Time Forth</em></a>。这一部分的例子大部分都可在 My4TH Forth 上实际运行，但也有一些是纯粹用于说明概念的，不可实际运行。</p>
+<p>本文按 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.zh-hans">CC BY-<strong>NC</strong>-SA 4.0</a> 协议发布。</p>
+<h2 id="forth-的特点总结">Forth 的特点总结<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></h2>
+<ul>
+<li>
+<p>大部分其他程序设计语言基于句法模型。Forth 与它们最大的不同是，它基于<strong>语义模型</strong>。Forth 注重符号的意义，而不是它的表达形式。Forth 中每个已定义的符号都是可以执行的。除了少数特例之外，标准符号的含义就是它的运行效果。每个符号都有其动作，而这个动作就是它的含义。Forth 语言中，一个短语的含义（也就是动作）可以从组成它的符号的含义直接推断出来。整个 Forth 程序的含义也可以从组成它的各部分的含义直接推断出来。</p>
+</li>
+<li>
+<p>可以说，<strong>应用程序决定其自身的自然语法</strong>。虽然 Forth 本身几乎不包含预设语法，但它具备可扩展性，能够直接体现任何应用程序的自然语法。这一模式允许将应用程序的自然“语言”与 Forth 本身相融合，最终使二者合而为一。</p>
+</li>
+<li>
+<p>与任何计算机语言一样，Forth 弥合了计算机硬件与人类之间的语义鸿沟。人类交流主要基于自然语言词汇，而计算机仅对位序列产生反应。Forth 通过将适当的位序列打包成“<strong>词</strong>”来实现从人类层面到计算机硬件层面的转换，允许用先前定义的词构建更高层级的词，直至达到需要的功能层级。Forth 程序员定义的词本质上是由一个或多个已定义命令（词）组成的包，其中每个命令本身也是这样的包。因此，Forth 程序中具有基础意义的结构单元就是词。</p>
+</li>
+<li>
+<p>自然语言具有不同类型的词（如名词、动词、介词等）。同样，Forth 也预定义了不同类型的词。但与自然语言不同，Forth 鼓励程序员根据需求开发新的类型的词。Forth 编程系统将这些词组织成可遍历的数据结构，称为“<strong>词典</strong>”。将新词的源代码转换为可执行结构并添加至词典的过程称为编译。通常而言，Forth 中每种类型的词都对应着不同的专用编译器。</p>
+</li>
+<li>
+<p>自然语言允许词语在不同语境中具有不同含义，与此相似，Forth 允许同一词在词典中拥有多个定义，每个定义对应不同功能。Forth 通过将词典组织为<strong>词表</strong>（word list）实现这一特性——同一词的不同定义分别位于不同的词表中。Forth 提供标准词用于指定新词编译到的词表，以及指定编译和执行期间的搜索顺序<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>。</p>
+</li>
+</ul>
+<ul>
+<li>
+<p>Forth 语言中一个适用于多种应用场景的核心概念是<strong>定义词</strong>（也可以称作“词类编译器”）。这一强大机制使得某个词可被赋予特殊扩展能力，用于定义（编译）具有程序员指定行为的新类型的词。系统包含若干标准定义词：其中部分用于创建常量、变量等标准编程元素；另一些则专为支持程序员针对特定应用需求，创建面向定制词类的新定义词（编译器）。</p>
+</li>
+<li>
+<p>每个定义词都具备<strong>定义时行为与实例行为</strong>。定义时行为负责创建包含用户自定义数据结构的新字典条目；实例行为则规定新创建词的具体行为。这一机制的强大之处在于：指定的实例行为可包含对编译器的调用，从而使新定义出的词本身也成为定义词。通过高阶定义词（即能定义其他定义词的定义词），开发者能够构建出非常简洁的高级应用程序代码。</p>
+</li>
+</ul>
+<h2 id="自然的语序">自然的语序<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></h2>
+<h3 id="数字词">数字+词</h3>
+<p>Forth 采用栈暂存数据。因此，自然状态下数字跟在词前面：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">10</span> <span class="k">cells	</span><span class="c1">\ 获得 10 个单元的寻址单位（字节）数。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">20</span> <span class="k">spaces	</span><span class="c1">\ 打印 20 个空格。
+</span></span></span></code></pre></div><p>这跟自然语言的语序相符。然而有些情况下，尤其是计算表达式时，语序跟自然语言不一样：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">3</span> <span class="mi">4</span> <span class="k">+	</span>	<span class="c1">\ 计算 3+4。
+</span></span></span></code></pre></div><p>前面已经讲过，这叫做后缀表达式（逆波兰表达式）。</p>
+<p>当然 Forth 系统提供了最大的灵活性。如果硬要采用自然语序（中缀表达式）计算两个数的加法，可以这样：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="c1">\ 下面重新定义的 “+ number ( n -- n )” 将栈中数字与从输入流中取得的下一个数字相加。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">+</span>  <span class="mi">0</span><span class="k">. parse-name &gt;number 2drop d&gt;s + </span><span class="nf">;↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">3</span> <span class="k">+ </span><span class="mi">4</span> <span class="kt">.</span><span class="nf">↵</span> <span class="mi">7</span>  <span class="nf">ok</span>
+</span></span></code></pre></div><p>不过这个重新定义的 “<code>+</code>” 无法在其他冒号定义中使用（因为后面的数字是从输入流中取得的），后面跟的那个东西也只能是一个字面上的数字（不能是栈中的参数）。所以一般情况下不要这么做。</p>
+<h3 id="名词动词">名词+动词</h3>
+<p>众所周知，自然语言的语序一般是动词跟在名词后面：</p>
+<pre tabindex="0"><code>S → NP VP
+</code></pre><p>借助栈，在 Forth 下这一语序也是自然的，而且最好实现。 <code>NP</code> 将代表它自身的元素（往往是一个数字、一个地址或任意类型的指针）压栈，<code>VP</code> 从栈中取得它，对 <code>NP</code> 代表的元素执行某种操作。例如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="k">key emit	</span><span class="c1">\ key 从键盘取得按键的代码，emit 将它显示在屏幕上。
+</span></span></span></code></pre></div><h3 id="动词宾语">动词+宾语</h3>
+<p>在汉语和英语等语言中宾语往往跟在动词后面：</p>
+<pre tabindex="0"><code>VP → V NP
+</code></pre><p>这一语序在 Forth 中也是可以实现的，当然它往往会增加程序的复杂程度。这一语序有不止一种常见的实现方式。第一种方式是 <code>V</code> 设置一个标志，<code>NP</code> 根据标志的内容执行相应的操作。这种方式的不足是，<code>NP</code> 往往需要很复杂，使其能够执行所有可能的 <code>V</code> 代表的操作。</p>
+<p>第二种方式是：前面的 <code>V</code> 设置一个执行向量（通过 <code>xt</code> 或 <code>DEFER</code> 等方式），然后用 <code>NP</code> 执行它。这一方式比第一种方式清晰。例如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">price</span> <span class="nf">orange</span>	<span class="c1">\ price 是一个数据类型，代表价格
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">100</span> <span class="nf">set</span> <span class="nf">orange</span>	<span class="c1">\ 设置 orange 的价格为 $1.00
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">show</span> <span class="nf">orange</span>		<span class="c1">\ 打印 orange 的价格
+</span></span></span></code></pre></div><p>可以借助 <code>CREATE</code>&hellip;<code>DOES&gt;</code> 和 <code>DEFER</code> 这样实现：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="k">defer </span><span class="nf">(price-action)</span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">price</span>  <span class="k">create </span><span class="mi">0</span> <span class="k">, </span>  <span class="k">does&gt; </span><span class="nf">(price-action)</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">(print-price)</span>  <span class="k">@ dup abs </span><span class="mi">0</span>
+</span></span><span class="line"><span class="cl">   <span class="k">&lt;# # # [char] . hold #s rot sign [char] </span><span class="nf">$</span> <span class="k">hold #&gt;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">type space ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">set</span>  <span class="k">[&#39;] ! is </span><span class="nf">(price-action)</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">show</span>  <span class="k">[&#39;] </span><span class="nf">(print-price)</span> <span class="k">is </span><span class="nf">(price-action)</span> <span class="k">;
+</span></span></span></code></pre></div><p>运行结果符合预期：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">price</span> <span class="nf">orange↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">100</span> <span class="nf">set</span> <span class="nf">orange↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">show</span> <span class="nf">orange↵</span> <span class="mh">$1</span><span class="kt">.00</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">price</span> <span class="nf">apple↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">200</span> <span class="nf">set</span> <span class="nf">apple↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">show</span> <span class="nf">apple↵</span> <span class="mh">$2</span><span class="kt">.00</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">show</span> <span class="nf">orange↵</span> <span class="mh">$1</span><span class="kt">.00</span>  <span class="nf">ok</span>
+</span></span></code></pre></div><p>当然如果接受操作对象（宾语）前置的语序，就像日语里那样</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">price</span> <span class="nf">orange</span>	<span class="c1">\ price 是一个数据类型，代表价格
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">100</span> <span class="nf">orange</span> <span class="nf">set</span>	<span class="c1">\ 设置 orange 的价格为 $1.00
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">orange</span> <span class="nf">show</span>		<span class="c1">\ 打印 orange 的价格
+</span></span></span></code></pre></div><p>那么实现起来更简单：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">price</span>  <span class="kn">variable</span> <span class="nc">;</span>	<span class="c1">\ price 就是一个普通的变量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">set</span>  <span class="k">! ;	</span>		<span class="c1">\ set 就是 ! 的别名
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">show</span>  <span class="k">@ dup abs </span><span class="mi">0</span>	<span class="c1">\ show ( price -- ) 就是普通的格式化输出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="k">&lt;# # # [char] . hold #s rot sign [char] </span><span class="nf">$</span> <span class="k">hold #&gt;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">type space ;
+</span></span></span></code></pre></div><p>运行结果：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">price</span> <span class="nf">orange↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">100</span> <span class="nf">orange</span> <span class="nf">set↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">orange</span> <span class="nf">show↵</span> <span class="mh">$1</span><span class="kt">.00</span>  <span class="nf">ok</span>
+</span></span></code></pre></div><p>第三种方式是让 <code>V</code> 取得输入流中的下一个元素 <code>NP</code>。这种方式其实相当常用，例如 <code>FORTH</code> 系统本身提供的 <code>CREATE</code> 和 <code>FORGET</code> 等词。此时跟在后面的 <code>NP</code> 应理解为 <code>V</code> 对其进行处理的记号或字符串，它未必是一个已经定义的词。</p>
+<p>实现这种方式可以使用 <code>PARSE</code> 或 <code>PARSE-NAME</code> 等系统提供的词对输入流进行处理，或在冒号定义中使用其他要求输入流中下一个元素的词（第一部分中所有关于 <code>CREATE</code>&hellip;<code>DOES&gt;</code> 的例子都是这样使用 <code>CREATE</code> 的）。</p>
+<p>需要注意的是，这类词在冒号定义中使用时，如果想让它取得定义中的下一个元素的内容，而不是在运行时取得输入流中的下一个元素的内容，可能需要将其编写为立即词（例如系统提供的 <code>.&quot;</code>）。</p>
+<h3 id="形容词名词">形容词+名词</h3>
+<p>自然语言里还有修饰其他词的词，如形容词：</p>
+<pre tabindex="0"><code>NP → ADJ N
+</code></pre><p>在 Forth 中实现这一语序的推荐方式是：让 <code>ADJ</code> 设置一个标志，在 <code>N</code> 里面根据标志返回相应的值。</p>
+<p>例如，假设系统用 0..7 表示八种颜色（如 1 表示蓝色），将颜色代码的第 3 位设置为 1 表示对应的亮色（如 9 表示亮蓝色）。那么可以有：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">variable</span> <span class="nc">light-mask</span>	<span class="c1">\ 是否亮色的掩码。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>					<span class="c1">\ 0 表示普通颜色，8（第 3 位为 1 ）表示亮色。与 颜色代码按位或。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">0</span> <span class="nf">light-mask</span> <span class="k">!
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">light</span>  <span class="mi">8</span> <span class="nf">light-mask</span> <span class="k">! ;	</span><span class="c1">\ 亮色：将掩码 light-mask 设置为 8
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">color</span> <span class="c1">( color-code -- color-code-with-light-mask )</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">light-mask</span> <span class="k">@ or	</span><span class="c1">\ 颜色代码与 light-mask 取或
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="mi">0</span> <span class="nf">light-mask</span> <span class="k">! ;	</span><span class="c1">\ light 只管到最近的一个颜色词，所以用完之后设置回 0 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">blue</span>  <span class="mi">1</span> <span class="nf">color</span> <span class="k">;
+</span></span></span></code></pre></div><p>程序的行为符合预期：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">blue</span> <span class="kt">.</span><span class="nf">↵</span> <span class="mi">1</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">light</span> <span class="nf">blue</span> <span class="kt">.</span><span class="nf">↵</span> <span class="mi">9</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">blue</span> <span class="kt">.</span><span class="nf">↵</span> <span class="mi">1</span>  <span class="nf">ok</span>
+</span></span></code></pre></div><p>（这段程序有另一种写法，参见后面“用 <code>CREATE</code>&hellip;<code>DOES&gt;</code> 提取功能”的内容。）</p>
+<p>前面的描述中借用了句法学常用的符号（如 <code>S → NP VP</code>），这不应理解为 Forth 解释器可以处理自然语言或其他程序设计语言中常见的递归的句法。对编译技术或句法学有所了解的读者可能已经发现，<strong>Forth 解释器不包含通常意义的句法分析器，它的行为是从左向右依次处理输入流中的记号</strong><sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>。因此，即使采用了前面提到的技巧，它对句法的处理能力也是有限的。例如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">+</span>  <span class="mi">0</span><span class="k">. parse-name &gt;number 2drop d&gt;s + </span><span class="nf">;↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">*</span>  <span class="mi">0</span><span class="k">. parse-name &gt;number 2drop d&gt;s * </span><span class="nf">;↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">3</span> <span class="k">+ </span><span class="mi">4</span> <span class="kt">.</span><span class="nf">↵</span> <span class="mi">7</span>  <span class="nf">ok</span>		<span class="c1">\ 可以处理
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">3</span> <span class="k">* </span><span class="mi">4</span> <span class="kt">.</span><span class="nf">↵</span> <span class="mi">12</span>  <span class="nf">ok</span>	<span class="c1">\ 可以处理
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">1</span> <span class="k">+ </span><span class="mi">2</span> <span class="k">* </span><span class="mi">3</span> <span class="kt">.</span><span class="nf">↵</span> <span class="mi">9</span>  <span class="nf">ok</span>	<span class="c1">\ 从左向右依次处理，不能处理优先级
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">100</span> <span class="kn">constant</span> <span class="nc">hundred↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">hundred</span> <span class="k">+ </span><span class="mi">1</span> <span class="kt">.</span><span class="nf">↵</span> <span class="mi">101</span>  <span class="nf">ok</span>	<span class="c1">\ 先将 hundred ( -- 100 ) 的结果压栈，可以处理
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">1</span> <span class="k">+ </span><span class="nf">hundred</span> <span class="kt">.</span><span class="nf">↵</span> <span class="mi">1</span>  <span class="nf">ok</span>	<span class="c1">\ 重新定义的 “+” 右边的东西只能是字面量，没有能力先将其求值
+</span></span></span></code></pre></div><h2 id="关于程序风格的惯例与建议">关于程序风格的惯例与建议<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup></h2>
+<h3 id="一般惯例">一般惯例</h3>
+<ul>
+<li>
+<p><strong>多定义几个简单的词，让每一个词执行简单确定的工作。</strong></p>
+<p>第一部分正文中已经重复多次。读者也可以从例子中体会到。</p>
+</li>
+<li>
+<p><strong>让数字跟在词前面，文本跟在词后面。</strong></p>
+<p>例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">20</span> <span class="k">spaces	</span>			<span class="c1">\ 数字跟在词前面
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">forget </span><span class="nf">blue</span>				<span class="c1">\ 文本跟在词后面
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">100</span> <span class="kn">constant</span> <span class="nc">hundred</span>	<span class="c1">\ 同时有数字和文本的情况
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="s">s&#34;</span> <span class="s">max-n</span><span class="nf">&#34;</span> <span class="k">environment?	</span><span class="c1">\ 如果要在编译模式和立即模式下都能使用，用 s&#34; 可能更方便
+</span></span></span></code></pre></div></li>
+<li>
+<p><strong>词应该把它需要的参数从栈里消耗掉。</strong></p>
+<p>例如，编写一个发射导弹的程序。发射系统有下面的几个词：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="k">load	</span><span class="c1">\ 装弹。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">aim</span>		<span class="c1">\ 瞄准。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">fire</span>	<span class="c1">\ 开火。
+</span></span></span></code></pre></div><p>它们都需要发射架的编号 <code>pad#</code> 作为参数。如果要定义</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">launch</span>	<span class="c1">( pad# -- )</span>	<span class="c1">\ 发射导弹：先装弹，再瞄准，最后开火。
+</span></span></span></code></pre></div><p>显然，程序的某处需要两个 <code>dup</code>。不推荐将这两个 <code>dup</code> 写在 <code>load</code> 和 <code>aim</code> 里：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="k">load	</span><span class="c1">( pad# -- pad# )</span>
+</span></span><span class="line"><span class="cl"><span class="nf">aim</span>		<span class="c1">( pad# -- pad# )</span>
+</span></span><span class="line"><span class="cl"><span class="nf">fire</span>	<span class="c1">( pad# -- )</span>
+</span></span></code></pre></div><p>虽然定义 <code>launch</code> 看起来很简洁：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">launch</span> <span class="c1">( pad# -- )</span> <span class="k">load </span><span class="nf">aim</span> <span class="nf">fire</span> <span class="k">;
+</span></span></span></code></pre></div><p>然而如果想定义 <code>ready</code>（先装弹再瞄准）就必须在最后把 <code>pad#</code> <code>drop</code> 掉：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">ready</span> <span class="c1">( pad# -- )</span> <span class="k">load </span><span class="nf">aim</span> <span class="k">drop ;
+</span></span></span></code></pre></div><p>推荐的方式是<strong>让三个词对栈的作用一致</strong>。此时建议遵循将参数消耗掉的惯例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="k">load	</span><span class="c1">( pad# -- )</span>
+</span></span><span class="line"><span class="cl"><span class="nf">aim</span>		<span class="c1">( pad# -- )</span>
+</span></span><span class="line"><span class="cl"><span class="nf">fire</span>	<span class="c1">( pad# -- )</span>
+</span></span></code></pre></div><p>定义 <code>launch</code> 和 <code>ready</code> 如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">launch</span> <span class="c1">( pad# -- )</span> <span class="k">dup load </span> <span class="k">dup </span><span class="nf">aim</span>  <span class="nf">fire</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">ready</span> <span class="c1">( pad# -- )</span>  <span class="k">dup load </span> <span class="nf">aim</span> <span class="k">;
+</span></span></span></code></pre></div></li>
+<li>
+<p><strong>序号从 0 开始。</strong></p>
+<p>自然语言习惯从 1 开始数数。但是从 0 开始数数能够大大简化处理。例如有一个表格，里面有若干条记录，每条记录占 8 字节。如果记录序号和字节数都从 0 开始数，那么计算记录的偏移量是最简单的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">record</span> <span class="c1">( record# -- adr )</span> <span class="mi">8</span> <span class="k">* </span><span class="nf">table</span> <span class="k">+ ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="c1">\ 记录的偏移量 = 记录序号 × 8
+</span></span></span><span class="line"><span class="cl"><span class="c1">\ 第一个记录（记录 0）的偏移量：0 × 8 = 0
+</span></span></span><span class="line"><span class="cl"><span class="c1">\ 第二个记录（记录 1）的偏移量：1 × 8 = 8
+</span></span></span><span class="line"><span class="cl"><span class="c1">\ 第三个记录（记录 2）的偏移量：2 × 8 = 8
+</span></span></span><span class="line"><span class="cl"><span class="c1">\ ...
+</span></span></span></code></pre></div><p>显然，两个里任何一个从 1 开始数，都会在公式中增加“减一”的环节。如果要兼顾自然习惯，暴露给用户“从 1 开始”的界面，可以定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">item</span> <span class="c1">( n -- adr )</span> <span class="k">1- </span><span class="nf">record</span> <span class="k">;
+</span></span></span></code></pre></div></li>
+<li>
+<p><strong>参数中，地址在长度前面。</strong></p>
+<p>标准中遵循这一惯例。如处理字符串的词要求<strong>首地址和长度</strong> <code>( c-addr u )</code> 二元组。</p>
+</li>
+<li>
+<p><strong>参数中，源在目标前面。</strong></p>
+<p>如第一部分的例子中定义的块拷贝词 <code>cp ( src dst -- )</code>。</p>
+<p>系统提供的 <code>MOVE</code> 同时遵循这两条惯例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="k">MOVE	</span><span class="c1">( addr1 addr2 u -- )</span>	<span class="c1">\ 从 addr1 向 addr2 搬移 u 字节的内容
+</span></span></span></code></pre></div></li>
+<li>
+<p><strong>参数中，越不经常更改的元素越放在后面。</strong></p>
+<p>这样可以避免很多无谓的 <code>SWAP</code>、<code>ROT</code> 等栈操作。前两条惯例背后的逻辑与本条相合。</p>
+<p>如“写 I2C”的词这样定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">I2C-WR</span>	<span class="c1">( data regnum addr -- flag )</span>	<span class="c1">\ 向 I2C 总线上地址 addr 的器件的 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>										<span class="c1">\ 寄存器 regnum 写数据 data，返回状态 flag
+</span></span></span></code></pre></div><p>比这样定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">I2C-WR2</span>	<span class="c1">( addr regnum data -- flag )</span>
+</span></span></code></pre></div><p>使用起来要方便得多。想想如何定义一个新词，给某个特定地址的器件写内容，或给某个特定地址器件的特定的寄存器写内容！</p>
+</li>
+<li>
+<p><strong>尽量避免词依赖输入流中后面的词的特性。</strong></p>
+<p>例如，有些读者可能想这样实现“形容词+名词”的语序：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">1</span> <span class="kn">constant</span> <span class="nc">blue</span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">light</span> <span class="c1">\ &#34;color&#34; ( -- color-value )
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="nf">&#39;</span> <span class="k">execute </span><span class="mi">8</span> <span class="k">or ; </span> 
+</span></span></code></pre></div><p>这里定义的 <code>light</code> 从输入流取得下一个记号，获取它的 <code>xt</code>，执行它，将返回值的位 3 置一。
+<code>light</code> 对下一个记号 <code>&quot;color&quot;</code> 的特性有很多预期：</p>
+<ol>
+<li><code>&quot;color&quot;</code> 必须是词典中已有的词（这样才能获取 <code>xt</code> 和执行）；</li>
+<li><code>&quot;color&quot;</code> 必须代表颜色；</li>
+<li><code>&quot;color&quot;</code> 必须有一个单精度数字返回值（对栈的作用为 <code>( ... -- n )</code>）。</li>
+</ol>
+<p>如果不满足这些预期，那么 <code>light</code> 就会（可能是一声不响地）出错。另外，这里的 <code>light</code> 在冒号定义中无法使用，它会在执行时从输入流取得 <code>&quot;color&quot;</code>。</p>
+<p>相比之下，前面介绍过的设置标志的方法就不存在上面这些问题。</p>
+</li>
+<li>
+<p><strong>让词只做它自身的工作。</strong></p>
+<p>最好的例子是 Forth 编译器本身。在编译一个冒号定义的过程中，编译器只做下列工作：</p>
+<ul>
+<li>
+<p>获取输入流中的下一个记号，在字典中查找它；</p>
+</li>
+<li>
+<p>如果它是一个普通词，编译它的地址；</p>
+</li>
+<li>
+<p>如果它是一个立即词，执行它；</p>
+</li>
+<li>
+<p>如果它不是一个已有的词，试图将其按数字解析，并作为字面量编译进程序；</p>
+</li>
+<li>
+<p>如果它也不是一个数字，那么中止并打印错误信息。</p>
+</li>
+</ul>
+<p>诸如 <code>IF</code>、<code>ELSE</code>、<code>THEN</code> 的词由这些词本身处理，编译器甚至不知道它们的具体作用。编译器只知道它们是立即词，遇到的时候执行它们，让它们做自身要做的工作。</p>
+<p>甚至注释用的 <code>(</code> 都可以定义为一个词，而不是让编译（解释）器对它进行特殊处理<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="c1">\ `(` 是一个立即词。它的作用是获取输入流中直到 ) 的内容，不做任何处理
+</span></span></span><span class="line"><span class="cl"><span class="c1">\ （将其 ( c-addr u ) 抛弃）。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">(</span>  <span class="k">[char] </span><span class="nf">)</span> <span class="k">parse 2drop ; immediate
+</span></span></span></code></pre></div></li>
+</ul>
+<ul>
+<li>
+<p><strong>如果要解释专用的语言，不要编写专用的解释（编译）器，而要借助 Forth 解释器本身。</strong></p>
+<p>很多应用都需要解释专用的语言，也就是实现目的所需的一套专门的指令。例如 <code>bash</code> 解释 <code>cd</code>、<code>echo</code>、<code>pwd</code> 等内部命令，并对变量、表达式、控制结构等进行处理；汇编器解释 <code>ADD</code>、<code>SUB</code>、<code>JMP</code> 等助记符，有些还具有宏替换、符号标号等高级功能。</p>
+<p>其他语言的用户习惯于<strong>编写</strong>解释器来完成这些工作。不同的是，Forth 用户习惯于借助 Forth 解释器本身，<strong>定义一组词</strong>来完成同样的工作。</p>
+<p>Forth 自身的数字格式化输出是最好的例子。C 语言借助 <code>printf()</code> 完成类似的工作。然而 <code>printf()</code> 的格式串与 C 语言本身相差甚远，而且在运行时解析。相比之下，Forth 的 <code>#</code>、<code>#S</code>、<code>SIGN</code>、<code>HOLD</code> 和 <code>HOLDS</code> 本身就是词，而初始化输出缓冲区的 <code>&lt;#</code> 和将未处理数字丢弃、输出缓冲区的 <code>( c-addr u )</code> 二元组压栈的 <code>#&gt;</code> 组成了一对对称的括弧，让语义变得清晰（格式化输出的词在括弧内使用）。<code>&lt;#</code>&hellip;<code>#&gt;</code> 在编译时解析，提高了运行效率；而且其内部可以使用任何其他的 Forth 词（如 <code>BEGIN</code>&hellip;<code>WHILE</code>&hellip;<code>REPEAT</code>、<code>IF</code>&hellip;<code>ELSE</code>&hellip;<code>THEN</code> 等等），<code>printf()</code> 的格式串是没有这个灵活程度的。</p>
+<p>再举一个例子：想让 Forth 演奏音乐，那么可以将音名定义为词，对栈的作用为 <code>( 时值 -- )</code>，行为为按时值播放对应音符。这样一段乐谱可以写成：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">freude1</span>  <span class="mi">8</span> <span class="nf">e4</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="mi">8</span> <span class="nf">f4</span> <span class="mi">8</span> <span class="nf">g4</span> <span class="mi">8</span> <span class="nf">g4</span> <span class="mi">8</span> <span class="nf">f4</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="mi">8</span> <span class="nf">d4</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">8</span> <span class="nf">c4</span> <span class="mi">8</span> <span class="nf">c4</span> <span class="mi">8</span> <span class="nf">d4</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">freude2</span>  <span class="nf">freude1</span> <span class="mi">12</span> <span class="nf">e4</span> <span class="mi">4</span> <span class="nf">d4</span> <span class="mi">16</span> <span class="nf">d4</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">freude3</span>  <span class="nf">freude1</span> <span class="mi">12</span> <span class="nf">d4</span> <span class="mi">4</span> <span class="nf">c4</span> <span class="mi">16</span> <span class="nf">c4</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">freude4</span>  <span class="mi">8</span> <span class="nf">d4</span> <span class="mi">8</span> <span class="nf">d4</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="mi">8</span> <span class="nf">c4</span> <span class="mi">8</span> <span class="nf">d4</span> <span class="mi">4</span> <span class="nf">e4</span> <span class="mi">4</span> <span class="nf">f4</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="mi">8</span> <span class="nf">c4</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">8</span> <span class="nf">d4</span> <span class="mi">4</span> <span class="nf">e4</span> <span class="mi">4</span> <span class="nf">f4</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="mi">8</span> <span class="nf">d4</span> <span class="mi">8</span> <span class="nf">c4</span> <span class="mi">8</span> <span class="nf">d4</span> <span class="mi">16</span> <span class="nf">g3</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">freude</span>  <span class="nf">freude2</span> <span class="nf">freude3</span> <span class="nf">freude4</span> <span class="nf">freude3</span> <span class="k">;
+</span></span></span></code></pre></div><p>有一点音乐常识的人很容易理解这种乐谱。而且在编写这种乐谱的时候，可以自然地利用 Forth 本身提供的嵌套调用（用来复用重复出现的乐段，例如上面的例子中，<code>freude</code> 调用了 <code>freude3</code>，而<code>freude3</code> 又调用了 <code>freude1</code>）、循环（用来实现反复记号或多段歌曲）等语言特性。</p>
+<p>为了对比，给出一个传统语言播放音乐的例子。CEC-I BASIC 提供了 <code>MUSIC</code> 指令：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-basic" data-lang="basic"><span class="line"><span class="cl"><span class="vg">MUSIC</span><span class="w"> </span><span class="vg">x</span><span class="p">,</span><span class="vg">y</span><span class="w"> </span><span class="c1">&#39;x 对应频率，y 对应时值</span>
+</span></span></code></pre></div><p>用 <code>MUSIC</code> 指令播放音乐的程序往往长得像这样：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-basic" data-lang="basic"><span class="line"><span class="cl"><span class="nl">10</span><span class="w"> </span><span class="kr">FOR</span><span class="w"> </span><span class="vg">I</span><span class="o">=</span><span class="il">1</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="il">15</span>
+</span></span><span class="line"><span class="cl"><span class="nl">20</span><span class="w"> </span><span class="kr">READ</span><span class="w"> </span><span class="vg">X</span><span class="p">,</span><span class="vg">Y</span>
+</span></span><span class="line"><span class="cl"><span class="nl">30</span><span class="w"> </span><span class="vg">MUSIC</span><span class="w"> </span><span class="vg">X</span><span class="p">,</span><span class="vg">Y</span>
+</span></span><span class="line"><span class="cl"><span class="nl">40</span><span class="w"> </span><span class="kr">NEXT</span><span class="w"> </span><span class="vg">I</span>
+</span></span><span class="line"><span class="cl"><span class="nl">50</span><span class="w"> </span><span class="kd">DATA</span><span class="w"> </span><span class="il">255</span><span class="p">,</span><span class="il">160</span><span class="p">,</span><span class="w"> </span><span class="il">228</span><span class="p">,</span><span class="il">160</span><span class="p">,</span><span class="w"> </span><span class="il">205</span><span class="p">,</span><span class="il">160</span><span class="p">,</span><span class="w"> </span><span class="il">192</span><span class="p">,</span><span class="il">160</span><span class="p">,</span><span class="w"> </span><span class="o">...</span>
+</span></span></code></pre></div><p>与上面的 Forth 程序相比，可读性高下立判。</p>
+<p>QBasic 中的 <code>PLAY</code> 语句是一个小型的专用语言解释器。它解释后面的字符串，并将其作为乐谱播放。如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-basic" data-lang="basic"><span class="line"><span class="cl"><span class="vg">music1$</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;o2 c1 d4 f4 e4 d4 g2 g2 g4 a4 e4 f4 d2 d2 d4 f4 e4 d4 c4&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">PLAY</span><span class="w"> </span><span class="vg">music1$</span>
+</span></span></code></pre></div><p>可以利用 BASIC 语言的字符串操作、流控制等语言特性来实现复杂的乐谱。但是，这样做也会影响可读性（也许只能称 <code>PLAY</code> 语句解释的字符串为“乐谱”，字符串外面组织乐谱的程序只能称为程序，他们的句法是完全不同的），效率也比 Forth 程序低得多。</p>
+<p>这种例子比比皆是。下面再举一例：如果要实现一个汇编器，那么可以将 <code>ADD</code>、<code>SUB</code>、<code>JMP</code> 等助记符定义成立即词，它们从栈中取得参数，并将对应的代码编译进词典。这不需要用户单独编写专用的解释器，借助 Forth 解释器本身就可以实现目的。</p>
+</li>
+</ul>
+<h3 id="程序结构">程序结构</h3>
+<p>本部分内容着重介绍传统的用屏（也就是 1024 字节大小的块，每块 16 行，每行 64 个字节）组织程序的方法。现代的 Forth 系统往往支持文件；用文件组织程序的自由度大很多，但关于空格、缩进等的惯例仍然值得考虑。</p>
+<ul>
+<li>
+<p><strong>程序的整体结构应该有层次，像一本书。</strong></p>
+<p>一个完整的应用程序包含：</p>
+<ul>
+<li>
+<p>屏：Forth 源代码的最小单位，16 行 × 64 字节大小。</p>
+</li>
+<li>
+<p>词汇表（lexicon）：实现一个模块的一组词，大小往往是 1~3 屏。</p>
+</li>
+<li>
+<p>章节（chapter）：一组相关的词汇表。</p>
+</li>
+<li>
+<p>装入屏（load screen）：类似书的目录，用途是将一组章节按正确的顺序装入。</p>
+</li>
+</ul>
+<p>一个典型的装入屏的例子如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">-----------------------------[Screen</span> <span class="mi">001</span><span class="nf">]-----------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="mi">00</span><span class="nf">|</span> <span class="c1">\ C QTF+ Load Screen                                    07/09/83 |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">01</span><span class="nf">|</span> <span class="kn">:</span> <span class="nc">release#</span>  <span class="s">.&#34;</span> <span class="s">2.01</span><span class="nf">&#34;</span> <span class="k">; </span>                                          <span class="nf">|</span>
+</span></span><span class="line"><span class="cl"><span class="mi">02</span><span class="nf">|</span> <span class="mi">9</span>   <span class="k">load </span> <span class="c1">\ compiler tools, language primitives                  |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">03</span><span class="nf">|</span> <span class="mi">12</span>  <span class="k">load </span> <span class="c1">\ video primitives                                     |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">04</span><span class="nf">|</span> <span class="mi">21</span>  <span class="k">load </span> <span class="c1">\ editor                                               |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">05</span><span class="nf">|</span> <span class="mi">39</span>  <span class="k">load </span> <span class="c1">\ line display                                         |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">06</span><span class="nf">|</span> <span class="mi">48</span>  <span class="k">load </span> <span class="c1">\ formatter                                            |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">07</span><span class="nf">|</span> <span class="mi">69</span>  <span class="k">load </span> <span class="c1">\ boxes                                                |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">08</span><span class="nf">|</span> <span class="mi">81</span>  <span class="k">load </span> <span class="c1">\ deferring                                            |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">09</span><span class="nf">|</span> <span class="mi">90</span>  <span class="k">load </span> <span class="c1">\ framing                                              |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">10</span><span class="nf">|</span> <span class="mi">96</span>  <span class="k">load </span> <span class="c1">\ labels, figures, tables                              |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">11</span><span class="nf">|</span> <span class="mi">102</span> <span class="k">load </span> <span class="c1">\ table of contents generator                          |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">12</span><span class="nf">|</span>                                                                  <span class="nf">|</span>
+</span></span><span class="line"><span class="cl"><span class="mi">13</span><span class="nf">|</span>                                                                  <span class="nf">|</span>
+</span></span><span class="line"><span class="cl"><span class="mi">14</span><span class="nf">|</span>                                                                  <span class="nf">|</span>
+</span></span><span class="line"><span class="cl"><span class="mi">15</span><span class="nf">|</span>                                                                  <span class="nf">|</span>
+</span></span><span class="line"><span class="cl"><span class="nf">----------------------------------------------------------------------</span>
+</span></span></code></pre></div><p>只要用 <code>1 load</code> 一条指令，就可以装入整个应用程序。</p>
+<p>这个装入屏指向应用程序的每一个章节对应的装入屏。如屏 12 是视频基本指令的装入屏。</p>
+<p>装入屏起到目录的作用。比如用户想寻找关于编辑器的程序，看到装入屏之后，就可以了解编辑器从屏 21 开始。</p>
+<p>章节的装入屏可以采用相对编号的方式实现。例如定义下面的词 <code>fh</code>（意思是 from here）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">fh</span>	<span class="c1">\ ( offset -- offset-block) &#34;from here&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">blk @ + ;
+</span></span></span></code></pre></div><p>回顾 <code>blk</code> 中存储的是当前 <code>load</code> 的块号。这样一个章节的装入屏可以长这样：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">-----------------------------[Screen</span> <span class="mi">100</span><span class="nf">]-----------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="mi">00</span><span class="nf">|</span> <span class="c1">\ C GRAPHICS            Chapter load                    07/11/83 |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">01</span><span class="nf">|</span>                                                                  <span class="nf">|</span>
+</span></span><span class="line"><span class="cl"><span class="mi">02</span><span class="nf">|</span> <span class="mi">1</span> <span class="nf">fh</span> <span class="k">load </span>          <span class="c1">\ dot-drawing primitive                      |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">03</span><span class="nf">|</span> <span class="mi">2</span> <span class="nf">fh</span> <span class="mi">3</span> <span class="nf">fh</span> <span class="k">thru </span>     <span class="c1">\ line-drawing primitives                    |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">04</span><span class="nf">|</span> <span class="mi">4</span> <span class="nf">fh</span> <span class="mi">7</span> <span class="nf">fh</span> <span class="k">thru </span>     <span class="c1">\ scaling, rotation                          |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">05</span><span class="nf">|</span> <span class="mi">8</span> <span class="nf">fh</span> <span class="k">load </span>          <span class="c1">\ box                                        |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">06</span><span class="nf">|</span> <span class="mi">9</span> <span class="nf">fh</span> <span class="mi">11</span> <span class="nf">fh</span> <span class="k">thru </span>    <span class="c1">\ circle                                     |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">07</span><span class="nf">|</span>                                                                  <span class="nf">|</span>
+</span></span><span class="line"><span class="cl"><span class="mi">08</span><span class="nf">|</span>                                                                  <span class="nf">|</span>
+</span></span><span class="line"><span class="cl"><span class="mi">09</span><span class="nf">|</span>                                                                  <span class="nf">|</span>
+</span></span><span class="line"><span class="cl"><span class="mi">10</span><span class="nf">|</span> <span class="nf">corner</span>  <span class="c1">\ initialize relative position to low-left corner        |
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">11</span><span class="nf">|</span>                                                                  <span class="nf">|</span>
+</span></span><span class="line"><span class="cl"><span class="mi">12</span><span class="nf">|</span>                                                                  <span class="nf">|</span>
+</span></span><span class="line"><span class="cl"><span class="mi">13</span><span class="nf">|</span>                                                                  <span class="nf">|</span>
+</span></span><span class="line"><span class="cl"><span class="mi">14</span><span class="nf">|</span>                                                                  <span class="nf">|</span>
+</span></span><span class="line"><span class="cl"><span class="mi">15</span><span class="nf">|</span>                                                                  <span class="nf">|</span>
+</span></span><span class="line"><span class="cl"><span class="nf">----------------------------------------------------------------------</span>
+</span></span></code></pre></div><p>屏 101（从当前屏往后算第 1 屏，也就是 <code>1 fh</code>）存储画点的基本指令，屏 102~103 存储画线的基本指令，依此类推。这样做的优点是，屏 100~111 的这段画图程序可以任意搬移而不用修改。
+下面是一个改进的 <code>fh</code> 定义，可以在立即模式下用在 <code>list</code> 中：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">fh</span>	<span class="c1">\ ( offset -- offset-block) &#34;from here&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">blk @ </span> <span class="k">?dup 0= if </span> <span class="k">scr @ </span> <span class="k">then </span> <span class="k">+ ;
+</span></span></span></code></pre></div><p>推荐在整个应用程序的装入屏中使用绝对屏号，在章节的装入屏中使用相对屏号。当然，足够小的应用程序可能不分章节，这样只需要一个装入屏（此时可以使用相对屏号）。</p>
+<p>层次结构的主要优点是，用户可以自由地修改、装入、测试和使用程序的任何一部分而不影响其他部分。这非常有利于快速迭代开发。层次化组织的屏就像是一本书，可以独立而快速地“随机访问”其中的任何一个章节。</p>
+<p>如果程序的某一个章节有一个存放在不同屏号位置的新版本，那么只需要修改装入屏中的屏号就可以进行测试，而不需要将大块内容在非挥发性存储器内部搬来搬去。</p>
+<p>一屏内容要么是程序，要么是装入屏，不要将它们混合在一起。在一大堆程序中间掺杂一个 <code>load</code> 或者 <code>thru</code> 会大大影响可读性。</p>
+</li>
+<li>
+<p><strong>定义尽量不要跨屏。</strong></p>
+<p>跨屏的定义难以调试。如果遵循<strong>多定义几个简单的词</strong>的建议，那么一个定义的长度很难超过一屏<sup id="fnref:7"><a href="#fn:7" class="footnote-ref" role="doc-noteref">7</a></sup>。</p>
+</li>
+</ul>
+<ul>
+<li>
+<p><strong>一屏尽量留一两行空行，以备不时之需。</strong></p>
+<p>调试程序的时候万一需要加几条指令的话，这一两行空行可以让编程者免去将块搬来搬去的麻烦。</p>
+</li>
+<li>
+<p><strong>用一屏的第 0 行书写关于从该屏开始的一部分程序的注释。</strong></p>
+<p>建议使用每个词汇表的开头一屏的最前面一行书写关于这个词汇表作用的简要注释。</p>
+<p>在只支持块而不支持文件的 Forth 系统（如 My4TH Forth）中，编程者很容易忘记某一个具体的块的内容。第一部分“块操作”一节中有一个例子讲过如何遍历块，并打印所有位于某屏的最前面一行并以 <code>\ C</code> 开头的注释。借助这一小段程序，可以在忘记某道程序存储在何处的时候迅速找到它（但是不要忘了这个例子本身存储在何处，建议在屏 0 中存放关于这段程序位置的注释）。</p>
+</li>
+<li>
+<p><strong>冒号定义从一行的最左边开始。</strong></p>
+<p>建议每一个定义都至少占一行，冒号从行首开始：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">hello</span>  <span class="s">.&#34;</span> <span class="s">Hello</span><span class="nf">&#34;</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">goodbye</span>  <span class="s">.&#34;</span> <span class="s">Goodbye</span><span class="nf">&#34;</span> <span class="k">;
+</span></span></span></code></pre></div><p>而不是：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">hello</span>  <span class="s">.&#34;</span> <span class="s">Hello</span><span class="nf">&#34;</span> <span class="k">; </span> <span class="kn">:</span> <span class="nc">goodbye</span>  <span class="s">.&#34;</span> <span class="s">Goodbye</span><span class="nf">&#34;</span> <span class="k">;	</span><span class="c1">\ goodbye 不容易找到！
+</span></span></span></code></pre></div><p>如果实在空间不足，那么建议在占用同一行的定义之间空三个以上的空格：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">hello</span>  <span class="s">.&#34;</span> <span class="s">Hello</span><span class="nf">&#34;</span> <span class="k">; </span>  <span class="kn">:</span> <span class="nc">goodbye</span>  <span class="s">.&#34;</span> <span class="s">Goodbye</span><span class="nf">&#34;</span> <span class="k">;	</span><span class="c1">\ 空三格好一些
+</span></span></span></code></pre></div></li>
+<li>
+<p><strong>注意空格和缩进。</strong></p>
+<p>众所周知，Forth 解释器接受输入流中由空白字符分隔的记号，对空白字符的个数没有特别要求。但是对人来说，在编写程序时将联系紧密的一组记号用 1 个空格分隔，联系相对不那么紧密的记号之间用 2 个或多个空格分隔，对提高可读性有良好作用。这里本文作者给出自己习惯的例子（与 <em>Thinking Forth</em> 中的建议未必完全相同）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">hello</span>  <span class="s">.&#34;</span> <span class="s">Hello</span><span class="nf">&#34;</span> <span class="k">;	</span><span class="c1">\ 冒号与名称之间 1 个空格，名称与冒号定义体之间 2 个空格
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">fh</span> <span class="c1">( offset -- offset-block )</span> <span class="k">blk @ + ;	</span><span class="c1">\ 如果要注释出词对栈的作用，
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>											<span class="c1">\ 栈表示法写在名称与冒号定义体之间，
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>											<span class="c1">\ 前后各 1 个空格即可
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">fh</span>	<span class="c1">\ ( offset -- offset-block)			\ 多行定义从第二行起缩进。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  											<span class="c1">\ 建议以 3 个空格为单位（2 个也可接受）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="k">blk @ </span> <span class="k">?dup 0= if </span> <span class="k">scr @ </span> <span class="k">then </span> <span class="k">+ ;	</span>	<span class="c1">\ 逻辑上联系相对紧密的一组记号之间
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   											<span class="c1">\ 空 1 格，组与组之间空 2 格
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">hello</span>  <span class="s">.&#34;</span> <span class="s">Hello</span><span class="nf">&#34;</span> <span class="k">; </span>  <span class="kn">:</span> <span class="nc">goodbye</span>  <span class="s">.&#34;</span> <span class="s">Goodbye</span><span class="nf">&#34;</span> <span class="k">;	</span><span class="c1">\ 实在空间不足要把两个冒号定义写一行
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  												<span class="c1">\ 时，中间空 3 格
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">price</span>  <span class="k">create </span><span class="mi">0</span> <span class="k">,
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">does&gt; </span><span class="nf">(price-action)</span> <span class="k">;	</span><span class="c1">\ does&gt; 最好另起一行
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">price</span>  <span class="k">create </span><span class="mi">0</span> <span class="k">, </span>  <span class="k">does&gt; </span><span class="nf">(price-action)</span> <span class="k">;	</span><span class="c1">\ 不想另起一行的话，中间空 3 个空格吧
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">create </span><span class="nf">buttons</span>  <span class="nf">&#39;</span> <span class="nf">btn0</span> <span class="k">, </span><span class="nf">&#39;</span> <span class="nf">btn1</span> <span class="k">, </span><span class="nf">&#39;</span> <span class="nf">btn2</span> <span class="k">, </span><span class="nf">&#39;</span> <span class="nf">btn3</span> <span class="k">, </span><span class="nf">&#39;</span> <span class="nf">btn4</span> <span class="k">,	</span><span class="c1">\ create 也与
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nf">&#39;</span> <span class="nf">btn5</span> <span class="k">,	</span>													<span class="c1">\ 冒号定义类似
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">cond</span> <span class="c1">( f -- )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">if </span>
+</span></span><span class="line"><span class="cl">      <span class="s">.&#34;</span> <span class="s">True.</span><span class="nf">&#34;</span> 	<span class="c1">\ 以 3 个空格为单位进一步缩进
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="k">else	</span>			<span class="c1">\ 如果空间足够，建议用回车分隔控制结构，
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="s">.&#34;</span> <span class="s">False.</span><span class="nf">&#34;</span>	<span class="c1">\ 用类似其他语言的缩进规则来缩进程序
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="k">then </span> <span class="k">cr ;	</span>	<span class="c1">\ 为省空间，cr 可以空两格放在 then 后面，最后的分号没必要另起一行
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">\ 为省空间也可以用空格分隔控制结构，但多重缩进时不容易看清楚，建议只在最内层这样做
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">cond</span> <span class="c1">( f -- )</span> <span class="k">if </span> <span class="s">.&#34;</span> <span class="s">True.</span><span class="nf">&#34;</span>  <span class="k">else </span> <span class="s">.&#34;</span> <span class="s">False.</span><span class="nf">&#34;</span>  <span class="k">then </span> <span class="k">cr ;	</span>
+</span></span></code></pre></div></li>
+<li>
+<p><strong>如果一屏的开始改变了缺省的数制，那么在一屏的最后要将数制切换回十进制。</strong></p>
+<p>数制对 Forth 系统来说属于全局状态。如果程序必须改变数制，建议在每一屏的开始改变，最后用 <code>DECIMAL</code> 恢复，或更讲究的办法是一开始用 <code>base @</code> 将数制压在栈中，最末了儿用 <code>base !</code> 恢复。</p>
+<p>当然 Forth 2012 标准规定了 <code>#</code>（十进制）、<code>$</code>（十六进制）、<code>%</code>（二进制）等数制前缀。利用它们可免去改变和恢复数制的麻烦。</p>
+<p>如果系统不支持这些前缀，那么还有一条建议——</p>
+</li>
+<li>
+<p><strong>在 HEX 状态下，16 进制数总是用 “0” 起头，以和十进制数与词区分。</strong></p>
+<p>如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">12</span>	<span class="c1">\ 在 decimal 模式下是十进制的 12，在 hex 模式下是十六进制的 12，
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">\ 阅读程序到一半的读者无法区分
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">012</span>	<span class="c1">\ 如果总是用 12 表示十进制的 12，用 012 表示十六进制的 12，那么就可以区分了。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">ADD</span>		<span class="c1">\ 到底是一个词还是一个十六进制数，完全取决于词典中是否有定义
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">0</span><span class="nf">ADD</span>	<span class="c1">\ 只需要保证不定义 0 开头且后面只包含数字及 A~F 的词，
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="c1">\ 就可以区分十六进制数字和词了。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="c1">\ 当然更好的办法是系统一直处在 decimal 模式下，
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="c1">\ 使用 12 和 $12、ADD 和 $ADD。但不是所有的系统都支持
+</span></span></span></code></pre></div></li>
+</ul>
+<h3 id="注释">注释</h3>
+<ul>
+<li>
+<p><strong>尽量让代码的意义自明。</strong></p>
+<p>这条建议的意义是自明的。</p>
+</li>
+<li>
+<p><strong>在注释中说明词的用途。</strong></p>
+<p>例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">range</span> <span class="c1">( n min max -- n1 )</span> <span class="c1">\ if min&lt;=n&lt;max, n1=n; else n1=0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="mi">2</span> <span class="k">pick </span><span class="nf">-rot</span> <span class="k">within 0= if </span> <span class="k">drop </span><span class="mi">0</span>  <span class="k">then ;
+</span></span></span></code></pre></div></li>
+<li>
+<p><strong>在注释中善用栈表示法。</strong></p>
+<p>关于一个词对栈的作用，前面已经有很多例子。如果有复杂的栈操作，多加一些栈表示法的注释会非常有助于理解。比如前面二分查找的例子。</p>
+</li>
+<li>
+<p><strong>为定义词的定义时行为和实例行为分别撰写注释。</strong></p>
+<p>例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">array</span> <span class="c1">\ name ( #cells -- )	\ example: 4 array name
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="k">create cells allot
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">does&gt; </span><span class="c1">( i -- &#39;cell )</span> <span class="k">swap cells + ;	</span><span class="c1">\ &#39;cell 代表 cell 的地址。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    									<span class="c1">\ 对实例行为的注释中不用写出 does&gt; 的行为
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    									<span class="c1">\ （压入栈顶的数据区域地址）
+</span></span></span></code></pre></div></li>
+<li>
+<p><strong>为立即词的编译时行为和执行时行为分别撰写注释。</strong></p>
+<p>例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">if</span> <span class="c1">( f -- )</span>	<span class="c1">\ 执行时行为：根据栈顶标志判断是否需要执行下面的程序段
+</span></span></span><span class="line"><span class="cl"><span class="c1">\ Compile: ( -- address-of-unresolved-branch )	\ 编译时行为：
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>												<span class="c1">\ 将下面要处理的分支地址压栈
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">...</span> <span class="k">; immediate	</span><span class="c1">\ 这是一个立即词
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">abort&#34;</span> <span class="c1">( f -- )</span>			<span class="c1">\ 执行时行为：根据栈顶标志判断是否中止程序并打印信息
+</span></span></span><span class="line"><span class="cl"><span class="c1">\ Compile: string&#34; ( -- )	\ 编译时需要执行时打印信息的字符串 string，以 &#34; 结尾
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">...</span>
+</span></span></code></pre></div><p>有时一个词既可以在编译模式下使用，又可以在立即模式下使用，那么可以这样编写注释：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">s&#34;</span>	<span class="c1">( -- c-addr u )</span>		<span class="c1">\ 执行时行为：将编译时后跟的字符串对应的
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>							<span class="c1">\ ( c-addr u ) 二元组压栈
+</span></span></span><span class="line"><span class="cl"><span class="c1">\ Compile: string&#34; ( -- )	\ 编译时需要字符串 string，以 &#34; 结尾
+</span></span></span><span class="line"><span class="cl"><span class="c1">\ Interpret: string&#34; ( -- c-addr u )	\ 如果在立即模式下使用，后面需跟字符串 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>										<span class="c1">\ string，以 &#34; 结尾，返回字符串对应的
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>										<span class="c1">\ ( c-addr u ) 二元组
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">...</span>
+</span></span></code></pre></div></li>
+</ul>
+<h3 id="词的名称">词的名称</h3>
+<ul>
+<li>
+<p><strong>词的名称要说明一个词“做什么”而不是“怎么做”。</strong></p>
+<p>名称是一个代号（做什么），而不是内容的缩写（怎么做）。比如</p>
+<pre tabindex="0"><code>Oedipus complex
+</code></pre><p>就比</p>
+<pre tabindex="0"><code>subconscious-attachment-to-parent-of-opposite-sex complex
+</code></pre><p>更适合作为一个名称，尽管读者不一定知道俄狄浦斯王弑父娶母的典故（现在不知道的读者也知道了）。</p>
+<p>具体到 Forth 上，不要把名称当成程序的缩写。例如：</p>
+<p>词 <code>ALLOT</code> 做的事情是分配内存。在大部分系统上，<code>ALLOT</code> 的做法是将 <code>HERE</code> 增加相应的字节数。然而 <code>ALLOT</code> 这个名字比诸如 <code>HERE+!</code> 的名字好，因为编程者想的是分配内存（做什么），而不是移动指针（怎么做）。</p>
+<p>当然懂得语言学的读者肯定听过<strong>凡是规则必有例外</strong>这半句话，况且这部分的内容都是惯例与建议，称不上规则（Forth 社群并没有其他语言的社群一样注重标准、规范之类的东西，甚至 Forth 2012 标准<a href="https://forth-standard.org/">官方网站</a>也更像一个论坛而不是死的文档，每一条下面读者都可以讨论）。诸如 <code>1+</code> 这种“做什么”能通过“怎么做”自明而且定义非常简单的词，名称当然可以既说“做什么”，又说“怎么做”。</p>
+</li>
+<li>
+<p><strong>选择最能表达意思的名称。</strong></p>
+<p>例：列出所有的词，用 <code>WORDS</code> 比用 <code>VLIST</code>（vocabulary list 的缩写）要更加达意。</p>
+<p>注：有些 Forth 系统支持在不同词表之间进行切换（My4TH Forth 暂无此项功能）。如 <code>EDITOR</code> 切换至命令式行编辑器的词表，<code>ASSEMBLER</code> 切换至汇编器的词表。此时 <code>editor words</code> 或者 <code>assembler words</code> 的意义就自明了。</p>
+</li>
+<li>
+<p><strong>选择在自然语言中能跟前后的词构成词组，且行为符合词组意义的名称。</strong></p>
+<p>这有利于让意义自明。例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">shutter</span> <span class="nf">open</span>	<span class="c1">\ shutter 将代表快门的 I/O 地址压栈，
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>				<span class="c1">\ open 将这个地址代表输出的位设置为 1。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="mi">3</span> <span class="nf">button</span> <span class="nf">does</span> <span class="nf">ignition</span>	
+</span></span><span class="line"><span class="cl">	<span class="c1">\ button 是 xt 的数组，3 button 取得这个数组的第 3 个元素的地址
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">\ （可以方便地用 create...does&gt; 定义这样的数据类型）。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">\ does 的作用是，将输入流中下一个词（此处为 ignition）的 xt 写到栈顶地址中。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">\ 这个程序段的意义与自然语言的意义（按钮 3 执行点火）完全符合。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">i&#39;m</span> <span class="nf">harry</span>		<span class="c1">\ 登录某个系统的词命名为 i&#39;m，
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>				<span class="c1">\ 这比 logon，login 或者 session 之类的名称都自然。
+</span></span></span></code></pre></div></li>
+<li>
+<p><strong>选择简洁的名称。</strong></p>
+<p>如果词的名称有多个选择，选择更短的那个。例如：</p>
+<ul>
+<li><code>HERE</code> 强于 <code>CURRENT-POSITION</code>；</li>
+<li><code>ENABLE</code> 强于 <code>ACTIVATE</code>，<code>GO</code>、<code>RUN</code> 或者 <code>ON</code> 可能更好；</li>
+<li><code>BRIGHT</code> 强于 <code>INTENSE</code>。</li>
+</ul>
+</li>
+<li>
+<p><strong>词的名称尽量使用全称而非缩写。</strong></p>
+<p>在惜存储空间如金的年代，人们经常使用缩写，如：</p>
+<ul>
+<li>
+<p>用 <code>DSPL-BFR</code> 来缩写 <code>DISPLAY-BUFFER</code></p>
+</li>
+<li>
+<p>用 <code>TMNL</code> 来缩写 <code>TERMINAL</code></p>
+<p>等等等等。</p>
+</li>
+</ul>
+<p><strong>从全称得到缩写容易，从缩写猜出全称难</strong>（我到底用什么缩写了 <code>DISPLAY</code>？是 <code>DISP</code> 还是 <code>DSPL</code> 还是 <code>DSPLY</code>？）。在存储极大丰富的当代尽量不要这样做。</p>
+<p>如果碰巧系统的存储空间很小，实在要求编程者惜字如金，可以与上一条建议结合起来考虑。如：</p>
+<ul>
+<li><code>GO</code> 强于 <code>ENBL</code></li>
+</ul>
+<p><strong>凡是规则必有例外</strong>的下半句是<strong>凡是例外均有规则</strong>，这条建议的例外能让读者理解这半句话。有一些词习惯用缩写：</p>
+<ul>
+<li>
+<p>Forth 系统中使用非常非常多的一些词用单个符号表示，如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">;</span> <span class="k">@ ! . ,
+</span></span></span></code></pre></div><p>把它们的名字起成</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">DEFINE</span> <span class="nf">END-DEFINITION</span> <span class="nf">FETCH</span> <span class="nf">STORE</span> <span class="nf">PRINT</span> <span class="nf">COMPILE#</span>
+</span></span></code></pre></div><p>不是不行，但是太过于冗长了（熟悉其他编程语言的读者可以比较一下 C 和 Pascal）。</p>
+<p>有趣的是，这些符号的名称，有一些已经进入自然语言，用来描述 Forth 语言独有的特性，如：</p>
+<ul>
+<li>
+<p><strong>冒号</strong>定义（有其他的词么？）</p>
+</li>
+<li>
+<p>将一个数<strong>逗</strong>进词典（逗号把一个数写进词典，跟 Forth 中编译的过程类似，但是跟<strong>冒号</strong>编译器的行为还不完全一致）</p>
+</li>
+</ul>
+</li>
+<li>
+<p>在终端下经常使用的词有时适合用单个字母的名称。如行编辑器的指令（<code>i</code> 代表插入行，<code>d</code> 代表删除行这类）。</p>
+</li>
+<li>
+<p>大家已经很熟悉的缩写。如汇编器中的助记符（<code>JMP</code>、<code>MOV</code> 等等）。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>注意有连字符的词，它们往往可以拆分。</strong></p>
+<p>例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">enable-left-motor</span>			<span class="nf">left</span> <span class="nf">motor</span> <span class="nf">on</span>
+</span></span><span class="line"><span class="cl"><span class="nf">enable-right-motor</span>			<span class="nf">right</span> <span class="nf">motor</span> <span class="nf">on</span>
+</span></span><span class="line"><span class="cl"><span class="nf">disable-left-motor</span>			<span class="nf">left</span> <span class="nf">motor</span> <span class="nf">off</span>
+</span></span><span class="line"><span class="cl"><span class="nf">disable-right-motor</span>			<span class="nf">right</span> <span class="nf">motor</span> <span class="nf">off</span>
+</span></span><span class="line"><span class="cl"><span class="nf">enable-left-solenoid</span>		<span class="nf">left</span> <span class="nf">solenoid</span> <span class="nf">on</span>
+</span></span><span class="line"><span class="cl"><span class="nf">enable-right-solenoid</span>		<span class="nf">right</span> <span class="nf">solenoid</span> <span class="nf">on</span>
+</span></span><span class="line"><span class="cl"><span class="nf">disable-left-solenoid</span>		<span class="nf">left</span> <span class="nf">solenoid</span> <span class="nf">off</span>
+</span></span><span class="line"><span class="cl"><span class="nf">disable-right-solenoid</span>		<span class="nf">right</span> <span class="nf">solenoid</span> <span class="nf">off</span>
+</span></span></code></pre></div><p>上面的例子中，左边一列需要定义 8 个词，而右边一列只需要定义 6 个词。而且如果系统发生了扩展（例如添加了中间的电动机和电磁铁），那么左边一列就需要再增加 8 个词（总共 16 个），右边一列只需要增加 <code>middle</code> 一个词（总共 7 个）。</p>
+</li>
+<li>
+<p><strong>注意名称中包含数字的词，它们往往可以拆分。</strong></p>
+<p>例如一个音频处理程序有三个通道，用 <code>1channel</code>、<code>2channel</code> 和 <code>3channel</code> 三个词代表，那么在多数情况下用 <code>channel ( n -- ...)</code> 一个词就可以取代，用法是：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">1</span> <span class="nf">channel</span>
+</span></span><span class="line"><span class="cl"><span class="mi">2</span> <span class="nf">channel</span>
+</span></span><span class="line"><span class="cl"><span class="mi">3</span> <span class="nf">channel</span>
+</span></span></code></pre></div><p>当然这两种方式的意义可能同样不显然。更好的办法是用描述性的名称来指代这三个通道，比如 <code>voice</code>、<code>guitar</code> 和 <code>bass</code>。</p>
+</li>
+<li>
+<p><strong>学习并采用 Forth 系统中词的命名方法。</strong></p>
+<p>Forth 长期的发展中已经形成了一套给词命名的惯例。它们的最好体现就是 Forth 系统的标准词集本身。</p>
+<p>例如，<code>.</code> 代表打印或显示，<code>d.</code>、<code>u.</code>、<code>.r</code> 和 <code>u.r</code> 用来按不同的格式打印不同类型的数字。不妨将打印日期的词起名叫 <code>.date</code>，这样它的意义是自明的。</p>
+<p>符号或包含符号的词应该能念出来，这样才能跟别人讨论程序。如 <code>&gt;R</code> 可以念作“to-R”或“去返回栈”，<code>R&gt;</code> 可以念作“R-from”或“从返回栈来”。Forth 2012 标准中提供了这些包含符号的词的推荐英文念法。</p>
+<p>后面的“词的前后缀约定”一节中提供了给词起名时使用的前后缀的惯例。Forth 系统中提供的词大都遵循这些惯例。但是应用这些前后缀时需要注意——</p>
+</li>
+<li>
+<p><strong>给词起名时，善用而不滥用前后缀。</strong></p>
+<p>不要让前后缀提供冗余的信息，而将它们用于区分相似的词。例如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kt">...</span> <span class="nf">done</span> <span class="k">if </span> <span class="nf">close</span>  <span class="k">then </span><span class="kt">...</span>
+</span></span></code></pre></div><p>并不比</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kt">...</span> <span class="nf">done?</span> <span class="k">if </span> <span class="nf">close</span>  <span class="k">then </span><span class="kt">...</span>
+</span></span></code></pre></div><p>难懂。那么就不妨省掉这个 <code>?</code>，除非程序中还有一个词叫 <code>DONE</code>。</p>
+</li>
+</ul>
+<h2 id="拆分factoring与提取factoring-out">拆分（factoring）与提取（factoring out）<sup id="fnref:8"><a href="#fn:8" class="footnote-ref" role="doc-noteref">8</a></sup></h2>
+<p><strong>拆分</strong>指将程序组织成便于使用的小片段。任何程序都有可复用的部分和不可复用的部分，通过良好的拆分，程序中可复用的部分定义为词，不可复用的部分变成词的参数。</p>
+<p>这一过程也就是将上面说到的这些部分<strong>提取</strong>出来。下面给出了一些技巧与原则。</p>
+<h3 id="拆分和提取的技巧">拆分和提取的技巧</h3>
+<ul>
+<li>
+<p><strong>提取出数据。</strong></p>
+<p>借助栈，这是很自然的。例如要计算 1000 的三分之二：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">1000</span> <span class="mi">2</span> <span class="mi">3</span> <span class="nf">*/</span>
+</span></span></code></pre></div><p>如果要计算<strong>任意数值</strong>的三分之二，可以定义</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">two-thirds</span> <span class="c1">( n1 -- n2 )</span> <span class="mi">2</span> <span class="mi">3</span> <span class="nf">*/</span>
+</span></span></code></pre></div><p>计算 800 的三分之二就是 <code>800 two-thirds</code>。</p>
+<p>如果数据在程序中间使用，那么需要借助栈操作的词将其移动到合适位置。例如，想在 80 列的屏幕上将一个 10 字节长的字符串居中：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">80</span> <span class="mi">10</span> <span class="k">- 2/ spaces
+</span></span></span></code></pre></div><p>但是字符串的长度不一定总是 10。为了让这一小段程序对任何长度的字符串都合用：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">center</span> <span class="c1">( length -- )</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">80</span> 	<span class="c1">( length 80 )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">swap	</span><span class="c1">( 80 length )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">- 2/ spaces ;
+</span></span></span></code></pre></div><p>字符串的长度为 20 的时候就可以用 <code>20 center</code>。</p>
+<p>数据栈也可以用来传递地址。因此，提取出来的数据不一定是一个数字，它可以是一个数字、一个数组、一个字符串（通过带长度的字符串或者 <code>( c-addr u )</code> 二元组的格式），甚至是一段程序（通过 xt）。</p>
+<p>有时想要提取的部分看起来像一段程序，但实际上是一个数字：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">程序段</span> <span class="mi">1</span><span class="nf">：</span> <span class="nf">willy</span> <span class="nf">nilly</span> <span class="nf">puddin&#39;</span> <span class="nf">pie</span> <span class="k">and
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">程序段</span> <span class="mi">2</span><span class="nf">：</span> <span class="nf">willy</span> <span class="nf">nilly</span> <span class="mi">8</span> <span class="k">* </span><span class="nf">puddin&#39;</span> <span class="nf">pie</span> <span class="k">and
+</span></span></span></code></pre></div><p>这里程序段 2 多出来了一个 “<code>8 *</code>”。注意到 1 乘以任何数得其本身，可以定义</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">new</span> <span class="c1">( n -- )</span> <span class="nf">willy</span> <span class="nf">nilly</span> <span class="mi">8</span> <span class="k">* </span><span class="nf">puddin&#39;</span> <span class="nf">pie</span> <span class="k">and ;
+</span></span></span></code></pre></div><p>这样有</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">程序段</span> <span class="mi">1</span><span class="nf">：</span> <span class="mi">1</span> <span class="nf">new</span>
+</span></span><span class="line"><span class="cl"><span class="nf">程序段</span> <span class="mi">2</span><span class="nf">：</span> <span class="mi">8</span> <span class="nf">new</span>
+</span></span></code></pre></div><p>当然如果程序段 “<code>willy nilly</code>” 改变了栈的内容，那么需要用合适的栈操作词将 <code>n</code> 移动到合适位置。</p>
+<p>如果运算涉及加减法，那 <code>0</code> 就可以起到乘除法中 <code>1</code> 的作用。</p>
+<p>提示：将两段程序的差异用数字（可以是值或者地址）的差异而不是操作过程的差异来表达。</p>
+</li>
+<li>
+<p><strong>提取出同样的功能。</strong></p>
+<p>当然，有时两段程序确实有功能上的差异。如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">程序段</span> <span class="mi">1</span><span class="nf">：bletch-a</span> <span class="nf">bletch-b</span> <span class="nf">bletch-c</span>   <span class="nf">bletch-d</span> <span class="nf">bletch-e</span> <span class="nf">bletch-f</span>
+</span></span><span class="line"><span class="cl"><span class="nf">程序段</span> <span class="mi">2</span><span class="nf">：bletch-a</span> <span class="nf">bletch-b</span> <span class="nf">perversity</span> <span class="nf">bletch-d</span> <span class="nf">bletch-e</span> <span class="nf">bletch-f</span>
+</span></span></code></pre></div><p>不好的拆分：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">bletches</span> <span class="c1">( t=do-bletch-c | f=do-perversity -- )</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">bletch-a</span> <span class="nf">bletch-b</span>
+</span></span><span class="line"><span class="cl">   <span class="k">if </span><span class="nf">bletch-c</span> <span class="k">else </span><span class="nf">perversity</span> <span class="k">then
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="nf">bletch-d</span> <span class="nf">bletch-e</span> <span class="nf">bletch-f</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">程序段</span> <span class="mi">1</span><span class="nf">：true</span> <span class="nf">bletches</span>
+</span></span><span class="line"><span class="cl"><span class="nf">程序段</span> <span class="mi">2</span><span class="nf">：false</span> <span class="nf">bletches</span>
+</span></span></code></pre></div><p>好的拆分：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">bletch-ab</span>  <span class="nf">bletch-a</span> <span class="nf">bletch-b</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">bletch-def</span>  <span class="nf">bletch-d</span> <span class="nf">bletch-e</span> <span class="nf">bletch-f</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">程序段</span> <span class="mi">1</span><span class="nf">：bletch-ab</span> <span class="nf">bletch-c</span>   <span class="nf">bletch-def</span>
+</span></span><span class="line"><span class="cl"><span class="nf">程序段</span> <span class="mi">2</span><span class="nf">：bletch-ab</span> <span class="nf">perversity</span> <span class="nf">bletch-def</span>
+</span></span></code></pre></div><p>在提取功能时<strong>不要向下传递标志</strong>。首先，在这种情况下，是应该进行一种操作还是进行另一种操作，编程时早已知道。向下传递标志的方法会把这一判断放在运行时进行，影响程序的效率。其次，这种方式的语义是模糊的，会造成程序不可读：<code>true bletches</code> 和 <code>false bletches</code> 真是相反的么？</p>
+</li>
+<li>
+<p><strong>提取出控制结构中的代码。</strong></p>
+<p>下面的程序片段的作用是，将可打印字符（ASCII 码 32..126 的字符）打印出来，遇到不可打印字符打印“<code>.</code>”：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kt">...</span> <span class="c1">( c )</span> <span class="k">dup </span><span class="mi">32</span> <span class="mi">127</span> <span class="k">within if </span> <span class="k">emit </span> <span class="k">else </span> <span class="k">drop [char] . emit </span> <span class="k">then </span><span class="kt">...</span>
+</span></span></code></pre></div><p>显然，两个分支都执行了 <code>emit</code>。这个 <code>emit</code> 应该从控制结构内提取出来（记得执行逻辑非操作用 <code>0=</code>）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kt">...</span> <span class="c1">( c )</span> <span class="k">dup </span><span class="mi">32</span> <span class="mi">127</span> <span class="k">within 0= if </span> <span class="k">drop [char] . </span> <span class="k">then </span> <span class="k">emit </span><span class="kt">...</span>
+</span></span></code></pre></div><p>更难的情况是复杂的控制结构相同，但控制结构内部执行的功能不同。这种情况下如果难以提取，可以用栈传递 <code>xt</code>，或者借助 <code>DEFER</code> 定义的可执行变量来实现拆分。</p>
+<p>需要提醒读者：如果要将 <code>DO</code>&hellip;<code>LOOP</code> 中间的内容提取出来组成一个单独的定义，注意要把其中的 <code>I</code>、<code>J</code>、<code>K</code> 和 <code>L</code> 等“循环变量”改成用栈传递的参数。</p>
+</li>
+<li>
+<p><strong>提取出控制结构本身。</strong></p>
+<p>下面的两个程序片段中，<code>IF</code>&hellip;<code>THEN</code> 控制结构相同，但执行的内容不同：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">active</span>  <span class="nf">a</span> <span class="nf">b</span> <span class="k">or </span><span class="nf">c</span> <span class="k">and if </span> <span class="nf">tumble</span> <span class="nf">juggle</span> <span class="nf">jump</span>  <span class="k">then ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">lazy</span>    <span class="nf">a</span> <span class="nf">b</span> <span class="k">or </span><span class="nf">c</span> <span class="k">and if </span> <span class="nf">sit</span> <span class="nf">eat</span> <span class="no">sleep </span> <span class="k">then ;
+</span></span></span></code></pre></div><p>可以这样提取：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">conditions?</span> <span class="c1">( -- f )</span> <span class="nf">a</span> <span class="nf">b</span> <span class="k">or </span><span class="nf">c</span> <span class="k">and ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">active</span>  <span class="nf">conditions?</span> <span class="k">if </span> <span class="nf">tumble</span> <span class="nf">juggle</span> <span class="nf">jump</span>  <span class="k">then ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">lazy</span>    <span class="nf">conditions?</span> <span class="k">if </span> <span class="nf">sit</span> <span class="nf">eat</span> <span class="no">sleep </span> <span class="k">then ;
+</span></span></span></code></pre></div><p>多重的 <code>IF</code>&hellip;<code>ELSE</code>&hellip;<code>THEN</code> 结构或复杂的 <code>BEGIN</code>&hellip;多个 <code>WHILE</code>&hellip;<code>REPEAT</code> 结构可通过合理的 <code>EXIT</code> 简化。本文第一部分给出了例子。</p>
+</li>
+<li>
+<p><strong>提取出名字。</strong></p>
+<p>如果程序中出现一系列有规律的名字，那么其中的规律往往可以提取出来变成一组更简单的词，甚至一个词和参数。前面“词的名称”一节已经给出了例子。</p>
+</li>
+<li>
+<p><strong>用 <code>CREATE</code>&hellip;<code>DOES&gt;</code> 提取功能。</strong></p>
+<p>下面这个例子在前面已经出现过：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">variable</span> <span class="nc">light-mask</span>	<span class="c1">\ 是否亮色的掩码。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>					<span class="c1">\ 0 表示普通颜色，8（第 3 位为 1 ）表示亮色。与 颜色代码按位或。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">0</span> <span class="nf">light-mask</span> <span class="k">!
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">light</span>  <span class="mi">8</span> <span class="nf">light-mask</span> <span class="k">! ;	</span><span class="c1">\ 亮色：将掩码 light-mask 设置为 8
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">color</span> <span class="c1">( color-code -- color-code-with-light-mask )</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">light-mask</span> <span class="k">@ or	</span><span class="c1">\ 颜色代码与 light-mask 取或
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="mi">0</span> <span class="nf">light-mask</span> <span class="k">! ;	</span><span class="c1">\ light 只管到最近的一个颜色词，所以用完之后设置回 0 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">black</span>  <span class="mi">0</span> <span class="nf">color</span> <span class="k">; </span>  <span class="kn">:</span> <span class="nc">blue</span>  <span class="mi">1</span> <span class="nf">color</span> <span class="k">; </span>  <span class="kn">:</span> <span class="nc">green</span>  <span class="mi">2</span> <span class="nf">color</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">cyan</span>  <span class="mi">3</span> <span class="nf">color</span> <span class="k">; </span>  <span class="kn">:</span> <span class="nc">red</span>  <span class="mi">4</span> <span class="nf">color</span> <span class="k">; </span>  <span class="kn">:</span> <span class="nc">magenta</span>  <span class="mi">5</span> <span class="nf">color</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">brown</span>  <span class="mi">6</span> <span class="nf">color</span> <span class="k">; </span>  <span class="kn">:</span> <span class="nc">gray</span>  <span class="mi">7</span> <span class="nf">color</span> <span class="k">;
+</span></span></span></code></pre></div><p>另一种写法是借助 <code>CREATE</code>&hellip;<code>DOES&gt;</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">variable</span> <span class="nc">light-mask</span>	<span class="c1">\ 是否亮色的掩码。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>					<span class="c1">\ 0 表示普通颜色，8（第 3 位为 1 ）表示亮色。与颜色代码按位或。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">0</span> <span class="nf">light-mask</span> <span class="k">!
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">light</span>  <span class="mi">8</span> <span class="nf">light-mask</span> <span class="k">! ;	</span><span class="c1">\ 亮色：将掩码 light-mask 设置为 8
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">color</span> <span class="c1">\ name ( color-code -- ) 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="k">create ,
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">does&gt; </span><span class="c1">( -- color )</span> <span class="k">@ </span><span class="nf">light-mask</span> <span class="k">@ or	</span><span class="c1">\ 颜色代码与 light-mask 取或
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="mi">0</span> <span class="nf">light-mask</span> <span class="k">! ;	</span><span class="c1">\ light 只管到最近的一个颜色词，所以用完之后设置回 0 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="mi">0</span> <span class="nf">color</span> <span class="nf">black</span>   <span class="mi">1</span> <span class="nf">color</span> <span class="nf">blue</span>   <span class="mi">2</span> <span class="nf">color</span> <span class="nf">green</span>
+</span></span><span class="line"><span class="cl"><span class="mi">3</span> <span class="nf">color</span> <span class="nf">cyan</span>   <span class="mi">4</span> <span class="nf">color</span> <span class="nf">red</span>   <span class="mi">5</span> <span class="nf">color</span> <span class="nf">magenta</span>
+</span></span><span class="line"><span class="cl"><span class="mi">6</span> <span class="nf">color</span> <span class="nf">brown</span>  <span class="mi">7</span> <span class="nf">color</span> <span class="nf">gray</span>
+</span></span></code></pre></div><p>对于使用“经典的”（间接或直接）穿线式代码的 Forth 系统而言，第二种写法更省内存空间；然而对 My4TH Forth 这一使用子例程穿线式代码的 Forth 系统，第一种写法更省内存空间。</p>
+<p>当然第二种写法有它的优势：</p>
+<ul>
+<li>
+<p>一眼可以看出，这些颜色都是同类的东西。</p>
+</li>
+<li>
+<p>这些颜色的<strong>定义时行为</strong>相同，由 <code>CREATE</code> 后面的程序段统一规定。如果要对数据的<strong>结构</strong>进行修改，只需要修改一个地方而不是 8 个地方。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="拆分和提取的原则">拆分和提取的原则</h3>
+<ul>
+<li>
+<p><strong>保持定义简短。</strong></p>
+<p>最硬核的的拆分论者也许是 Forth 语言的创始人 Chuck Moore。他认为一个定义的长度不要超过一行。然而即使是他本人也无法完全做到这一点：他自己写的程序中，一行的定义和两行的定义大概一半对一半。</p>
+<p>众所周知，人的注意力只能集中在最多 7 个左右的东西上，简短的定义最符合人类本身的认知规律。<strong>当你觉得对一段代码没有把握，也许就是时候拆分它了。</strong></p>
+<p>关于这个问题，Moore 还谈过两点：</p>
+<ul>
+<li>
+<p>双重循环不好调试，因此它的内层一般都应该提取出来，定义一个新词；</p>
+</li>
+<li>
+<p>如果为了测试提取出一个新词，那么不要把它塞回原来（更大的）词中。它能提出来单独测试，就说明它能单独使用。</p>
+</li>
+</ul>
+<p>这个原则的另一面是：<strong>当你觉得需要一个注释，尤其是在定义中间需要提醒你自己栈里有什么东西，也许就是时候拆分它了。</strong></p>
+<p>例如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kt">...</span> <span class="nf">balance</span>  <span class="k">dup </span><span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span>
+</span></span><span class="line"><span class="cl">     <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span>   <span class="c1">( balance )</span> <span class="nf">show</span> <span class="kt">...</span>
+</span></span></code></pre></div><p>这一程序段的开始计算 <code>balance</code>，最后打印它。中间的一长串 <code>xxx</code> 利用 <code>balance</code> 做自己的工作。因为中间这串处理代码太长，到了 <code>show</code> 那个地方，编程者需要提醒自己，<code>show</code> 需要栈内的 <code>balance</code> 作为参数。</p>
+<p>这时候把中间的一长串 <code>xxx</code> 拆分出来会让代码更清晰：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">revise</span> <span class="c1">( balance -- )</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="nf">xxx</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kt">...</span> <span class="nf">balance</span>  <span class="k">dup </span><span class="nf">revise</span> <span class="nf">show</span>  <span class="kt">...</span>
+</span></span></code></pre></div><p>当然编程者可能会担心，过多的短定义会浪费过多的内存（因为每个定义都有不短的头部）。这当然是事实，然而简短的定义带来的测试、调试与使用上的便利，让这种对内存的占用很难称为“浪费”。而且良好的拆分与提取消除了代码的重复部分，从总体上看占用的内存可能更少。况且，与其他语言相比，Forth 占用的内存已经够少了。</p>
+<p>另外的一个担心是，过多的短定义带来的转子程序和返回操作会影响程序的执行效率。这一担心也是事实，然而一般来说这种转子和返回对效率的影响微乎其微。有些专门为 Forth 系统优化的体系结构（例如 <a href="https://excamera.com/files/j1.pdf">J1</a>）甚至提供了单周期转子和<strong>零周期</strong>返回（爱整活的读者可以试试在 J1 的基础上实现零周期转子）！如果效率真正成为了卡脖子的要素，那么也许应该用汇编重写真正卡脖子的部分。</p>
+<p>为了节约内存，有些 Forth 系统可以限制名称的宽度，也就是在词典中只存储定义名称的长度和前几个（如 3 个）字符。有些系统甚至可以默认限制宽度，必要（有两个名称的长度和前几个字符相同）时存储全长的名称。限于篇幅，本文不讨论这些高级技巧。</p>
+</li>
+<li>
+<p><strong>提取出重复的代码片段。</strong></p>
+<p>这一点可能比保持定义简短还重要。Moore 认为，一个简短的词固然好（比起一大篇代码中的一小部分，它更清晰，也方便调试），但是如果能用多次那就更好了。如果一个词只用一次，程序编写者可能会质疑它的意义。当程序变得很大的时候应该回头看一下，找找有没有可以提取出的部分。</p>
+<p>例如，编写一个编辑器时，下面的片段可能会出现很多次：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">frame</span>  <span class="nf">cursor</span> <span class="k">@ </span> <span class="k">+
+</span></span></span></code></pre></div><p>按其作用起名，不妨将其定义为 <code>at</code>。编程者需要动脑识别长得不同但是作用相同的代码，例如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">frame</span>  <span class="nf">cursor</span> <span class="k">@ 1- </span> <span class="k">+
+</span></span></span></code></pre></div><p>其实就是</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">at</span> <span class="k">1-
+</span></span></span></code></pre></div><p>在编程时，如果发现自己要从前面复制代码片段过来用，那么复制的这个片段也许就应该提取出来定义成一个单独的词，以便后续使用。</p>
+<p>有时提取的部分也不是越多越好。看下面的例子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="k">blk @ block &gt;in @ + </span> <span class="k">c@
+</span></span></span></code></pre></div><p>编程者将这个程序段提取出来定义为 <code>letter</code>，因为它返回解释器当前处理的那个字符。</p>
+<p>后来编程者发现他需要使用下面的程序段：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="k">blk @ block &gt;in @ + </span> <span class="k">c!
+</span></span></span></code></pre></div><p>于是他改变了 <code>letter</code> 的定义</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">letter</span>  <span class="k">blk @ block &gt;in @ + ;
+</span></span></span></code></pre></div><p>在程序中使用 <code>letter c@</code> 和 <code>letter c!</code>。回过头来再看，这一定义比上一个更紧凑：它返回解释器当前处理的字符的地址，把对这个字符进行的操作剥离开了（当然一开始的时候不一定能意识到这点，这也是符合人类认知的规律的）。</p>
+</li>
+<li>
+<p><strong>拆分出的程序段要能够命名。</strong></p>
+<p>参考“词的名称”一节。</p>
+</li>
+<li>
+<p><strong>为隐藏信息（尤其是可能变化的细节）进行拆分。</strong></p>
+<p>Forth 系统的  <code>&gt;BODY</code>（获得 <code>CREATE</code> 创建的词的数据区域的地址）是一个非常好的例子。前面已经讲过，在 My4TH Forth 中，<code>&gt;BODY</code> 这样定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">&gt;body</span> <span class="c1">( xt -- a-addr )</span> <span class="mi">13</span> <span class="k">+ ;
+</span></span></span></code></pre></div><p>在使用经典的穿线式代码的 Forth 系统中，<code>&gt;BODY</code> 可能这样定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">&gt;body</span> <span class="k">cell+ ;
+</span></span></span></code></pre></div><p>如果直接用 <code>cell+</code> 甚至 <code>2 +</code> 来代替 <code>&gt;BODY</code> 的话，那么把使用了这一特性的程序移植到 My4TH Forth 就会变得非常麻烦：需要找到每一处然后替换，还需要判断每一个 <code>cell+</code> 或者 <code>2 +</code> 到底是在找 <code>body</code> 的地址，还是在进行其他的操作（<code>2 +</code> 的可移植性更差，因为在诸如 32 位或者 64 位的 Forth 系统下面，<code>cell</code> 的大小就不是 2 了）。<code>&gt;BODY</code> 隐藏了 <code>CREATE</code> 创建的词的具体实现，使程序变得可移植。</p>
+<p>另一个例子是上面举过的编辑器。一个对块进行编辑的编辑器可能有：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">frame</span> <span class="c1">( -- addr )</span> <span class="k">scr @ block ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">cursor</span> <span class="c1">( -- addr )</span> <span class="nf">r#</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">at</span> <span class="c1">( -- addr )</span> <span class="nf">frame</span> <span class="nf">cursor</span> <span class="k">@ + ;
+</span></span></span></code></pre></div><p>调试的时候，可能不希望编辑器对实际的块进行修改（可能会弄坏一整块的内容！），那么就可以重新定义头两个词：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="k">create </span><span class="nf">frame</span> <span class="mi">1024</span> <span class="k">allot
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">variable</span> <span class="nc">cursor</span>
+</span></span></code></pre></div><p>这样不需要修改其他任何东西，就可以将编辑对象从真实的块变成内存中的一个缓冲区。</p>
+<p>隐藏信息有时也是<strong>不去拆分</strong>的原因。例如上面的例子</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">frame</span> <span class="c1">( -- addr )</span> <span class="k">scr @ block ;
+</span></span></span></code></pre></div><p>不要盲目地将所有的 <code>scr @ block</code> 都替换成 <code>frame</code>，而只替换<strong>意义为</strong>“在编辑程序中，将当前编辑的块设置为列出的块”的那些。有时你的 <code>scr @ block</code> 有其他的用途，那就不要替换。因为将来如果你修改了 <code>frame</code> 的定义，那么这一小段又要替换回去！</p>
+</li>
+<li>
+<p><strong>将处理数据的程序段和输出数据的程序段分解开。</strong></p>
+<p>例如，下面的词可以计算 n 个人之间有多少条一对一的信息传输途径：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">people&gt;paths</span> <span class="c1">( #people -- #paths )</span> <span class="k">dup 1- * 2/ ;
+</span></span></span></code></pre></div><p>下面的词调用 <code>people&gt;paths</code> 并打印结果：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">people</span> <span class="c1">( #people -- )</span>
+</span></span><span class="line"><span class="cl">   <span class="s">.&#34;</span> <span class="s">= </span><span class="nf">&#34;</span> <span class="nf">people&gt;paths</span> <span class="k">. </span><span class="s">.&#34;</span> <span class="s">paths </span><span class="nf">&#34;</span> <span class="k">;
+</span></span></span></code></pre></div><p>运行结果：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">2</span> <span class="nf">people↵</span> <span class="nf">=</span> <span class="mi">1</span> <span class="nf">paths</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">3</span> <span class="nf">people↵</span> <span class="nf">=</span> <span class="mi">3</span> <span class="nf">paths</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">5</span> <span class="nf">people↵</span> <span class="nf">=</span> <span class="mi">10</span> <span class="nf">paths</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">10</span> <span class="nf">people↵</span> <span class="nf">=</span> <span class="mi">45</span> <span class="nf">paths</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">20</span> <span class="nf">people↵</span> <span class="nf">=</span> <span class="mi">190</span> <span class="nf">paths</span>  <span class="nf">ok</span>
+</span></span></code></pre></div><p>不要寻思着一个结果只用一次，就把它和输出的程序写在一起。你总有需要把它们拆分开的时候——明天你可能需要右对齐输出这个结果，后天你可能需要用不同的数制输出这个结果，这是没法预测的！</p>
+</li>
+<li>
+<p><strong>进行拆分以简化用户界面。</strong></p>
+<p>拆分不一定会得到更多的词。很多情况下，拆分的结果是<strong>更少</strong>的词。前面“词的名称”一节中 <code>left motor on</code> 和 <code>1 channel</code> 的例子已经说明了这一点。</p>
+</li>
+<li>
+<p><strong>不要为了拆分而拆分。</strong></p>
+<p>最后要记住：</p>
+<ul>
+<li>拆分词不是目的，而是让程序变得更加整洁易懂的手段。</li>
+<li>拆分词不是原因，而是<strong>拆分问题</strong>的结果。</li>
+</ul>
+<p>有些特别短（两三个词）、只涉及栈操作和简单算术运算的固定用法，如果不涉及信息隐藏，Forth 用户习惯直接使用这些<strong>成语</strong>，而不是再去新造词。例如<sup id="fnref:9"><a href="#fn:9" class="footnote-ref" role="doc-noteref">9</a></sup>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="k">1+ swap </span><span class="c1">( first-number last-number -- lim n )</span>	<span class="c1">\ 将人类习惯的“第一个数 最后一个数”
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>												<span class="c1">\ 转换为 do 或 ?do 使用的格式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">over + swap </span><span class="c1">( addr u –- addr+u addr )</span>	<span class="c1">\ 将 ( addr u ) 二元组转换为
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>										<span class="c1">\ do 或 ?do 使用的格式
+</span></span></span></code></pre></div></li>
+</ul>
+<h3 id="冒号定义外的拆分和提取">冒号定义外的拆分和提取</h3>
+<p>拆分和提取不必须发生在冒号定义里。程序中往往会用 <code>CONSTANT</code>、<code>VARIABLE</code> 和 <code>CREATE</code> 等定义词定义数据，用 <code>!</code> 给数据赋初值。此时可能也能发现需要拆分和提取的内容。</p>
+<ul>
+<li>
+<p><strong>如果一个常数的值依赖前面的常数，那么请借助 Forth 系统计算这个常数的值。</strong></p>
+<p>例如，要打印下面的图形：</p>
+<pre tabindex="0"><code>********    ********    ********
+********    ********    ********
+********    ********    ********
+********    ********    ********
+********    ********    ********
+
+
+********    ********    ********
+********    ********    ********
+********    ********    ********
+********    ********    ********
+********    ********    ********
+
+
+********    ********    ********
+********    ********    ********
+********    ********    ********
+********    ********    ********
+********    ********    ********
+</code></pre><p>很显然可以定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">8</span> <span class="kn">constant</span> <span class="nc">wide</span>		<span class="c1">\ 方块的宽度（字符数）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">5</span> <span class="kn">constant</span> <span class="nc">high</span>		<span class="c1">\ 方块的高度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">4</span> <span class="kn">constant</span> <span class="nc">ave</span>		<span class="c1">\ 南北向间隔的宽度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">2</span> <span class="kn">constant</span> <span class="nc">street</span>	<span class="c1">\ 东西向间隔的宽度
+</span></span></span></code></pre></div><p>要把这个图形在 80 列的屏幕上居中显示，那么左边界应该是 <code>(80-图形总宽度)/2</code>。</p>
+<p>图形总宽度是</p>
+<pre tabindex="0"><code>8 + 4 + 8 + 4 + 8 = 32
+</code></pre><p>显然左边界就是</p>
+<pre tabindex="0"><code>(80-32) / 2 = 24.
+</code></pre><p>可以定义</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">24</span> <span class="kn">constant</span> <span class="nc">leftmargin</span>
+</span></span></code></pre></div><p>但是更好的做法是，将上面的计算交给 Forth 系统：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">wide</span> <span class="mi">3</span> <span class="k">* </span> <span class="nf">ave</span> <span class="mi">2</span> <span class="k">* </span> <span class="k">+ </span> <span class="mi">80</span> <span class="k">swap - </span> <span class="k">2/ </span><span class="kn">constant</span> <span class="nc">leftmargin</span>
+</span></span></code></pre></div><p>这样如果更改了方块或者南北向间隔的宽度，不用重新人工计算 <code>leftmargin</code>。</p>
+</li>
+<li>
+<p><strong>定义合适的定义词来简化定义。</strong></p>
+<p>这个标题可能有点绕口。看下面的例子：</p>
+<p>假设需要定义一系列 I/O 端口的地址，它们从 $1a0 开始：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mh">$1a0</span> <span class="kn">constant</span> <span class="nc">base.port.address</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">base.port.address</span> <span class="kn">constant</span> <span class="nc">speaker</span>
+</span></span><span class="line"><span class="cl"><span class="nf">base.port.address</span> <span class="mi">2</span> <span class="k">+ </span><span class="kn">constant</span> <span class="nc">flipper-a</span>
+</span></span><span class="line"><span class="cl"><span class="nf">base.port.address</span> <span class="mi">4</span> <span class="k">+ </span><span class="kn">constant</span> <span class="nc">flipper-b</span>
+</span></span><span class="line"><span class="cl"><span class="nf">base.port.address</span> <span class="mi">6</span> <span class="k">+ </span><span class="kn">constant</span> <span class="nc">win-light</span>
+</span></span></code></pre></div><p>这在功能上是正确的，但是代码有大量的重复。看下面借助 <code>CREATE</code>&hellip;<code>DOES&gt;</code> 进行的改进：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">port</span> <span class="c1">( offset -- )</span> <span class="k">create ,
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">does&gt; </span><span class="c1">( -- &#39;port )</span> <span class="k">@ </span><span class="nf">base.port.address</span> <span class="k">+ ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">0</span> <span class="nf">port</span> <span class="nf">speaker</span>
+</span></span><span class="line"><span class="cl"><span class="mi">2</span> <span class="nf">port</span> <span class="nf">flipper-a</span>
+</span></span><span class="line"><span class="cl"><span class="mi">4</span> <span class="nf">port</span> <span class="nf">flipper-b</span>
+</span></span><span class="line"><span class="cl"><span class="mi">6</span> <span class="nf">port</span> <span class="nf">win-light</span>
+</span></span></code></pre></div><p>代码紧凑了很多。但是这段代码在运行时计算偏移量，这会降低运行效率。更好的改进是：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">port</span> <span class="c1">( offset -- )</span> <span class="nf">base.port.address</span> <span class="k">+ </span><span class="kn">constant</span> <span class="nc">;</span>
+</span></span><span class="line"><span class="cl"><span class="mi">0</span> <span class="nf">port</span> <span class="nf">speaker</span>
+</span></span><span class="line"><span class="cl"><span class="mi">2</span> <span class="nf">port</span> <span class="nf">flipper-a</span>
+</span></span><span class="line"><span class="cl"><span class="mi">4</span> <span class="nf">port</span> <span class="nf">flipper-b</span>
+</span></span><span class="line"><span class="cl"><span class="mi">6</span> <span class="nf">port</span> <span class="nf">win-light</span>
+</span></span></code></pre></div><p>这个例子中，偏移量在定义时计算，与最前面的那个例子相当。</p>
+<p>注意到每个端口的地址依次加 2，可以让代码更清爽：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">port</span> <span class="c1">( &#39;port -- &#39;next-port )</span> <span class="k">dup </span><span class="kn">constant</span> <span class="nc">2</span> <span class="k">+ ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">base.port.address</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">port</span> <span class="nf">speaker</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">port</span> <span class="nf">flipper-a</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">port</span> <span class="nf">flipper-b</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">port</span> <span class="nf">win-light</span>
+</span></span><span class="line"><span class="cl"><span class="k">drop </span><span class="c1">( port.address )</span>
+</span></span></code></pre></div><p>到了这一步，注意到 <code>base.port.address</code> 只出现了一次，而且不是在任何定义当中。这种情况下不把它定义成一个常量而是直接按字面量使用，不会降低程序的可维护性，而且还能节约一点内存：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">port</span> <span class="c1">( &#39;port -- &#39;next-port )</span> <span class="k">dup </span><span class="kn">constant</span> <span class="nc">2</span> <span class="k">+ ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mh">$1a0</span> <span class="c1">\ base port address
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="nf">port</span> <span class="nf">speaker</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">port</span> <span class="nf">flipper-a</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">port</span> <span class="nf">flipper-b</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">port</span> <span class="nf">win-light</span>
+</span></span><span class="line"><span class="cl"><span class="k">drop
+</span></span></span></code></pre></div></li>
+</ul>
+<h3 id="迭代式编程">迭代式编程</h3>
+<ul>
+<li>
+<p><strong>每次只关注问题的一个方面。</strong></p>
+<p>继续前面打印星号组成的图形的例子。现在需要在指定的 x,y 坐标绘制或擦除由星号组成的方块。首先关注如何绘制方块（先不要管怎么擦除）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">8</span> <span class="kn">constant</span> <span class="nc">wide</span>   <span class="mi">5</span> <span class="kn">constant</span> <span class="nc">high</span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">layer</span>  <span class="nf">wide</span> <span class="mi">0</span> <span class="k">do </span> <span class="k">[char] * emit </span> <span class="k">loop ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">box</span> <span class="c1">( upper-left-x upper-left-y -- )</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">high</span> <span class="mi">0</span> <span class="k">do </span> <span class="k">2dup i + at-xy </span><span class="nf">layer</span>  <span class="k">loop </span> <span class="k">2drop ;
+</span></span></span></code></pre></div><p>确认代码工作正常后，再研究如何利用这一代码擦除方块。显然，只要改变 <code>layer</code> 中打印的字符，把 <code>[char] *</code> 改成 <code>bl</code> 就可以了。用一个变量存储打印的字符：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">variable</span> <span class="nc">ink</span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">draw</span>  <span class="k">[char] * </span><span class="nf">ink</span> <span class="k">! ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">undraw</span>  <span class="k">bl </span><span class="nf">ink</span> <span class="k">! ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">layer</span>  <span class="nf">wide</span> <span class="mi">0</span> <span class="k">do </span> <span class="nf">ink</span> <span class="k">@ emit </span> <span class="k">loop ;
+</span></span></span></code></pre></div><p>这样，绘制或擦除方块可以使用</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">10</span> <span class="mi">10</span> <span class="nf">draw</span> <span class="nf">box</span>
+</span></span><span class="line"><span class="cl"><span class="mi">10</span> <span class="mi">10</span> <span class="nf">undraw</span> <span class="nf">box</span>
+</span></span></code></pre></div><p>这一语序也是自然的。</p>
+<p>每次只关注问题的一个方面可以让程序更容易调试。在不受其他没测试过的代码的影响的情况下，更容易发现和改正出现的问题。</p>
+</li>
+<li>
+<p><strong>不要一次更改过多的代码。</strong></p>
+<p>在为了除错或增加功能修改程序的时候，编程者往往倾向于一次更改几个不同的地方。尽量不要这样做，而应该一次只更改一个地方，测试成功后再更改下一个地方。否则你会发现，但凡一次改了两三个地方，很容易就让整个程序工作不正常。一次只更改一个地方的好处是，如果改完之后程序工作不正常，那么很容易发现原因。</p>
+</li>
+<li>
+<p><strong>不要过早花费精力考虑如何拆分。</strong></p>
+<p>很多用户会好奇，为啥大部分 Forth 系统都没提供数组（<code>ARRAY</code>）这种在其他语言中非常基本的数据类型。对此，Moore 评论道（例子按 Forth 2012 标准稍作更改）：</p>
+<blockquote>
+<p>编程的时候经常会遇到称作“数组”的一组对象。最简单的数组就是把下标加在地址上，返回新的地址。这种数组可以这样定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="k">create </span><span class="nf">x</span> <span class="mi">100</span> <span class="k">cells allot
+</span></span></span></code></pre></div><p>使用方法是：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">10</span> <span class="k">cells </span><span class="nf">x</span> <span class="k">+
+</span></span></span></code></pre></div><p>或者可以定义</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">x</span> <span class="k">cells </span><span class="nf">x</span> <span class="k">+ ;
+</span></span></span></code></pre></div><p>使用时写</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">10</span> <span class="nf">x</span>
+</span></span></code></pre></div><p>编程时最令人纠结的事情之一，就是决定到底要不要给一个特定的数据结构建立定义词。到底有没有足够多的实例，让人值得这么做？</p>
+<p>我几乎不会提前知道程序里到底有没有多于一个的数组，因此我不会预先定义 <code>ARRAY</code> 这个词。</p>
+<p>如果程序里有两个数组，那么这个词可定义可不定义。</p>
+<p>如果程序里有三个数组，按常理就应该建立一个定义词了，除非它们各不相同——出奇的是，它们会各不相同的。有时候你想省去 <code>@</code> 让数组直接返回值；有时候你需要字节数组，甚至是位数组；有时候你想做边界检查，或者存储数组的长度，以便在后面追加元素。</p>
+<p>难道要为了用上已经有的 <code>ARRAY</code>，把一个字节数组定义成单元（2 字节）的数组么？</p>
+<p>问题越复杂，越难找到一个通用的数据结构。真正复杂的通用数据结构非常少见。一个成功的例子是 Forth 的词典：它的结构紧凑、通用性很好。Forth 系统中各处都依赖它。但是这样的例子真的很稀有。</p>
+<p>如果编程者选择定义 <code>ARRAY</code>，他就提前对问题进行了分解，预先将<strong>数组</strong>这个概念从将要编写的词里提取了出来，提前进入了另一个抽象层面。而对问题进行抽象是一个<strong>动态过程</strong>，不应该进行预判。</p></blockquote>
+</li>
+<li>
+<p><strong>今天让代码工作，明天再优化它。</strong></p>
+<p>继续放一段 Moore 的评论。背景是 Moore 在设计一台运行 Forth 的单板计算机，使用市场上供应的集成电路。他用 Forth 编写了模拟器，以测试计算机的逻辑。</p>
+<blockquote>
+<p>今早我意识到，我混淆了集成电路的型号与它在板子上的位号。现在这个阶段没什么问题，然而如果要把程序用来模拟使用了同样集成电路的其他板子，那么就能看出我把事情搞混了。</p>
+<p>我本来应该把集成电路的描述本身和它的应用场合拆分开，这样就有了一种“芯片描述语言”。当然在写这段程序的当时，我没有关注到这个级别的优化。</p>
+<p>即使现在想到了这一点，我可能也会说：“好吧，后面再干这个。”然后继续还没完成的工作。目前这个阶段，优化不是最重要的。</p>
+<p>当然我会努力进行良好的拆分。但是如果似乎没有好办法，我会先让程序能够工作。这么做的动机并不是懒惰，而是知道在过程中总会有其他的东西出现，并以无法预料的方式影响全局。在当前阶段就进行优化不是明智的选择，因为在观察到问题全貌之前，不可能知道到底什么才是最优的。</p></blockquote>
+<p>上面提到的这些建议不应与前面讲的关于信息隐藏的建议矛盾。一种策略是提前提取出可能变化的部分以让程序易移植，另一种策略是直到必要时再修改程序。明智的编程者会在它们之间取得平衡。</p>
+<p>当然，在这两者中做决定需要经验。下面是一条一般的规律——</p>
+</li>
+<li>
+<p><strong>用组织信息而不是增加复杂度的方式来解决未来可能会变化的事情。只有在当前迭代需要的时候增加复杂度，以使其正常工作。</strong></p>
+</li>
+</ul>
+<h2 id="编写可读的-forth-程序">编写可读的 Forth 程序</h2>
+<p><a href="http://www.murphywong.net/hello/forth.htm">Leo Wong</a> 总结了 10 条编写可读的 Forth 程序的指南：</p>
+<ol>
+<li>
+<p><strong>使用与处理的数据相符的词。</strong></p>
+</li>
+<li>
+<p><strong>冒号定义中不要使用 ASCII 码或其他“魔法数字”。</strong></p>
+</li>
+<li>
+<p><strong>不要单纯为了把词拆分开而拆分词。</strong></p>
+</li>
+<li>
+<p><strong>保证程序、注释、名称三者正确且一致。</strong></p>
+</li>
+<li>
+<p><strong>不要使用语法糖。</strong></p>
+</li>
+<li>
+<p><strong>避免把问题复杂化。</strong></p>
+</li>
+<li>
+<p><strong>进行测试，即使非常显然的东西也要测试。</strong></p>
+</li>
+<li>
+<p><strong>不要“前门拒虎，后门进狼”。</strong></p>
+</li>
+<li>
+<p><strong>充分利用栈。</strong></p>
+</li>
+<li>
+<p><strong>为词取名要有规律。</strong></p>
+</li>
+</ol>
+<p>下面的例子主要来自 <em>Forth Programmer&rsquo;s Handbook 3rd ed</em>（略有修改）。其中有些例子来源于 <em>Starting Forth</em> 和 <em>Thinking Forth</em> 等传统经典 Forth 入门著作，注意 <em>Forth Programmer&rsquo;s Handbook</em> 的作者并不完全同意这些传统经典著作中的做法，这些例子有正面的也有反面的。</p>
+<h3 id="例-1魔法数字">例 1：魔法数字</h3>
+<p>考察以下的三个例子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">star</span>  <span class="mi">42</span> <span class="k">emit ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">star</span>  <span class="s">.&#34;</span> <span class="s">*</span><span class="nf">&#34;</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">star</span>  <span class="k">[char] * emit ;
+</span></span></span></code></pre></div><p>它们各有自己的问题：</p>
+<ul>
+<li>
+<p>第一个例子要求读者知道 “*” 的 ASCII 码为 42。（当然可以在注释里标明这点来解决问题。）</p>
+</li>
+<li>
+<p>本来要输出一个字符，然而第二个例子使用了输出字符串的词 <code>.&quot;</code>。</p>
+</li>
+<li>
+<p>第三个例子可读性好，生成的代码与第一个完全相同，但是比前两个例子都长。</p>
+</li>
+</ul>
+<p>这三个相比，第三个例子是相对最佳的。</p>
+<p><strong>对应的规则：</strong></p>
+<ul>
+<li>
+<ol>
+<li>使用与处理的数据相符的词。</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>冒号定义中不要使用 ASCII 码或其他“魔法数字”。</li>
+</ol>
+</li>
+</ul>
+<h3 id="例-2拆分词">例 2：拆分词</h3>
+<p>设计时要<strong>拆分问题</strong>而不是单纯地拆分词。拆分词只是拆分问题的结果。</p>
+<p>第一个例子来自 <em>Starting Forth</em> 第一版 43 页：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">QUARTERS</span>  <span class="mi">4</span> <span class="k">/MOD . </span><span class="s">.&#34;</span> <span class="s">ONES AND </span><span class="nf">&#34;</span> <span class="k">. </span><span class="s">.&#34;</span> <span class="s">QUARTERS </span><span class="nf">&#34;</span> <span class="k">;
+</span></span></span></code></pre></div><p>第二个例子来自 <em>Starting Forth</em> 第二版 40 页：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">$&gt;QUARTERS</span> <span class="c1">( dollars -- quarters dollars)</span> <span class="mi">4</span> <span class="k">/MOD ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">.DOLLARS</span> <span class="c1">( dollars -- )</span> <span class="k">. </span><span class="s">.&#34;</span> <span class="s">dollar bills</span><span class="nf">&#34;</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">.QUARTERS</span> <span class="c1">( quarters -- )</span> <span class="k">. </span><span class="s">.&#34;</span> <span class="s">quarters </span><span class="nf">&#34;</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">QUARTERS</span> <span class="c1">( dollars -- )</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">$&gt;QUARTERS</span> <span class="s">.&#34;</span> <span class="s">Gives </span><span class="nf">&#34;</span> <span class="kt">.</span><span class="nf">DOLLARS</span> <span class="s">.&#34;</span> <span class="s">and </span><span class="nf">&#34;</span> <span class="kt">.</span><span class="nf">QUARTERS</span> <span class="k">;
+</span></span></span></code></pre></div><p>显然，第二个例子有过度拆分的倾向，其中一个词的名字和两个注释也有问题。这种拆分让程序变得更大更冗长，但是没有增加程序的功能，也没有提高程序的可读性。</p>
+<p>类似地，有前面播放音乐的例子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">freude1</span>  <span class="mi">8</span> <span class="nf">e4</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="mi">8</span> <span class="nf">f4</span> <span class="mi">8</span> <span class="nf">g4</span> <span class="mi">8</span> <span class="nf">g4</span> <span class="mi">8</span> <span class="nf">f4</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="mi">8</span> <span class="nf">d4</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">8</span> <span class="nf">c4</span> <span class="mi">8</span> <span class="nf">c4</span> <span class="mi">8</span> <span class="nf">d4</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="k">;
+</span></span></span></code></pre></div><p>懂一点音乐的人很容易理解。</p>
+<p>极端的拆分论者可能会只定义 <code>c</code> <code>d</code> <code>e</code> <code>f</code> <code>g</code> <code>a</code> <code>b</code> 七个音名的词，然后将八度的序号作为参数传递（也就是<code>( 时值 八度序号 -- )</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">freude1</span>  <span class="mi">8</span> <span class="mi">4</span> <span class="nf">e</span> <span class="mi">8</span> <span class="mi">4</span> <span class="nf">e</span> <span class="mi">8</span> <span class="mi">4</span> <span class="nf">f</span> <span class="mi">8</span> <span class="mi">4</span> <span class="nf">g</span> <span class="mi">8</span> <span class="mi">4</span> <span class="nf">g</span> <span class="mi">8</span> <span class="mi">4</span> <span class="nf">f</span> <span class="mi">8</span> <span class="mi">4</span> <span class="nf">e</span> <span class="mi">8</span> <span class="mi">4</span> <span class="nf">d</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">8</span> <span class="mi">4</span> <span class="nf">c</span> <span class="mi">8</span> <span class="mi">4</span> <span class="nf">c</span> <span class="mi">8</span> <span class="mi">4</span> <span class="nf">d</span> <span class="mi">8</span> <span class="mi">4</span> <span class="nf">e</span> <span class="k">;
+</span></span></span></code></pre></div><p>这样做在大部分情况下并不是最优的，因为：</p>
+<ul>
+<li>
+<p>差一个八度的音频率差一倍，因此每次执行的时候都需要根据八度序号计算参数。这需要乘法或循环移位操作，对 <code>My4TH</code> 这种运算非常慢的计算机来说会显著影响播放效果和时值。</p>
+</li>
+<li>
+<p>由于计算机的实际限制，播放程序中对应的参数往往不是严格的整倍数关系，会有正负几的误差（如 CEC-I BASIC 中，中音 c 的参数是 192，高音 c 是 95 而非 96）。这会让处理音名的程序包含乘法和分支判断，变得十分复杂。</p>
+</li>
+<li>
+<p>书写格式与乐理上的通用格式差别太大。</p>
+</li>
+</ul>
+<p>更极端的拆分论者可能会只定义一个词，将音名的代码也用数字代替（比如 <code>c</code> <code>d</code> <code>e</code> <code>f</code> <code>g</code> <code>a</code> <code>b</code> 用 1~7 编码，与简谱相同）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">note</span>	<span class="c1">( duration octave note-number -- )</span>	<span class="c1">\ 如：8 4 3 note
+</span></span></span></code></pre></div><p>这会把播放音乐的程序搞得比用 CEC-I BASIC 的 <code>MUSIC 频率参数,时值参数</code> 指令还复杂，严重影响了可读性。</p>
+<p><strong>对应的规则：</strong></p>
+<ul>
+<li>
+<ol start="3">
+<li>不要单纯为了把词拆分开而拆分词。</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>保证程序、注释、名称三者正确且一致。</li>
+</ol>
+</li>
+<li>
+<ol start="10">
+<li>为词取名要有规律。</li>
+</ol>
+</li>
+</ul>
+<h3 id="例-3简化">例 3：简化</h3>
+<p>考察 <em>Starting Forth</em> 第二版 277~278 页的例子（按 Forth 2012 标准修改）。假设系统提供了下面两个词：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">BRIGHT</span>	<span class="c1">( -- )</span>	<span class="c1">\ 将显示切换到高亮模式。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">-BRIGHT</span>	<span class="c1">( -- )</span>	<span class="c1">\ 将显示切换回缺省模式。
+</span></span></span></code></pre></div><p>现在需要一个输出高亮字符串的词，其具体行为为：将显示切换到高亮模式，输出字符串，然后将显示切换回缺省模式。</p>
+<p>书中的第一个例子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">bdot&#34;</span>  <span class="nf">BRIGHT</span> <span class="k">R&gt; COUNT 2DUP + &gt;R TYPE </span><span class="nf">-BRIGHT</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">B.&#34;</span>  <span class="k">POSTPONE </span><span class="nf">bdot&#34;</span> <span class="k">[CHAR] </span><span class="nf">&#34;</span> <span class="k">WORD C@ 1+ ALLOT ; IMMEDIATE
+</span></span></span></code></pre></div><p>原作者 Leo Brodie 的评价：“这个例子很凌乱，并且可能不好移植。”</p>
+<p>第二个例子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">B.&#34;</span>  <span class="k">POSTPONE </span><span class="nf">BRIGHT</span> <span class="k">POSTPONE </span><span class="s">.&#34;</span> <span class="s">POSTPONE -BRIGHT ; IMMEDIATE
+</span></span></span></code></pre></div><p>原作者的评价：“与上一个例子相比，第二个例子的主要缺点是，每次使用 <code>B.&quot;</code> 时都多编译了两个地址。第一个例子更加高效，如果读者有目标 Forth 系统的源码，确认第一个例子能够在目标系统上工作，并且使用 <code>B.&quot;</code> 很频繁，那么可以选用第一个例子。第二个例子的优点是实现更简单，适合使用 <code>B.&quot;</code> 不是很频繁的场合。”</p>
+<p>“其他语言也许更好学，但是只有 Forth 语言能够这么灵活地扩展编译器。”</p>
+<p>原作者举这两个例子的目的是介绍 <code>POSTPONE</code> 和 <code>IMMEDIATE</code> 的用法。如果不使用推迟执行等编译器特性，而使用 <code>( c-addr u )</code> 二元组表示字符串，可以这么定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">.BRIGHT</span> <span class="c1">( c-addr u -- )</span> <span class="nf">BRIGHT</span> <span class="k">TYPE </span><span class="nf">-BRIGHT</span> <span class="k">;
+</span></span></span></code></pre></div><p><strong>对应的规则：</strong></p>
+<ul>
+<li>
+<ol start="5">
+<li>不要使用语法糖。</li>
+</ol>
+</li>
+<li>
+<ol start="6">
+<li>避免把问题复杂化。</li>
+</ol>
+</li>
+</ul>
+<h3 id="例-4充分的测试">例 4：充分的测试</h3>
+<p>例子来自 <em>Thinking Forth</em>（重印版）第 219 页。原作者想表达的意思是，用逻辑运算获得标志比用 <code>IF</code> 简单、快、好（当然，对使用串行运算器的 My4TH 来说，这一点不一定成立）。举的例子是：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-diff" data-lang="diff"><span class="line"><span class="cl">x=0 当 t&lt;0 时
+</span></span><span class="line"><span class="cl">x=1 当 t&gt;=0 时
+</span></span></code></pre></div><p>与单个表达式</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">t</span> <span class="k">0&lt; </span><span class="mi">1</span> <span class="k">AND
+</span></span></span></code></pre></div><p>等价。</p>
+<p>打开任何一个 Forth 系统进行测试，就知道问题出在哪里了。</p>
+<p><strong>对应的规则：</strong></p>
+<ul>
+<li>
+<ol start="7">
+<li>进行测试，即使非常显然的东西也要测试。</li>
+</ol>
+</li>
+</ul>
+<h3 id="例-5要不要避免-if">例 5：要不要避免 <code>IF</code>？</h3>
+<p>像上一个例子所描述的，很多 Forth 用户都付出很大的努力来避免使用 <code>IF</code>，有些人甚至极端到只要有可能就使用 <code>CASE</code>、查表或向量执行。下面的例子来自 <em>Starting Forth</em> 第二版：</p>
+<p>第一个例子，使用 <code>IF</code>（183页）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">CATEGORY</span> <span class="c1">( weight-per-dozen -- category#)</span>
+</span></span><span class="line"><span class="cl">   <span class="k">DUP </span><span class="mi">18</span> <span class="k">&lt; IF </span><span class="mi">0</span> <span class="k">ELSE
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">DUP </span><span class="mi">21</span> <span class="k">&lt; IF </span><span class="mi">1</span> <span class="k">ELSE
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">DUP </span><span class="mi">24</span> <span class="k">&lt; IF </span><span class="mi">2</span> <span class="k">ELSE
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">DUP </span><span class="mi">27</span> <span class="k">&lt; IF </span><span class="mi">3</span> <span class="k">ELSE
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">DUP </span><span class="mi">30</span> <span class="k">&lt; IF </span><span class="mi">4</span> <span class="k">ELSE
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>               <span class="mi">5</span>
+</span></span><span class="line"><span class="cl">   <span class="k">THEN THEN THEN THEN THEN SWAP DROP ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">LABEL</span> <span class="c1">( category# -- )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">DUP 0= IF </span><span class="s">.&#34;</span> <span class="s">Reject </span><span class="nf">&#34;</span> <span class="k">ELSE
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">DUP </span><span class="mi">1</span> <span class="nf">=</span> <span class="k">IF </span><span class="s">.&#34;</span> <span class="s">Small </span><span class="nf">&#34;</span> <span class="k">ELSE
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">DUP </span><span class="mi">2</span> <span class="nf">=</span> <span class="k">IF </span><span class="s">.&#34;</span> <span class="s">Medium </span><span class="nf">&#34;</span> <span class="k">ELSE
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">DUP </span><span class="mi">3</span> <span class="nf">=</span> <span class="k">IF </span><span class="s">.&#34;</span> <span class="s">Large </span><span class="nf">&#34;</span> <span class="k">ELSE
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">DUP </span><span class="mi">4</span> <span class="nf">=</span> <span class="k">IF </span><span class="s">.&#34;</span> <span class="s">Extra Large </span><span class="nf">&#34;</span> <span class="k">ELSE
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>              <span class="s">.&#34;</span> <span class="s">Error </span><span class="nf">&#34;</span>
+</span></span><span class="line"><span class="cl">   <span class="k">THEN THEN THEN THEN THEN DROP ;
+</span></span></span></code></pre></div><p>第二个例子如下。原作者称它“对行家来说既简单又讲究”：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="k">CREATE </span><span class="nf">SIZES</span> <span class="mi">18</span> <span class="k">C, </span><span class="mi">21</span> <span class="k">C, </span><span class="mi">24</span> <span class="k">C, </span><span class="mi">27</span> <span class="k">C, </span><span class="mi">30</span> <span class="k">C, </span><span class="mi">255</span> <span class="k">C,
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">CATEGORY</span> <span class="c1">( weight-per-dozen -- category# )</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">6</span> <span class="mi">0</span> <span class="k">DO DUP </span><span class="nf">SIZES</span> <span class="k">I + C@
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">&lt; IF DROP I LEAVE THEN LOOP ;
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE </span><span class="nf">&#34;LABEL&#34;</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">ASCII</span> <span class="nf">&#34;</span> <span class="nf">STRING</span> <span class="nf">Reject</span>  <span class="nf">Small</span>   <span class="nf">Medium</span>  <span class="nf">Large</span>   <span class="nf">Xtra</span> <span class="nf">LrgError</span>   <span class="nf">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">LABEL</span> <span class="c1">( category# -- )</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">8</span> <span class="k">* </span><span class="nf">&#34;LABEL&#34;</span> <span class="k">+ </span><span class="mi">8</span> <span class="k">TYPE SPACE ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">LABEL</span>  <span class="mi">0</span> <span class="k">MAX </span><span class="mi">5</span> <span class="k">MIN </span><span class="nf">LABEL</span> <span class="k">;
+</span></span></span></code></pre></div><p>（其中 <code>ASCII</code> 和 <code>STRING</code> 是 polyFORTH 系统的扩展：<code>ASCII &quot;</code> 相当于标准的 <code>CHAR &quot;</code>，<code>STRING str&lt;char&gt; ( char --)</code> 将后面直到 char 的字符按带长度字符串存入当前堆地址（类似于前面定义的<code>,&quot;</code>）。）</p>
+<p>这里不再展开介绍这段代码，因为（此处应有黄色狗头 emoji）：</p>
+<ul>
+<li>
+<p>对行家来说这段代码很“简单”，不需要解释；</p>
+</li>
+<li>
+<p>一解释就得给这段“讲究”的代码除错。</p>
+</li>
+</ul>
+<p>你会用哪种实现方式？</p>
+<p><strong>对应的规则：</strong></p>
+<ul>
+<li>
+<ol start="8">
+<li>不要“前门拒虎，后门进狼”。</li>
+</ol>
+</li>
+</ul>
+<h3 id="例-6栈操作">例 6：栈操作</h3>
+<p>对人看似很复杂的东西对 Forth 系统来说可能很简单。然而对 Forth 系统来说很简单的东西对人而言未必很复杂。</p>
+<p>第一个例子（ <em>Thinking Forth</em>（重印版）第 222 页）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="c1">\ Telephone rates                       03/30/84
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">CREATE </span><span class="nf">FULL</span>  <span class="mi">30</span> <span class="k">, </span><span class="mi">20</span> <span class="k">, </span><span class="mi">12</span> <span class="k">,
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE </span><span class="nf">LOWER</span>  <span class="mi">22</span> <span class="k">, </span><span class="mi">15</span> <span class="k">, </span><span class="mi">10</span> <span class="k">,
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE </span><span class="nf">LOWEST</span>  <span class="mi">12</span> <span class="k">, </span><span class="mi">9</span> <span class="k">, </span><span class="mi">6</span> <span class="k">,
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">VARIABLE</span> <span class="nc">RATE</span>	<span class="c1">\ Points to FULL, LOWER or LOWEST
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>				<span class="c1">\ depending on time of day
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">FULL</span> <span class="nf">RATE</span> <span class="k">! </span>	<span class="c1">\ For instance
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">CHARGE</span> <span class="c1">( o -- )</span> <span class="k">CREATE ,
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="k">DOES&gt; </span><span class="c1">( -- rate )</span> <span class="k">@ </span><span class="nf">RATE</span> <span class="k">@ + @ ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">0</span> <span class="nf">CHARGE</span> <span class="mi">1</span><span class="nf">MINUTE</span> 	<span class="c1">\ Rate for first minute
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">2</span> <span class="nf">CHARGE</span> <span class="nf">+MINUTES</span> 	<span class="c1">\ Rate for each additional minute
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">4</span> <span class="nf">CHARGE</span> <span class="nf">/MILES</span> 	<span class="c1">\ Rate per each 100 miles
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">VARIABLE</span> <span class="nc">OPERATOR?</span> 	<span class="c1">\ 90 if operator assisted; else 0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">VARIABLE</span> <span class="nc">#MILES</span> 	<span class="c1">\ Hundreds of miles
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">?ASSISTANCE</span> <span class="c1">( Direct-dial charge -- total charge)</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">OPERATOR?</span> <span class="k">@ + ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">MILEAGE</span> <span class="c1">( -- charge )</span> <span class="nf">#MILES</span> <span class="k">@ </span><span class="nf">/MILES</span> <span class="k">* ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">FIRST</span> <span class="c1">( -- charge )</span> <span class="mi">1</span><span class="nf">MINUTE</span> <span class="nf">?ASSISTANCE</span> <span class="nf">MILEAGE</span> <span class="k">+ ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">ADDITIONAL</span> <span class="c1">( -- charge)</span> <span class="nf">+MINUTES</span> <span class="nf">MILEAGE</span> <span class="k">+ ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">TOTAL</span> <span class="c1">( #minutes -- total charge)</span>
+</span></span><span class="line"><span class="cl">   <span class="k">1- </span><span class="nf">ADDITIONAL</span> <span class="k">* </span><span class="nf">FIRST</span> <span class="k">+ ;
+</span></span></span></code></pre></div><p>这个例子使用了很多 <code>VARIABLE</code> 来避免栈操作。可读么？</p>
+<p>第二个例子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="c1">\ Phone-rate table from Brodie, Thinking Forth,
+</span></span></span><span class="line"><span class="cl"><span class="c1">\ reprint edition, p. 51
+</span></span></span><span class="line"><span class="cl"><span class="c1">\ Rates are used as offsets into arrays
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">0</span> <span class="k">CELLS </span><span class="kn">CONSTANT</span> <span class="nc">FULL</span>
+</span></span><span class="line"><span class="cl"><span class="mi">1</span> <span class="k">CELLS </span><span class="kn">CONSTANT</span> <span class="nc">LOWER</span>
+</span></span><span class="line"><span class="cl"><span class="mi">2</span> <span class="k">CELLS </span><span class="kn">CONSTANT</span> <span class="nc">LOWEST</span>
+</span></span><span class="line"><span class="cl"><span class="c1">\ Array-defining word
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">FOR</span>  <span class="k">CREATE DOES&gt; </span><span class="c1">( rate - charge-per-minute)</span> <span class="k">+ @ ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="c1">\ Table comprises three arrays
+</span></span></span><span class="line"><span class="cl"><span class="c1">\ Charge-per-minute at FULL LOWER LOWEST rate
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">FOR</span> <span class="nf">FIRST</span> <span class="mi">30</span> <span class="k">, </span><span class="mi">22</span> <span class="k">, </span><span class="mi">12</span> <span class="k">,
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">FOR</span> <span class="nf">+MINUTES</span> <span class="mi">20</span> <span class="k">, </span><span class="mi">15</span> <span class="k">, </span><span class="mi">9</span> <span class="k">,
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">FOR</span> <span class="nf">DISTANCE</span> <span class="mi">12</span> <span class="k">, </span><span class="mi">10</span> <span class="k">, </span><span class="mi">6</span> <span class="k">,
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">90</span> <span class="kn">CONSTANT</span> <span class="nc">ASSISTANCE</span> <span class="c1">\ Charge for operator assistance
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">?ASSISTANCE</span> <span class="c1">( flag - charge)</span> <span class="nf">ASSISTANCE</span> <span class="k">AND ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">ADDITIONAL</span> <span class="c1">( #minutes-1 rate - charge)</span> <span class="nf">+MINUTES</span> <span class="k">* ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">MINUTES</span> <span class="c1">( #minutes rate - charge)</span>
+</span></span><span class="line"><span class="cl">   <span class="k">DUP </span><span class="nf">FIRST</span> <span class="k">ROT 1- ROT </span><span class="nf">ADDITIONAL</span> <span class="k">+ ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">MILES</span> <span class="c1">( distance #minutes rate - charge)</span> <span class="nf">DISTANCE</span> <span class="k">* * ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">TOTAL</span> <span class="c1">( distance #minutes rate assistance-flag - charge)</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">?ASSISTANCE</span> <span class="k">&gt;R 2DUP </span><span class="nf">MINUTES</span> <span class="k">&gt;R </span><span class="nf">MILES</span> <span class="k">2R&gt; + + ;
+</span></span></span></code></pre></div><p>这个例子利用了栈操作。可读性下降了还是上升了？</p>
+<p><strong>对应的规则：</strong></p>
+<ul>
+<li>
+<ol start="9">
+<li>充分利用栈。</li>
+</ol>
+</li>
+</ul>
+<h2 id="词的前后缀约定">词的前后缀约定</h2>
+<table>
+  <thead>
+      <tr>
+          <th>格式</th>
+          <th>意义</th>
+          <th>例子</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>!name</code></td>
+          <td>存储到 <code>name</code></td>
+          <td><code>!DATA</code></td>
+      </tr>
+      <tr>
+          <td><code>#name</code></td>
+          <td>大小或数量</td>
+          <td><code>#PIXELS</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>输出数字</td>
+          <td><code>#S</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>缓冲区名称</td>
+          <td><code>#I</code></td>
+      </tr>
+      <tr>
+          <td><code>'name</code></td>
+          <td><code>name</code> 的地址</td>
+          <td><code>'S</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>指向 <code>name</code> 的指针的地址</td>
+          <td><code>'TYPE</code></td>
+      </tr>
+      <tr>
+          <td><code>(name)</code></td>
+          <td><code>name</code> 是内部组成部分，通常不希望用户直接使用</td>
+          <td><code>(IF)</code> <code>(FIND)</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>name</code> 的运行时过程（实例行为对应的程序入口）</td>
+          <td><code>(DOES&gt;)</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>文件索引</td>
+          <td><code>(PEOPLE)</code></td>
+      </tr>
+      <tr>
+          <td><code>*name</code></td>
+          <td>乘</td>
+          <td><code>*DIGIT</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>词需要缩放过的参数</td>
+          <td><code>*DRAW</code></td>
+      </tr>
+      <tr>
+          <td><code>+name</code></td>
+          <td>加</td>
+          <td><code>+LOOP</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>向前移动指针</td>
+          <td><code>+BUF</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>使能</td>
+          <td><code>+CLOCK</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>更强大的</td>
+          <td><code>+INITIALIZE</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>词需要相对的参数</td>
+          <td><code>+DRAW</code></td>
+      </tr>
+      <tr>
+          <td><code>-name</code></td>
+          <td>减、移除</td>
+          <td><code>-TRAILING</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>禁止</td>
+          <td><code>-CLOCK</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>与 <code>name</code> 的作用相反</td>
+          <td><code>-DONE</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>返回取反的标志（非零代表条件不成立，零代表条件成立）</td>
+          <td><code>-MATCH</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>文件中的指针</td>
+          <td><code>-JOB</code></td>
+      </tr>
+      <tr>
+          <td><code>.name</code></td>
+          <td>打印 <code>name</code> 提示的内容</td>
+          <td><code>.S</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>按 <code>name</code> 提示的格式打印栈中内容</td>
+          <td><code>.R</code> <code>.$</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>打印后面的字符串</td>
+          <td><code>.&quot; string&quot;</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>（可以前缀类型提示）</td>
+          <td><code>D.</code> <code>U.</code> <code>U.R</code></td>
+      </tr>
+      <tr>
+          <td><code>/name</code></td>
+          <td>除</td>
+          <td><code>/DIGIT</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>初始化程序或设备</td>
+          <td><code>/COUNTER</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>“每”</td>
+          <td><code>/SIDE</code></td>
+      </tr>
+      <tr>
+          <td><code>1name</code></td>
+          <td>一组元素的第一个</td>
+          <td><code>1SWITCH</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>整数 1</td>
+          <td><code>1+</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>大小为 1 字节</td>
+          <td><code>1@</code></td>
+      </tr>
+      <tr>
+          <td>2name</td>
+          <td>一组元素的第二个</td>
+          <td><code>2SWITCH</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>整数 2</td>
+          <td><code>2/</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>大小为 2 个单元</td>
+          <td><code>2@</code></td>
+      </tr>
+      <tr>
+          <td><code>;name</code></td>
+          <td>结束一部分内容</td>
+          <td><code>;S</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>结束一部分内容，开始另一部分内容</td>
+          <td><code>;CODE</code></td>
+      </tr>
+      <tr>
+          <td><code>&lt;name</code></td>
+          <td>小于</td>
+          <td><code>&lt;LIMIT</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>左括弧</td>
+          <td><code>&lt;#</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>来自设备</td>
+          <td><code>&lt;TAPE</code></td>
+      </tr>
+      <tr>
+          <td><code>&lt;name&gt;</code></td>
+          <td>设备驱动的内部组成部分的名称</td>
+          <td><code>&lt;TYPE&gt;</code></td>
+      </tr>
+      <tr>
+          <td><code>&gt;name</code></td>
+          <td>数据去到 <code>name</code></td>
+          <td><code>&gt;R</code> <code>&gt;TAPE</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>索引指针</td>
+          <td><code>&gt;IN</code></td>
+      </tr>
+      <tr>
+          <td><code>&gt;name&lt;</code></td>
+          <td>交换（尤其指字节）</td>
+          <td><code>&gt;&lt;</code>：交换字节； <code>&gt;MOVE&lt;</code>：移动并交换字节</td>
+      </tr>
+      <tr>
+          <td><code>?name</code></td>
+          <td>检查 <code>name</code> 代表的条件，如果满足则返回真</td>
+          <td><code>?TERMINAL</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>条件满足时执行操作</td>
+          <td><code>?DUP</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>检查 <code>name</code> 代表的条件，如果不满足则中止程序</td>
+          <td><code>?STACK</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>取出 <code>name</code> 的内容并打印</td>
+          <td><code>?N</code></td>
+      </tr>
+      <tr>
+          <td><code>@name</code></td>
+          <td>取出 <code>name</code> 的内容</td>
+          <td><code>@INDEX</code></td>
+      </tr>
+      <tr>
+          <td><code>Cname</code></td>
+          <td>大小为 1 字节</td>
+          <td><code>C@</code></td>
+      </tr>
+      <tr>
+          <td><code>Dname</code></td>
+          <td>大小为 2 个单元</td>
+          <td><code>D+</code></td>
+      </tr>
+      <tr>
+          <td><code>Mname</code></td>
+          <td>单精度与双精度整数的混合运算</td>
+          <td><code>M*</code></td>
+      </tr>
+      <tr>
+          <td><code>Tname</code></td>
+          <td>大小为 3 个单元</td>
+          <td><code>T*</code></td>
+      </tr>
+      <tr>
+          <td><code>Uname</code></td>
+          <td>无符号整数</td>
+          <td><code>U.</code></td>
+      </tr>
+      <tr>
+          <td>[name]</td>
+          <td>在编译时执行（与执行时使用的 name 作用相同的立即词）</td>
+          <td><code>[']</code></td>
+      </tr>
+      <tr>
+          <td>\name</td>
+          <td>无符号减</td>
+          <td><code>\LOOP</code></td>
+      </tr>
+      <tr>
+          <td><code>name!</code></td>
+          <td>存储到 <code>name</code></td>
+          <td><code>B!</code></td>
+      </tr>
+      <tr>
+          <td><code>name&quot;</code></td>
+          <td>后跟字符串，以 <code>&quot;</code> 结束</td>
+          <td><code>ABORT&quot; string&quot;</code></td>
+      </tr>
+      <tr>
+          <td><code>name,</code></td>
+          <td>将内容存入堆中</td>
+          <td><code>C,</code></td>
+      </tr>
+      <tr>
+          <td><code>name:</code></td>
+          <td>开始编译</td>
+          <td><code>NONAME:</code></td>
+      </tr>
+      <tr>
+          <td><code>name&gt;</code></td>
+          <td>右括弧</td>
+          <td><code>#&gt;</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>数据来自 <code>name</code></td>
+          <td><code>R&gt;</code></td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>结束一部分内容，开始另一部分内容</td>
+          <td><code>DOES&gt;</code></td>
+      </tr>
+      <tr>
+          <td><code>name?</code></td>
+          <td>与 <code>?name</code> 相同</td>
+          <td><code>B?</code></td>
+      </tr>
+      <tr>
+          <td><code>name@</code></td>
+          <td>取出 <code>name</code> 的内容</td>
+          <td><code>B@</code></td>
+      </tr>
+  </tbody>
+</table>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>本节内容改编自 <em>Real Time Forth</em> 前言。&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>选择词表的功能在 Forth 2012 标准中由 Search-Order 词集实现。My4TH Forth 目前没有实现这一词集。&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p>本节内容部分改编自 <em>Thinking Forth</em> 第四章。&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4">
+<p>a. 事实上一个全功能的句法分析器可能比一个 Forth 解释器还大。</p>
+<p>b. 读者可以思考一个问题：为什么 Forth 不支持冒号定义嵌套？&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:5">
+<p>本部分内容主要改编自 <em>Thinking Forth</em> 第四章和第五章。&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:6">
+<p>a. 到这里，前面提到过的“为什么 Forth 不支持冒号定义嵌套”的问题，读者应该已经有了答案。</p>
+<p>b. 当然为了效率，实现解释器时对 <code>(</code> 和 <code>\</code> 等进行特殊处理也不是不能接受的。具体的工程问题总是充满了折衷。</p>
+<p>c. 读者可能会感兴趣：实现一个 Forth 系统，最少需要多少个不能用其他词定义的词（称为原语）？先说结论：</p>
+<ul>
+<li>
+<p>极端的简化论者可以用个位数个原语实现基本的 Forth 系统（功能不一定完整，效率也可能受影响）。</p>
+</li>
+<li>
+<p>实现完整的 Forth 系统最少需要 13 个原语。</p>
+</li>
+<li>
+<p>要想实用，需要 30 个左右或者更多的原语。</p>
+</li>
+</ul>
+<p>Rod Pemberton 曾经做过一个不完全的统计（发布在新闻组 <code>comp.lang.forth</code>），摘录如下：</p>
+<pre tabindex="0"><code>---
+FORTH Primitives Comparison (use a fixed width font)
+---
+3 primitives - Frank Sargent&#39;s &#34;3 Instruction Forth&#34;
+9 primitives - Mark Hayes theoretical minimal Forth bootstrap
+9,11 primitives - Mikael Patel&#39;s Minimal Forth Machine (9 minimum, 11 full)
+13 primitives - theoretical minimum for a complete FORTH (Brad Rodriguez)
+16,29 primitives - C. Moore&#39;s word set for the F21 CPU (16 minimum, 29 full)
+20 primitives - Philip Koopman&#39;s &#34;dynamic instruction frequencies&#34;
+23 primitives - Mark Hayes MRForth
+25 primitives - C. Moore&#39;s instruction set for MuP21 CPU
+36 primitives - Dr. C.H. Ting&#39;s eForth, a highly portable forth
+46 primitives - GNU&#39;s GFORTH for 8086
+60-63 primitives - considered the essence of FORTH by C. Moore (unknown)
+72 primitives - Brad Rodriguez&#39;s 6809 CamelForth
+    
+58-255 functions - FORTH-83 Standard (255 defined, 132 required, 58 nucleus)
+74-236 functions - FORTH-79 Standard (236 defined, 147 required, 74 nucleus)
+94-229 functions - fig-FORTH Std. (229 defined, 117 required, 94 level zero)
+133-? functions - ANS-FORTH Standard (? defined, 133 required, 133 core)
+200 functions - FORTH 1970, the original Forth by C. Moore
+240 functions - MVP-FORTH (FORTH-79)
+~1000 functions - F83 FORTH
+~2500 functions - F-PC FORTH
+    
+eForth primitives (9 optional)
+----
+doLIT doLIST BYE EXECUTE EXIT next ?branch branch ! @ C! C@ RP@ RP! R&gt; R@ &gt;R
+SP@ SP! DROP DUP SWAP OVER 0&lt; AND OR XOR UM+ TX!
+?RX !IO $CODE $COLON $USER D$ $NEXT COLD IO?
+    
+9 MRForth bootstrap theoretical
+----
+@ ! + AND XOR (URSHIFT) (LITERAL) (ABORT) EXECUTE
+    
+9 Minimal Forth (3 optional)
+----
+&gt;r r&gt; 1+ 0= nand @ dup! execute exit
+drop dup swap
+    
+23 MRForth primitives
+----
+C@ C! @ ! DROP DUP SWAP OVER $&gt;$R R$&gt;$ + AND OR XOR (URSHIFT) 0$&lt;$ 0=
+(LITERAL) EXIT (ABORT) (EMIT) (KEY)
+    
+20 Koopman high execution, Dynamic Freq.
+----
+CALL EXIT EXECUTE VARIABLE USER LIT CONSTANT 0BRANCH BRANCH I @ C@ R&gt; &gt;R
+SWAP DUP ROT + = AND
+    
+46 Gforth
+----
+:DOCOL :DOCON :DODEFER :DOVAR :DODOES ;S BYE EXECUTE BRANCH ?BRANCH LIT @ !
+C@ C! SP@ SP! R&gt; R@ &gt;R RP@ RP! + - OR XOR AND 2/ (EMIT) EMIT? (KEY) (KEY?)
+DUP 2DUP DROP 2DROP SWAP OVER ROT -ROT UM* UM/MOD LSHIFT RSHIFT 0= =
+    
+36 eForth
+-------
+BYE ?RX TX! !IO doLIT doLIST EXIT EXECUTE next ?branch branch ! @ C! C@ RP@
+RP! R&gt; R@ &gt;R SP@ SP! DROP DUP SWAP OVER 0&lt; AND OR XOR UM+ $NEXT D$ $USER
+$COLON $CODE
+</code></pre><p>对这个问题十分感兴趣的读者可以参考新闻组 <code>comp.lang.forth</code> 1996 年 8 月 26 日的帖子 “What is Minimum Assembly Coded Words set in Forth?” 和 2008 年 6 月 28 日的帖子 “seeking a special Forth”。&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:7">
+<p>一般的 Forth 系统都允许跨屏定义。跨屏定义可以用 <code>THRU</code> 装入。</p>
+<p><em>Thinking Forth</em> 中介绍了“装入下一屏”的词 <code>--&gt;</code>。在 Forth 2012 标准中，这一词可以这么定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">--&gt;</span>  <span class="k">refill drop ; immediate
+</span></span></span></code></pre></div><p>这一词可以用在编译模式，也可以用在立即模式。需要注意，<code>--&gt;</code> 与 <code>THRU</code> 不能同时使用（否则每一屏都会被 <code>LOAD</code> 不止一次）。<code>--&gt;</code> 每次都会装入一系列的屏，不如 <code>THRU</code> 灵活。因此建议尽量使用 <code>THRU</code>。&#160;<a href="#fnref:7" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:8">
+<p>本部分内容主要改编自 <em>Thinking Forth</em> 第六章。&#160;<a href="#fnref:8" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:9">
+<p><code>over + swap</code> 这个成语的复杂程度恰好让 Forth 用户们见仁见智。比它更复杂的用法，大部分用户都会造一个词；比它更简单的用法，大部分用户都不会专门造词。My4th Forth 碰巧定义了不包含在 Forth 2012 标准中的 <code>BOUNDS</code> 一词来代表它（继承自 Gforth）。&#160;<a href="#fnref:9" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2025
+    <a href="/zh/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (window.location.host !== 'qsl.net')
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+:root {
+  /*--ccolor: #f8f8f2;
+  --cbcolor: #272822;*/
+  --ccolor: #000000;
+  --cbcolor: #e6e6e6;
+}
+p > code {
+  font-family: Iosevka, monospace;
+  color: var(--ccolor);
+  background: var(--cbcolor);
+  padding: 2px;
+}
+code {
+  font-family: Iosevka, monospace;
+  color: var(--ccolor);
+  background: var(--cbcolor);
+}
+pre {
+  color: var(--ccolor);
+  background: var(--cbcolor);
+  padding: 24px;
+  overflow-x: auto;
+}

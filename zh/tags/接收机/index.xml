@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>接收机 on BH1PHL 的 Blog</title>
+    <link>https://bh1phl.github.io/zh/tags/%E6%8E%A5%E6%94%B6%E6%9C%BA/</link>
+    <description>Recent content in 接收机 on BH1PHL 的 Blog</description>
+    <generator>Hugo</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Mon, 27 Feb 2023 04:54:41 +0800</lastBuildDate>
+    <atom:link href="https://bh1phl.github.io/zh/tags/%E6%8E%A5%E6%94%B6%E6%9C%BA/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用 2N7002 的惠斯通电桥再生式 (WBR) 接收机</title>
+      <link>https://bh1phl.github.io/zh/posts/wbrrecv_2n7002/</link>
+      <pubDate>Mon, 27 Feb 2023 04:54:41 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/wbrrecv_2n7002/</guid>
+      <description>&lt;h2 id=&#34;基本原理&#34;&gt;基本原理&lt;/h2&gt;&#xA;&lt;p&gt;电路基于 N1BYT 的 WBR 接收机，如下图所示。以 Q1 为核心组成电容三点式振荡电路，RV2 和 RV5 调整是否起振（再生强弱）。L2、C7、C8 和 6 个二极管 D1~D6 构成振荡槽路。输入信号通过 RV1（起可调衰减作用）衰减和 L1，馈入 L2 中间抽头。变容二极管阳极的直流通路由 L1 提供。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

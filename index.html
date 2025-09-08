@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<meta name="generator" content="Hugo 0.149.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+  
+    
+      <title>BH1PHL&#39;s Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/"><h1>BH1PHL&#39;s Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/"><b>Home</b></a>
+      
+         | 
+        <a href="/about"><b>About</b></a>
+      
+         | 
+        <a href="/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/zh/"><b>中文</b></a>
+      
+    
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+	<main>
+		
+		
+			<article class="summary">
+  <a href="/posts/my4th_peripherals/">
+    <h1 class="title">Some experiments on My4TH (4): Peripherals</h1>
+    
+  </a>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2025-02-18</time>
+    
+    
+  </strong>
+ <span> • 547 words</span>
+ <span> • 3 minute read</span>
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/my4th">My4TH</a>, 
+        <a href="/tags/forth">Forth</a>
+    </div>
+  
+</div>
+
+  <div class="content">
+    <p><h2 id="eeprom-card-and-backplane">EEPROM Card and Backplane</h2>
+<h3 id="eeprom-card">EEPROM Card</h3>
+<p>For EEPROM cards, <a href="https://bh1phl.github.io/posts/my4th_faster/">firmware provided on this website</a> arranges adjacent blocks on the same EEPROM chip, with block numbers ordered according to EEPROM addresses.</p>
+<p>The EEPROM card card uses a USB 3.0 Type-A interface, where the power contacts are compatible with standard USB interfaces, and the signal contacts are used for I2C interface and addressing:</p>
+<p><img src="/a/my4th_peripherals/eeprom-card-interface.png" alt="EEPROM Card Interface"></p>
+<p><code>SOCKET</code> connects to EEPROM address line <code>A1</code>：</p></p>
+    
+      <a href="/posts/my4th_peripherals/">Read more...</a>
+    
+  </div>
+</article>
+
+		
+			<article class="summary">
+  <a href="/posts/my4th_faster/">
+    <h1 class="title">Some experiments on My4TH (3): Faster speed</h1>
+    
+  </a>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2024-12-26</time>
+    
+    
+  </strong>
+ <span> • 642 words</span>
+ <span> • 4 minute read</span>
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/my4th">My4TH</a>, 
+        <a href="/tags/forth">Forth</a>
+    </div>
+  
+</div>
+
+  <div class="content">
+    <p><h2 id="working-at-20mhz-and-221184mhz">Working at 20MHz and 22.1184MHz</h2>
+<p>Tests have shown that My4TH can operate stably at 20MHz (using the 10MHz ROM image file provided by the original author at baud rate 9600) by increasing Vcc to 5.2V with 74HC series logic circuits and AM27H256-45/35DC.</p>
+<p>This configuation can work at 22.1184MHz with Vcc=5.4V:</p>
+<table>
+  <thead>
+      <tr>
+          <th>U2 U3</th>
+          <th>U4</th>
+          <th>U9</th>
+          <th>U15</th>
+          <th>U16</th>
+          <th>Others</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>74F161A(TI)/ 74AC161(TI)</td>
+          <td>74LVC541A(TI)</td>
+          <td>74ACT08/ 74LVC08</td>
+          <td>AM27H256-45/35DC (needs to be selected)</td>
+          <td>IS61C256AL-12T(L)I/ CY7C199(L)-15ZC</td>
+          <td>74HC series</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="higher-baud-rate">Higher baud rate</h2>
+<p>By adjusting the delays in serial subroutines, the system can operate at 14400 baud above 16MHz and 19200 at 22.1184MHz.</p></p>
+    
+      <a href="/posts/my4th_faster/">Read more...</a>
+    
+  </div>
+</article>
+
+		
+			<article class="summary">
+  <a href="/posts/my4th_music/">
+    <h1 class="title">Some experiments on My4TH (2): Playing music</h1>
+    
+  </a>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2024-12-22</time>
+    
+    
+  </strong>
+ <span> • 434 words</span>
+ <span> • 3 minute read</span>
+  
+</div>
+
+  <div class="content">
+    <p><p>In the 1960s and 1970s, Broadcast radio receiver was an <a href="https://mp.weixin.qq.com/s/vhCskYx1rM5PPwvGXrFDcw">essential tool</a> for debugging computer memory. Users could use an ordinary broadcast radio to monitor the electromagnetic radiation emitted by the computer, confirming the operational status of magnetic core memory and the bus. Users quickly discovered that this phenomenon could be used to play music (e.g. <a href="https://mp.weixin.qq.com/s/_qp-S85hQ-MsK3NrkBqjlw">here</a> and <a href="https://www.honest-broker.com/p/how-an-ibm-computer-learned-to-sing/comment/13966958">here</a>).</p>
+<p>While My4TH utilizes modern EPROM and SRAM, its bus still generates some electromagnetic radiation. Experiments have shown that a regular AM radio can pick up the electromagnetic radiation caused by status changes in the bus.</p></p>
+    
+      <a href="/posts/my4th_music/">Read more...</a>
+    
+  </div>
+</article>
+
+		
+			<article class="summary">
+  <a href="/posts/my4th_16mhz/">
+    <h1 class="title">Some experiments on My4TH (1): Running at 16MHz</h1>
+    
+  </a>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2024-12-19</time>
+    
+    
+  </strong>
+ <span> • 823 words</span>
+ <span> • 4 minute read</span>
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/my4th">My4TH</a>
+    </div>
+  
+</div>
+
+  <div class="content">
+    <p><p><a href="http://mynor.org/my4th">My4TH</a> is a minimalist computer designed by Dennis Kuschel. This computer is extremely simplified in its design, employing a serial ALU and utilizing 16 74HC series CMOS logic devices along with microcodes from  ROM for CPU. It runs the Forth system. Here are some experiments related to this computer.</p>
+<h2 id="increasing-the-running-speed">Increasing the running speed</h2>
+<p>To ensure the state of the bus during reset, the original version of My4TH employs 10k resistors to pull down the data bus to GND. This introduces compatibility issues between TTL and HCMOS voltage levels: the outputs of RAM 62256 and ROM 27C256 conform to TTL levels, with a minimum high-level output voltage (\(V_\mathrm{OH}\)) of 2.4V; whereas the minimum high-level input voltage (\(V_\mathrm{IH}\)) for 74HC devices is \(0.7 V_\mathrm{cc}\), which is 3.5 V when powered at 5 V.</p></p>
+    
+      <a href="/posts/my4th_16mhz/">Read more...</a>
+    
+  </div>
+</article>
+
+		
+			<article class="summary">
+  <a href="/posts/wbrrecv_2n7002/">
+    <h1 class="title">A Wheatstone bridge regenerative (WBR) receiver with 2N7002</h1>
+    
+  </a>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2023-02-27</time>
+    
+    
+  </strong>
+ <span> • 1801 words</span>
+ <span> • 9 minute read</span>
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/receiver">Receiver</a>, 
+        <a href="/tags/2n7002">2N7002</a>, 
+        <a href="/tags/wbr">WBR</a>
+    </div>
+  
+</div>
+
+  <div class="content">
+    <p><h2 id="basic-principles">Basic principles</h2>
+<p>The circuit is based on the N1BYT&rsquo;s WBR receiver, as shown in the schematic below. Q1 is the core of a Colpitts oscillator circuit, and RV2 and RV5 adjust whether the circuit oscillates (i.e., regeneration strength). L2, C7, C8, and six diodes D1 to D6 form the oscillation tank circuit. The input signal is attenuated by RV1, and then fed into the middle tap of L2 with L1. The DC path of the variable capacitance diode anode is provided by L1.</p></p>
+    
+      <a href="/posts/wbrrecv_2n7002/">Read more...</a>
+    
+  </div>
+</article>
+
+		
+			<article class="summary">
+  <a href="/posts/mirror_fcz/">
+    <h1 class="title">Mirror site of www.fcz-lab.com</h1>
+    
+  </a>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2017-03-28</time>
+    
+    
+  </strong>
+ <span> • 7 words</span>
+ <span> • 1 minute read</span>
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/mirror-site">Mirror site</a>, 
+        <a href="/tags/fcz-lab">fcz-lab</a>
+    </div>
+  
+</div>
+
+  <div class="content">
+    <p><p><a href="/s/www.fcz-lab.com/index.html">Mirror site of www.fcz-lab.com (March 28 2017)</a></p></p>
+    
+  </div>
+</article>
+
+		
+		<div>
+  
+  1 of 1
+  
+</div>
+
+	</main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2025
+    <a href="/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (window.location.host !== 'qsl.net')
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

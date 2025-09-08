@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+  
+    
+      <title>Some experiments on My4TH (4): Peripherals | BH1PHL&#39;s Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/"><h1>BH1PHL&#39;s Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/"><b>Home</b></a>
+      
+         | 
+        <a href="/about"><b>About</b></a>
+      
+         | 
+        <a href="/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/zh/posts/my4th_peripherals/"><b>中文</b></a>
+      
+    
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">Some experiments on My4TH (4): Peripherals</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2025-02-18</time>
+    
+    
+  </strong>
+  <span> • 547 words</span>
+  <span> • 3 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/my4th">My4TH</a>, 
+        <a href="/tags/forth">Forth</a>
+    </div>
+  
+</div>
+
+      <div class="content"><h2 id="eeprom-card-and-backplane">EEPROM Card and Backplane</h2>
+<h3 id="eeprom-card">EEPROM Card</h3>
+<p>For EEPROM cards, <a href="https://bh1phl.github.io/posts/my4th_faster/">firmware provided on this website</a> arranges adjacent blocks on the same EEPROM chip, with block numbers ordered according to EEPROM addresses.</p>
+<p>The EEPROM card card uses a USB 3.0 Type-A interface, where the power contacts are compatible with standard USB interfaces, and the signal contacts are used for I2C interface and addressing:</p>
+<p><img src="/a/my4th_peripherals/eeprom-card-interface.png" alt="EEPROM Card Interface"></p>
+<p><code>SOCKET</code> connects to EEPROM address line <code>A1</code>：</p>
+<p><img src="/a/my4th_peripherals/eeprom-card-eeprom.png" alt="EEPROM on Card"></p>
+<p>The KiCad project files of the EEPROM card can be downloaded <a href="/s/my4th/eeprom-card-128k.7z">here</a>.</p>
+<p><img src="/a/my4th_peripherals/eeprom-card.jpg" alt="EEPROM Card"></p>
+<h3 id="backplane">Backplane</h3>
+<p>The KiCad project files for the backplane used to connect storage expansion cards and provide 5.2V/5.4V power (for 20MHz and 22.1184MHz) can be downloaded <a href="/s/my4th/my4th-backplane-v1.2.7z">here</a>. The backplane also includes a DS1307 real-time clock and PCA9557 I/O expansion.</p>
+<p><img src="/a/my4th_peripherals/backplane_naked.jpg" alt="Backplane"></p>
+<p><img src="/a/my4th_peripherals/backplane_combined.jpg" alt="Backplane with My4TH SMT"></p>
+<p>The connectors between My4TH SMT and the backplane are generic 0.8mm pitch doble slots board-to-board 2x16 connectors (total height 4mm, such as <a href="https://www.lcsc.com/product-detail/Board-to-Board-and-Backplane-Connector_HCTL-HC-PBB08-2-32-M-H1-0-G1-R-P-04_C41421128.html?s_z=n_C41421128">this one</a> and <a href="https://www.lcsc.com/product-detail/Board-to-Board-and-Backplane-Connector_HCTL-HC-PBB08-2-32-F-H3-0-G1-R-P-04_C41421149.html?s_z=n_C41421149">this one</a>, or <a href="https://item.taobao.com/item.htm?id=592117990571&amp;skuId=4385836045812">this one</a>. Socket on My4TH board, plug on backplane.) The Bus connector is a PHB 2x20 2mm pitch right angle socket.</p>
+<p>The power supply circuit is shown in the figure below. SW1 and SW2 are 7-pin toggle switches with a size of 6.6x2.7mm and a pin pitch of 1.5mm (for example, <a href="https://www.lcsc.com/product-detail/Slide-Switches_Yuandi-TA-3524A-A1-W_C730329.html?s_z=n_C730329">this one</a>).</p>
+<p><img src="/a/my4th_peripherals/backplane-power.png" alt="Backplane Power"></p>
+<h4 id="drivers-for-ds1307-and-pca9557">Drivers for DS1307 and PCA9557</h4>
+<p>The DS1307 real-time clock on the board occupies the I2C address $D0.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="c1">\ C DS1307 Driver
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">dec2bcd</span> <span class="c1">( dec -- bcd )</span> <span class="mi">10</span> <span class="k">/mod </span><span class="mi">16</span> <span class="k">* + ; </span><span class="c1">\ 2 digits only
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">bcd2dec</span> <span class="c1">( bcd -- dec )</span> <span class="mi">16</span> <span class="k">/mod </span><span class="mi">10</span> <span class="k">* + ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">rtc-rh</span>  <span class="mh">$d0</span> <span class="nf">i2c-rr</span> <span class="k">drop ; </span>  <span class="kn">:</span> <span class="nc">rtc-wh</span>  <span class="mh">$d0</span> <span class="nf">i2c-wr</span> <span class="k">drop ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="c1">\ 0:sec(use rtc-sc@/!) 1:min 2:hour 3:day 4:date 5:month 6:year
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">rtc-r</span> <span class="c1">( reg -- dat )</span> <span class="nf">rtc-rh</span> <span class="nf">bcd2dec</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">rtc-w</span> <span class="c1">( dat reg -- )</span> <span class="k">swap </span><span class="nf">dec2bcd</span> <span class="k">swap </span><span class="nf">rtc-wh</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">rtc-sc@</span>  <span class="mi">0</span> <span class="nf">rtc-rh</span> <span class="mi">127</span> <span class="k">and </span><span class="nf">bcd2dec</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">rtc-sc!</span>  <span class="nf">dec2bcd</span> <span class="mi">0</span> <span class="nf">rtc-rh</span> <span class="mi">128</span> <span class="k">and or </span><span class="mi">0</span> <span class="nf">rtc-wh</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">rtc-stop</span>  <span class="mi">0</span> <span class="nf">rtc-rh</span> <span class="mi">128</span> <span class="k">or </span><span class="mi">0</span> <span class="nf">rtc-wh</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">rtc-start</span>  <span class="mi">0</span> <span class="nf">rtc-rh</span> <span class="mi">127</span> <span class="k">and </span><span class="mi">0</span> <span class="nf">rtc-wh</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="c1">\ Forth 2012 Facility Extension word TIME&amp;DATE
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">time&amp;date</span> <span class="c1">( -- sec min hour date month year )</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">rtc-sc@</span> <span class="mi">1</span> <span class="nf">rtc-r</span> <span class="mi">2</span> <span class="nf">rtc-r</span> <span class="mi">4</span> <span class="nf">rtc-r</span> <span class="mi">5</span> <span class="nf">rtc-r</span> <span class="mi">6</span> <span class="nf">rtc-r</span> <span class="mi">2000</span> <span class="k">+ ;
+</span></span></span></code></pre></div><p>When using the following driver, <code>addr</code> is the I2C address $34 of the PCA9557 I/O expander on the board.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="c1">\ C I2C PCA9557 Driver
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">p57-pc</span> <span class="c1">( addr -- )</span> <span class="mh">$00</span> <span class="mh">$02</span> <span class="k">rot </span><span class="nf">i2c-wr</span> <span class="k">drop ; </span><span class="c1">\ polarity clear
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">p57-dir</span> <span class="c1">( dir addr -- )</span> <span class="k">swap </span><span class="mh">$03</span> <span class="k">rot </span><span class="nf">i2c-wr</span> <span class="k">drop ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">p57-wo</span> <span class="c1">( val addr -- )</span> <span class="k">swap </span><span class="mh">$01</span> <span class="k">rot </span><span class="nf">i2c-wr</span> <span class="k">drop ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">p57-ro</span> <span class="c1">( addr -- val )</span> <span class="mh">$01</span> <span class="k">swap </span><span class="nf">i2c-rr</span> <span class="k">drop ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">p57-ri</span> <span class="c1">( addr -- val )</span> <span class="mh">$00</span> <span class="k">swap </span><span class="nf">i2c-rr</span> <span class="k">drop ;
+</span></span></span></code></pre></div><h3 id="eprom-zif-socket">EPROM ZIF socket</h3>
+<p>ZIF socket allows for convenient testing of different EPROMs. The connection between the socket and the My4TH SMT board is made using 6mm pogo pins (such as <a href="https://www.lcsc.com/product-detail/Pogo-Pin-Spring-Probe-Connector_Xinyangze-YZ221615072P-03_C5157358.html?s_z=n_C5157358">this</a> and <a href="https://item.taobao.com/item.htm?id=750082995689&amp;skuId=5172933449509">this</a>). The KiCad project files can be downloaded <a href="/s/my4th/my4th_smt_eprom_test_fixture.7z">here</a>.</p>
+<p><img src="/a/my4th_peripherals/test-fixture.jpg" alt="EPROM ZIF Socket"></p>
+<h2 id="1602-lcd-screen-and-buttons">1602 LCD screen and buttons</h2>
+<p>With two PCA9557 I/O expanders and a 74HC165 shift register, the 1602 LCD screen and buttons can be driven using the I2C interface:</p>
+<p><img src="/a/my4th_peripherals/i2c-lcd-sch.png" alt="I2C LCD and Button"></p>
+<p><a href="/s/my4th/i2c-clock.scr">This</a> is an example of a clock that uses a 1602 LCD screen, buttons, and a DS1307 real-time clock. The KiCad project files can be downloaded <a href="/s/my4th/my4th-i2c-lcd-v1.3.7z">here</a>.</p>
+<p><img src="/a/my4th_peripherals/i2c-lcd.jpg" alt="I2C Clock"></p>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2025
+    <a href="/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (window.location.host !== 'qsl.net')
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+  
+    
+      <title>关于 My4TH 的一些试验（二）：演奏音乐 | BH1PHL 的 Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/zh/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/zh/"><h1>BH1PHL 的 Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/zh/"><b>Home</b></a>
+      
+         | 
+        <a href="/zh/about"><b>About</b></a>
+      
+         | 
+        <a href="/zh/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/zh/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/zh/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/posts/my4th_music/"><b>English</b></a>
+      
+    
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">关于 My4TH 的一些试验（二）：演奏音乐</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2024-12-22</time>
+    
+    
+  </strong>
+  <span> • 564 words</span>
+  <span> • 2 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/zh/tags/my4th">My4TH</a>, 
+        <a href="/zh/tags/forth">Forth</a>
+    </div>
+  
+</div>
+
+      <div class="content"><p>在20世纪六七十年代，收音机是调试计算机存储器的<a href="https://mp.weixin.qq.com/s/vhCskYx1rM5PPwvGXrFDcw">必备工具</a>。用户可以借助普通的广播收音机侦听计算机发出的电磁辐射，确认磁心存储器及总线的工作状态。当时的用户很快发现，这一现象可以用来演奏音乐（例如<a href="https://mp.weixin.qq.com/s/_qp-S85hQ-MsK3NrkBqjlw">这里</a>和<a href="https://www.honest-broker.com/p/how-an-ibm-computer-learned-to-sing/comment/13966958">这里</a>）。</p>
+<p>虽然 My4TH 使用了现代的存储器，但其总线或多或少也会产生一些电磁辐射。试验发现，使用调幅收音机可以明显地听到总线上的工作状态变化产生的电磁辐射。</p>
+<p>通过调整二层循环嵌套程序中的循环终止值，可以控制总线上状态的变化周期及持续时间，从而实现音乐演奏，并用收音机收听。</p>
+<p>借助 Forth 语言的威力，乐谱可以非常方便地转换成程序：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">250</span> <span class="kn">value</span> <span class="nc">tempo</span> <span class="c1">\ smaller is faster
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">delay</span> <span class="c1">( n -- )</span> <span class="mi">0</span> <span class="k">do loop ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">tone</span> <span class="c1">( duration tone -- )</span> <span class="k">swap </span><span class="nf">tempo</span> <span class="k">* over /
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="mi">0</span> <span class="k">do dup </span><span class="nf">delay</span> <span class="k">loop drop ;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>   
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">P</span> <span class="c1">( duration -- )</span> <span class="nf">tempo</span> <span class="k">* </span><span class="nf">delay</span> <span class="k">; </span><span class="c1">\ pausa
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">:</span> <span class="nc">D5</span> <span class="mi">7</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">C5</span> <span class="mi">8</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">B4</span> <span class="mi">9</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">A4</span> <span class="mi">10</span> <span class="nf">tone</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">G4</span> <span class="mi">12</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">F4</span> <span class="mi">14</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">E4</span> <span class="mi">15</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">D4</span> <span class="mi">17</span> <span class="nf">tone</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">C4</span> <span class="mi">20</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">B3</span> <span class="mi">21</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">A3</span> <span class="mi">24</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">G3</span> <span class="mi">27</span> <span class="nf">tone</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">F3</span> <span class="mi">31</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">E3</span> <span class="mi">33</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">D3</span> <span class="mi">38</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">C3</span> <span class="mi">43</span> <span class="nf">tone</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">B2</span> <span class="mi">46</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">A2</span> <span class="mi">51</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">G2</span> <span class="mi">58</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">F2</span> <span class="mi">66</span> <span class="nf">tone</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">E2</span> <span class="mi">70</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">D2</span> <span class="mi">80</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">C2</span> <span class="mi">90</span> <span class="nf">tone</span> <span class="k">; </span><span class="c1">( duration -- )</span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">F#3</span> <span class="mi">29</span> <span class="nf">tone</span> <span class="k">; </span><span class="kn">:</span> <span class="nc">G#3</span> <span class="mi">26</span> <span class="nf">tone</span> <span class="k">;
+</span></span></span></code></pre></div><p>下面的例子运行在 16MHz 下，演奏《欢乐颂》：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">freude1</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="mi">8</span> <span class="nf">f4</span> <span class="mi">8</span> <span class="nf">g4</span> <span class="mi">8</span> <span class="nf">g4</span> <span class="mi">8</span> <span class="nf">f4</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="mi">8</span> <span class="nf">d4</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">8</span> <span class="nf">c4</span> <span class="mi">8</span> <span class="nf">c4</span> <span class="mi">8</span> <span class="nf">d4</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">freude2</span> <span class="nf">freude1</span> <span class="mi">12</span> <span class="nf">e4</span> <span class="mi">4</span> <span class="nf">d4</span> <span class="mi">16</span> <span class="nf">d4</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">freude3</span> <span class="nf">freude1</span> <span class="mi">12</span> <span class="nf">d4</span> <span class="mi">4</span> <span class="nf">c4</span> <span class="mi">16</span> <span class="nf">c4</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">freude4</span> <span class="mi">8</span> <span class="nf">d4</span> <span class="mi">8</span> <span class="nf">d4</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="mi">8</span> <span class="nf">c4</span> <span class="mi">8</span> <span class="nf">d4</span> <span class="mi">4</span> <span class="nf">e4</span> <span class="mi">4</span> <span class="nf">f4</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="mi">8</span> <span class="nf">c4</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">8</span> <span class="nf">d4</span> <span class="mi">4</span> <span class="nf">e4</span> <span class="mi">4</span> <span class="nf">f4</span> <span class="mi">8</span> <span class="nf">e4</span> <span class="mi">8</span> <span class="nf">d4</span> <span class="mi">8</span> <span class="nf">c4</span> <span class="mi">8</span> <span class="nf">d4</span> <span class="mi">16</span> <span class="nf">g3</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="kn">:</span> <span class="nc">freude</span> <span class="nf">tempo</span> <span class="mi">200</span> <span class="k">to </span><span class="nf">tempo</span> <span class="nf">freude2</span> <span class="nf">freude3</span> <span class="nf">freude4</span> <span class="nf">freude3</span>
+</span></span><span class="line"><span class="cl">   <span class="k">to </span><span class="nf">tempo</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="k"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">freude</span>
+</span></span></code></pre></div><p><div style="margin: 10px 0 20px 0;">
+  <div style="position:relative; padding-bottom:75%; width:100%; height:0">
+    <iframe src="https://short.icu/xUMMZIsTbT"
+        scrolling="no" border="0"
+        frameborder="no"
+        framespacing="0"
+        allowfullscreen="true"
+        style="position:absolute; height: 100%; width: 100%;">
+    </iframe>
+  </div>
+</div>
+(视频无法播放的话请在<a href="/s/my4th/my4th_music.mp4">这里</a>下载)</p>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2025
+    <a href="/zh/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (window.location.host !== 'qsl.net')
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

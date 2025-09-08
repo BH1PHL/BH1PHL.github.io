@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+  
+    
+      <title>Some experiments on My4TH (3): Faster speed | BH1PHL&#39;s Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/"><h1>BH1PHL&#39;s Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/"><b>Home</b></a>
+      
+         | 
+        <a href="/about"><b>About</b></a>
+      
+         | 
+        <a href="/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/zh/posts/my4th_faster/"><b>中文</b></a>
+      
+    
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">Some experiments on My4TH (3): Faster speed</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2024-12-26</time>
+    
+    
+  </strong>
+  <span> • 642 words</span>
+  <span> • 4 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/my4th">My4TH</a>, 
+        <a href="/tags/forth">Forth</a>
+    </div>
+  
+</div>
+
+      <div class="content"><h2 id="working-at-20mhz-and-221184mhz">Working at 20MHz and 22.1184MHz</h2>
+<p>Tests have shown that My4TH can operate stably at 20MHz (using the 10MHz ROM image file provided by the original author at baud rate 9600) by increasing Vcc to 5.2V with 74HC series logic circuits and AM27H256-45/35DC.</p>
+<p>This configuation can work at 22.1184MHz with Vcc=5.4V:</p>
+<table>
+  <thead>
+      <tr>
+          <th>U2 U3</th>
+          <th>U4</th>
+          <th>U9</th>
+          <th>U15</th>
+          <th>U16</th>
+          <th>Others</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>74F161A(TI)/ 74AC161(TI)</td>
+          <td>74LVC541A(TI)</td>
+          <td>74ACT08/ 74LVC08</td>
+          <td>AM27H256-45/35DC (needs to be selected)</td>
+          <td>IS61C256AL-12T(L)I/ CY7C199(L)-15ZC</td>
+          <td>74HC series</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="higher-baud-rate">Higher baud rate</h2>
+<p>By adjusting the delays in serial subroutines, the system can operate at 14400 baud above 16MHz and 19200 at 22.1184MHz.</p>
+<p>Modified firmware and tools can be downloaded <a href="/s/my4th/my4th-rom-ilk-altes-20250119.7z">here</a>. Major changes:</p>
+<ul>
+<li>Updated 2025-01-19: <code>M*/</code> now with 3-cell intermediate results; add  <code>FH</code> and <code>--&gt;</code> for screen load（see <em>Thinking Forth</em>, Ch.5）</li>
+<li>Updated 2025-01-13: fixed a bug in uart_recv at 14400/19200 baud</li>
+</ul>
+<p>Firmware:</p>
+<ul>
+<li>Alternative EEPROM search: Consecutive pages on one EEPROM chip (24xx1026/BR24G1MFJ/M24M01 recommended), for external EEPROM cards</li>
+<li>Faster UART: 14400 baud at and above 16MHz, 19200 baud at 22.1184MHz</li>
+<li>Use PLD/PHD in words for performance</li>
+<li>Optimize tab_opcode for BLOAD modules with NFD extension</li>
+<li>Tiny little debugs on PARSE, WORD and ADDRESS-UNIT-BITS in accordance with Forth 2012 standard</li>
+<li>CH453 Keyboard and PCA9557 I2C LCD4004 Driver (will be discussed later)</li>
+<li>Modified key codes for CTRL keys</li>
+<li>Improve LIST for working with other I2C peripherals</li>
+<li>Improve LIST, DUMP and WORDS for auto pause on LCD</li>
+<li>Add word COLD for reset system at command line</li>
+<li>Change line number in EDIT and LIST to 0..15 in accordance with convensions</li>
+</ul>
+<p>EDIT for LCD (<code>m4-lcd-edit.bin</code>):</p>
+<ul>
+<li>Shift+Up: up 4 lines</li>
+<li>Shift+Down: down 4 lines</li>
+<li>Shift+Left: return to line start</li>
+<li>Shift+Right: go to line end</li>
+<li>Ctrl+Enter: insert line after current line</li>
+<li>Shift+Enter: break current line</li>
+<li>Ctrl+C: Copy current line</li>
+<li>Ctrl+K: Delete(cut) current line</li>
+<li>Ctrl+U: Undelete(paste) a line</li>
+<li>Ctrl+Space: Clear current line</li>
+<li>Ctrl+Backspace: merge current line with previous line</li>
+</ul>
+<p><code>my4th-tool</code>:</p>
+<ul>
+<li>Custom baud rate at transfer and simulation</li>
+</ul>
+<h2 id="stability-test-at-221184mhz">Stability test at 22.1184MHz</h2>
+<p>Not all EPROMs can operate stably at 22.1184MHz. To test stability, the EPROM can be placed on a heating plate at a constant temperature of 45°C. After waiting a few minutes for the temperature to equilibrate, perform the following tests:</p>
+<p><img src="/a/my4th_faster/EPROM_testbench.jpg" alt="EPROM test bench"></p>
+<p><img src="/a/my4th_faster/EPROM_on_heating_plate.jpg" alt="EPROM on heating plate"></p>
+<p>Test 1，output should be -1000：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">test1</span> <span class="mi">0</span> <span class="mi">1000</span> <span class="mi">0</span> <span class="k">do </span><span class="mi">1</span> <span class="mi">2</span> <span class="k">u&lt; + loop . ;	</span><span class="c1">\ should be -1000
+</span></span></span></code></pre></div><p>Test 2，output should be as expected, no crash/hang:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">test</span> <span class="mi">1000</span> <span class="k">. </span><span class="nf">;↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">test↵</span> <span class="mi">1000</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">test</span> <span class="mi">5000</span> <span class="k">. </span><span class="nf">;↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">test↵</span> <span class="mi">5000</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="k">forget </span><span class="nf">test↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">test↵</span> <span class="mi">1000</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="k">forget </span><span class="nf">test↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">test↵</span>  <span class="nf">?</span> <span class="nf">unknown</span> <span class="k">word </span><span class="nf">test</span>
+</span></span></code></pre></div><p>Test 3，output should be as expected no crash/hang:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">+</span> <span class="mi">0</span><span class="k">. parse-name &gt;number 2drop d&gt;s + </span><span class="nf">;↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">3</span> <span class="k">+ </span><span class="mi">4</span> <span class="k">+ </span><span class="mi">5</span> <span class="kt">.</span><span class="nf">↵</span> <span class="mi">12</span>
+</span></span></code></pre></div><p>If not working, try</p>
+<ul>
+<li>Slightly increase the supply voltage by 0.05 to 0.1V (not to exceed 5.5V);</li>
+<li>Replace the EPROM;</li>
+<li>Lower the test temperature to 40°C (it can still work stably at room temperature, but the margin is not as sufficient).</li>
+</ul>
+<p>Most AM27H256-35/45DC can work stably at 45°C. <del>however, most AM27H256-45DC cannot work stably at 45°C. By lowering the test temperature to 40°C, some AM27H256-45DC can work.</del><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<h2 id="improved-smt-versions">Improved SMT versions</h2>
+<ul>
+<li>
+<p>Since TSSOP packages are not as easy to solder as SOIC packages, a version <a href="/s/my4th/kicad_my4th-sbc_v1.3-smt_R2_SO.7z">with all logic circuits in SOIC packages except HC/LVC541, HC574, and HC273</a> was designed.</p>
+</li>
+<li>
+<p>Since higher supply voltage is required for operation at 20MHz/22.1184MHz, a version <a href="/s/my4th/kicad_my4th-sbc_v1.3-smt_R3_SO_Boost_Trim.7z">with a Boost circuit to raise the supply voltage to the target value</a> was designed based on the above version.</p>
+</li>
+<li>
+<p>For future testing, a version <a href="/s/my4th/kicad_my4th-sbc_v1.3-smt_R3.1_SO_Boost_Trim.7z">with test points on important signals</a> was designed based on the above version.</p>
+</li>
+</ul>
+<p><img src="/a/my4th_faster/my4th_smt_r1_r3.jpg" alt="Some SMT Versions"></p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>There was a bug in uart_recv subroutine (<code>PSH R0</code> in the “wait for start-bit” loop) in the firmware posted at 2024-12-26.
+Effects of temperature on the timing can trigger this bug, causing multiple R0s pushed in the stack but only one popped. Fixing this bug increases the percentage of EPROMs that can work stably. ——2025-01-13&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2025
+    <a href="/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (window.location.host !== 'qsl.net')
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+    <link rel="stylesheet" href="/katex/katex.min.css">
+<script defer src="/katex/katex.min.js"></script>
+<script defer src="/katex/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '\\[', right: '\\]', display: true},   
+        {left: '$$', right: '$$', display: true},     
+        {left: '\\(', right: '\\)', display: false},  
+      ],
+      throwOnError : false
+    });
+  });
+</script>
+
+  
+  
+    
+      <title>关于 My4TH 的一些试验（一）：提高运行速度到 16 MHz | BH1PHL 的 Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/zh/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/zh/"><h1>BH1PHL 的 Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/zh/"><b>Home</b></a>
+      
+         | 
+        <a href="/zh/about"><b>About</b></a>
+      
+         | 
+        <a href="/zh/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/zh/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/zh/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/posts/my4th_16mhz/"><b>English</b></a>
+      
+    
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">关于 My4TH 的一些试验（一）：提高运行速度到 16 MHz</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2024-12-19</time>
+    
+    
+  </strong>
+  <span> • 1522 words</span>
+  <span> • 4 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/zh/tags/my4th">My4TH</a>
+    </div>
+  
+</div>
+
+      <div class="content"><p><a href="http://mynor.org/my4th">My4TH</a> 是 Dennis Kuschel 设计的一款非常简单的计算机。这一计算机在设计上极度简化，采用串行运算器，用 16 个 74HC 系列 CMOS 逻辑电路及 ROM 中的微码组成运控，运行 Forth 系统。本系列文章是关于 My4TH 的一些试验。</p>
+<h2 id="提高运行速度到-16-mhz">提高运行速度到 16 MHz</h2>
+<p>为了保证总线在复位时的状态，原版 My4TH 的数据总线采用 10k 电阻下拉到地。这带来了 TTL 与 HCMOS 电平的兼容性问题：RAM 62256 与 ROM 27C256 的输出符合 TTL 电平，其输出高电平 \(V_\mathrm{OH}\) 的最小值为 2.4V；而 74HC 系列逻辑电路的输入高电平 \(V_\mathrm{IH}\) 的最小值为 \(0.7 V_\mathrm{cc}\)，在 5V 供电时为 3.5V。</p>
+<p>对 My4TH 而言，由于逻辑电路数量少，数据总线上 RAM 和 ROM 的扇出较少，原版在 10MHz 时尚能正常工作；继续提速，就会影响正常工作。原作者通过更换某些逻辑电路为 74AC 系列的方法，将速度提升到了 14MHz 。然而是否有更简单的办法呢？</p>
+<p>根据 Fairchild 公司应用笔记<a href="/a/my4th_16MHz/AN319.pdf">第 319 号</a>及<a href="/a/my4th_16MHz/AN368.pdf">第 368 号</a>，使 TTL 电平输出与 HCMOS 电平输入相容的最简单办法是将 TTL 电路输出端与 HCMOS 电路输入端的连接线上拉。然而，对于 My4TH 而言，直接将数据总线上拉到 \(V_\mathrm{cc}\) 会影响复位时数据总线的初始状态，导致复位向量及控制信号的初始值不正常，使系统上电时无法工作。为了使初始状态正确，需要在复位时将数据总线拉低，在复位后第一个时钟周期将数据总线拉高。</p>
+<p>系统中 \(\overline{\text{RESET}}\) 信号（U1 的 8 脚）满足复位时为低，复位后第一个时钟周期变高的要求。经过试验，将上拉电阻 R1 改为 8×2.2k，公共端接 U1 的 8 脚（当然，更好的办法是增加一个 74LVC1G04 之类的强输出能力反相驱动器，输入连接系统中的 \(\text{RESET}\) 信号（U1 的 9 脚），输出连接 R1 的公共端。），使用 74HC 系列逻辑电路、HY62256ALP-70/AS6C62256-55PCN 及 AM27C256-55DC，系统可以正常工作到 12MHz。</p>
+<p><img src="/a/my4th_16MHz/jumper_wire.jpg" alt="飞线"></p>
+<p><img src="/a/my4th_16MHz/pulling_resistors.png" alt="上下拉电阻"></p>
+<p><img src="/a/my4th_16MHz/my4th_12MHz.jpg" alt="My4TH 12MHz"></p>
+<p>是否能够进一步提速？试验发现，使用 74HC 系列逻辑电路，RAM 使用 IS61C256AH-20N （或更快速度版本）， ROM 使用 AM27C256-55DC，系统可正常工作在 16MHz。使用<a href="http://mynor.org/downloads/my4th-roms-24030.zip">原作者提供的 ROM 镜像文件</a> <code>My4TH-nfd-rom_8MHz_v1.4.bin</code>，可用 9600 波特率进行通信。</p>
+<p><img src="/a/my4th_16MHz/my4th_16MHz.jpg" alt="My4TH 16MHz"></p>
+<p>由于 IS61C256AH 的直插版本为 28 脚窄体（7.62 mm），为兼容宽体（15.24 mm）的 62256 ，印制板的 RAM 插座处进行了更改，更改后的工程（包含上下拉电阻的更改）在<a href="/s/my4th/kicad_my4th-sbc_v1.3_4l_R2.7z">此处</a>下载。该版本还进行了少量的其他修改，如使用了 4 层板、电源输入接口改用 USB Type-C、部分元器件替换为贴片等。</p>
+<p>IS61C256 的直插版本目前已经停产，但是 SOJ 和 TSOP 封装的版本仍然在产。如果想要使用 2024 年 12 月仍然在产的高速 DIP 32×8 bit SRAM，可以尝试 <a href="https://www.mouser.com/ProductDetail/Alliance-Memory/AS7C256C-15PCN?qs=IKkN%2F947nfDmix4Mxi60WA%3D%3D">AS7C256C-15PCN</a>.</p>
+<h2 id="贴片版">贴片版</h2>
+<p>为了进一步缩小体积， 制作了 60mm*70mm 大小的贴片版。该版本的 RAM 采用 TSOP 封装的 IS61C256AL-12T(L)I 或 CY7C199(L)-15ZC，逻辑电路采用 TSSOP 封装，并增加了驱动上下拉电阻的 74LVC1G04，以及 USB 转串口的 CH340N。这一版本的工程在<a href="/s/my4th/kicad_my4th-sbc_v1.3-smt-R1.7z">此处</a>下载。</p>
+<p><img src="/a/my4th_16MHz/my4th_TSSOP_SMT.jpg" alt="My4TH TSSOP SMT"></p>
+<h2 id="排故">排故</h2>
+<p>如果系统在 16MHz 下工作不正常，重点检查以下问题：</p>
+<ul>
+<li><strong>供电电压</strong>：确保 \(V_\mathrm{cc}\) 电压高于 4.8V。注意由于使用了二极管  D3 反倒灌，上述贴片版用 USB 接口供电时，可能会导致系统供电电压过低。使用带电源输入的 USB HUB 可解决这一问题。如果不需要同时使用 USB 接口和外接供电，也可将二极管 D3 短路。使用 74AC161、LV161 和 LV08/AC(T)08 等可能也有帮助。</li>
+<li><strong>尝试更换不同厂家的 HC541/HC574</strong>：国产小品牌的也许比 TI/Nexperia 的好用（但 HC139 是 TI 的更好用）！</li>
+<li><strong>尝试更换 ROM</strong>：ROM 的个体差异可能导致系统工作不正常，尤其当供电电压较低时。比起 AM27C256-55DC，使用 AM27H256-45/35DC 时系统可在更低的供电电压下正常工作。</li>
+<li><strong>尝试工作在更低频率（如 8MHz）</strong>。如果仍不正常，则<strong>检查焊接</strong>。</li>
+</ul>
+<p>参考的工作电流：电源电压 5V、频率 16MHz 时，使用 AM27H256-35DC 和 IS61C256AL-12TLI，系统工作电流约 90mA，按下 RESET 键时电流约 15mA；使用 AM27C256-55DC 和 IS61C256AH-20N，系统工作电流约 150mA，按下 RESET 键时电流约 70mA。</p>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2025
+    <a href="/zh/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (window.location.host !== 'qsl.net')
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+    <link rel="stylesheet" href="/katex/katex.min.css">
+<script defer src="/katex/katex.min.js"></script>
+<script defer src="/katex/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '\\[', right: '\\]', display: true},   
+        {left: '$$', right: '$$', display: true},     
+        {left: '\\(', right: '\\)', display: false},  
+      ],
+      throwOnError : false
+    });
+  });
+</script>
+
+  
+  
+    
+      <title>Some experiments on My4TH (1): Running at 16MHz | BH1PHL&#39;s Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/"><h1>BH1PHL&#39;s Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/"><b>Home</b></a>
+      
+         | 
+        <a href="/about"><b>About</b></a>
+      
+         | 
+        <a href="/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/zh/posts/my4th_16mhz/"><b>中文</b></a>
+      
+    
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">Some experiments on My4TH (1): Running at 16MHz</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2024-12-19</time>
+    
+    
+  </strong>
+  <span> • 823 words</span>
+  <span> • 4 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/my4th">My4TH</a>
+    </div>
+  
+</div>
+
+      <div class="content"><p><a href="http://mynor.org/my4th">My4TH</a> is a minimalist computer designed by Dennis Kuschel. This computer is extremely simplified in its design, employing a serial ALU and utilizing 16 74HC series CMOS logic devices along with microcodes from  ROM for CPU. It runs the Forth system. Here are some experiments related to this computer.</p>
+<h2 id="increasing-the-running-speed">Increasing the running speed</h2>
+<p>To ensure the state of the bus during reset, the original version of My4TH employs 10k resistors to pull down the data bus to GND. This introduces compatibility issues between TTL and HCMOS voltage levels: the outputs of RAM 62256 and ROM 27C256 conform to TTL levels, with a minimum high-level output voltage (\(V_\mathrm{OH}\)) of 2.4V; whereas the minimum high-level input voltage (\(V_\mathrm{IH}\)) for 74HC devices is \(0.7 V_\mathrm{cc}\), which is 3.5 V when powered at 5 V.</p>
+<p>For My4TH, due to the low number of logic devices and the low fan-out of RAM and ROM on the data bus, the original version can still function properly at 10 MHz. However, pushing for higher speeds causes malfunction. The original author achieved 14 MHz by replacing certain 74HC parts with 74AC series. However, is there a simpler method to achieve a higher speed?</p>
+<p>According to Fairchild&rsquo;s application notes <a href="/a/my4th_16MHz/AN319.pdf">AN 319</a> and <a href="/a/my4th_16MHz/AN368.pdf">AN 368</a>, the simplest method to make TTL-level outputs compatible with HCMOS-level inputs is to pull up the connection line between the TTL circuit&rsquo;s output and the HCMOS circuit&rsquo;s input. However, for My4TH, directly pulling up the data bus to \(V_\mathrm{cc}\) would affect the initial state of the data bus during reset, leading to abnormal initial values for the reset vector and control signals, making the system unable to operate when powered on. To ensure the correct initial state, it is necessary to pull down the data bus during reset and then pull it up in the first clock cycle after reset.</p>
+<p>The \(\overline{\text{RESET}}\) signal (pin 8 of U1) in the system meets the requirement of being low during reset and becoming high in the first clock cycle after reset. Through experimentation, changing the resistors R1 to 8×2.2k, with the common end connected to pin 8 of U1, allows the system to operate normally at 12 MHz with 74HC devices, HY62256ALP-70, and AM27C256-55DC. However, it fails to function properly at 16 MHz (14 MHz is untested because of there is no 14 MHz crystal oscillators on hand). The results are same with AS6C62256-55PCN.</p>
+<p>It&rsquo;s worth noting that using a dedicated higher-output-drive NOT gate such as 74LVC1G04, connecting \(\text{RESET}\) signal (pin 9 of U1) to the gate&rsquo;s input, and connecting the common end of R1 to the gate&rsquo;s output would be a better solution.</p>
+<p><img src="/a/my4th_16MHz/jumper_wire.jpg" alt="Jumper wire"></p>
+<p><img src="/a/my4th_16MHz/pulling_resistors.png" alt="Pulling resistors"></p>
+<p><img src="/a/my4th_16MHz/my4th_12MHz.jpg" alt="My4TH 12MHz"></p>
+<p>To further improve the speed, experiments show that the RAM can be changed with IS61C256AH-20N (or a  faster version). With IS61C256AH-20N, AM27C256-55DC and 74HC devices,  the system can operate  normally at 16 MHz. Serial port communication can be established at a baud rate of  9600 using the ROM image file <code>My4TH-nfd-rom_8MHz_v1.4.bin</code> <a href="http://mynor.org/downloads/my4th-roms-24030.zip">provided by the original author</a>.</p>
+<p><img src="/a/my4th_16MHz/my4th_16MHz.jpg" alt="My4TH 16MHz"></p>
+<p>Due to the DIP version of IS61C256 being a narrow-body  (7.62 mm) device, modifications were made to the RAM socket on the PCB for compatibility. The modified project (including changes on the pulling resistors) can be downloaded <a href="/s/my4th/kicad_my4th-sbc_v1.3_4l_R2.7z">here</a>. This version also includes a few other changes, such as the use of a 4-layer PCB, changing the power input port to USB Type-C, and replacing some components with surface mount devices.</p>
+<p>The DIP version of IS61C256 has been discontinued, but surface mount versions (SOJ and TSOP packages) are still in production. If you wish to use currently produced DIP device as of Dec 2024, consider <a href="https://www.mouser.com/ProductDetail/Alliance-Memory/AS7C256C-15PCN?qs=IKkN%2F947nfDmix4Mxi60WA%3D%3D">AS7C256C-15PCN</a>.</p>
+<h2 id="smt-version">SMT Version</h2>
+<p>To further reduce the size, a 60mm x 70mm SMT board was created. This version uses TSOP-packaged IS61C256AL-12T(L)I or CY7C199(L)-15ZC RAM, TSSOP-packaged logic circuits, and adds a 74LVC1G04 for pulling resistors and a CH340N for USB-to-serial conversion. The project can be downloaded <a href="/s/my4th/kicad_my4th-sbc_v1.3-smt-R1.7z">here</a>.</p>
+<p><img src="/a/my4th_16MHz/my4th_TSSOP_SMT.jpg" alt="My4TH TSSOP SMT"></p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>If the system is not functioning properly at 16MHz, focus on checking the following issues:</p>
+<ul>
+<li><strong>Power supply voltage</strong>: Ensure the \(V_\mathrm{cc}\)​ voltage is above 4.8V. Note that due to the use of a reverse current protection diode (D3), powering the SMT board via the USB interface may result in insufficient system voltage. Using a USB hub with external power can resolve this issue. If simultaneous use of the USB interface and external power is unnecessary, you can short-circuit diode D3. Using 74AC161, LV161, and LV08/AC(T)08 may also help.</li>
+<li><strong>Replace HC541/HC574 chips</strong>: Try using HC541/HC574 chips from different manufacturers. Chips from smaller Chinese manufacturers may work better than those from TI/Nexperia (though TI&rsquo;s HC139 performs better).</li>
+<li><strong>Replace ROM</strong>: Differences between individual ROM chips may cause the system to malfunction, especially at lower supply voltages. Compared to the AM27C256-55DC, the AM27H256-45/35DC allows the system to operate  at lower \(V_\mathrm{cc}\).</li>
+<li><strong>Try running at lower speed</strong> (e.g., 8MHz). if still not working, <strong>check soldering</strong>.</li>
+</ul>
+<p>Operating current for reference (\(V_\mathrm{cc}=5\mathrm{V}\), running at 16MHz): 90mA(running)/15mA(pressing RESET) with AM27H256-35DC and IS61C256AL-12TLI, 150mA(running)/70mA(pressing RESET) with AM27C256-55DC and IS61C256AH-20N.</p>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2025
+    <a href="/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (window.location.host !== 'qsl.net')
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

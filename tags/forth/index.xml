@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Forth on BH1PHL&#39;s Blog</title>
+    <link>https://bh1phl.github.io/tags/forth/</link>
+    <description>Recent content in Forth on BH1PHL&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>en-US</language>
+    <lastBuildDate>Tue, 18 Feb 2025 09:30:39 +0800</lastBuildDate>
+    <atom:link href="https://bh1phl.github.io/tags/forth/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Some experiments on My4TH (4): Peripherals</title>
+      <link>https://bh1phl.github.io/posts/my4th_peripherals/</link>
+      <pubDate>Tue, 18 Feb 2025 09:30:39 +0800</pubDate>
+      <guid>https://bh1phl.github.io/posts/my4th_peripherals/</guid>
+      <description>&lt;h2 id=&#34;eeprom-card-and-backplane&#34;&gt;EEPROM Card and Backplane&lt;/h2&gt;&#xA;&lt;h3 id=&#34;eeprom-card&#34;&gt;EEPROM Card&lt;/h3&gt;&#xA;&lt;p&gt;For EEPROM cards, &lt;a href=&#34;https://bh1phl.github.io/posts/my4th_faster/&#34;&gt;firmware provided on this website&lt;/a&gt; arranges adjacent blocks on the same EEPROM chip, with block numbers ordered according to EEPROM addresses.&lt;/p&gt;&#xA;&lt;p&gt;The EEPROM card card uses a USB 3.0 Type-A interface, where the power contacts are compatible with standard USB interfaces, and the signal contacts are used for I2C interface and addressing:&lt;/p&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://bh1phl.github.io/a/my4th_peripherals/eeprom-card-interface.png&#34; alt=&#34;EEPROM Card Interface&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;SOCKET&lt;/code&gt; connects to EEPROM address line &lt;code&gt;A1&lt;/code&gt;：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Some experiments on My4TH (3): Faster speed</title>
+      <link>https://bh1phl.github.io/posts/my4th_faster/</link>
+      <pubDate>Thu, 26 Dec 2024 22:40:42 +0800</pubDate>
+      <guid>https://bh1phl.github.io/posts/my4th_faster/</guid>
+      <description>&lt;h2 id=&#34;working-at-20mhz-and-221184mhz&#34;&gt;Working at 20MHz and 22.1184MHz&lt;/h2&gt;&#xA;&lt;p&gt;Tests have shown that My4TH can operate stably at 20MHz (using the 10MHz ROM image file provided by the original author at baud rate 9600) by increasing Vcc to 5.2V with 74HC series logic circuits and AM27H256-45/35DC.&lt;/p&gt;&#xA;&lt;p&gt;This configuation can work at 22.1184MHz with Vcc=5.4V:&lt;/p&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;U2 U3&lt;/th&gt;&#xA;          &lt;th&gt;U4&lt;/th&gt;&#xA;          &lt;th&gt;U9&lt;/th&gt;&#xA;          &lt;th&gt;U15&lt;/th&gt;&#xA;          &lt;th&gt;U16&lt;/th&gt;&#xA;          &lt;th&gt;Others&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;74F161A(TI)/ 74AC161(TI)&lt;/td&gt;&#xA;          &lt;td&gt;74LVC541A(TI)&lt;/td&gt;&#xA;          &lt;td&gt;74ACT08/ 74LVC08&lt;/td&gt;&#xA;          &lt;td&gt;AM27H256-45/35DC (needs to be selected)&lt;/td&gt;&#xA;          &lt;td&gt;IS61C256AL-12T(L)I/ CY7C199(L)-15ZC&lt;/td&gt;&#xA;          &lt;td&gt;74HC series&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;h2 id=&#34;higher-baud-rate&#34;&gt;Higher baud rate&lt;/h2&gt;&#xA;&lt;p&gt;By adjusting the delays in serial subroutines, the system can operate at 14400 baud above 16MHz and 19200 at 22.1184MHz.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

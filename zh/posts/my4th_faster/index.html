@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+  
+    
+      <title>关于 My4TH 的一些试验（三）：更快的运行速度 | BH1PHL 的 Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/zh/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/zh/"><h1>BH1PHL 的 Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/zh/"><b>Home</b></a>
+      
+         | 
+        <a href="/zh/about"><b>About</b></a>
+      
+         | 
+        <a href="/zh/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/zh/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/zh/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/posts/my4th_faster/"><b>English</b></a>
+      
+    
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">关于 My4TH 的一些试验（三）：更快的运行速度</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2024-12-26</time>
+    
+    
+  </strong>
+  <span> • 1385 words</span>
+  <span> • 3 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/zh/tags/my4th">My4TH</a>, 
+        <a href="/zh/tags/forth">Forth</a>
+    </div>
+  
+</div>
+
+      <div class="content"><h2 id="工作在-20mhz-和-221184mhz">工作在 20MHz 和 22.1184MHz</h2>
+<p>试验表明，使用 74HC 系列逻辑电路和 AM27H256-45/35DC，把电源电压提高到 5.2V，系统就可以稳定工作在 20MHz（使用原作者提供的 10MHz ROM 镜像文件，波特率 9600）。</p>
+<p>电源电压进一步提高到 5.4V，下面的配置可以让系统工作在 22.1184MHz：</p>
+<table>
+  <thead>
+      <tr>
+          <th>U2 U3</th>
+          <th>U4</th>
+          <th>U9</th>
+          <th>U15</th>
+          <th>U16</th>
+          <th>其他</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>74F161A(TI)/ 74AC161(TI)</td>
+          <td>74LVC541A(TI)</td>
+          <td>74ACT08/ 74LVC08</td>
+          <td>AM27H256-45/35DC （需筛选）</td>
+          <td>IS61C256AL-12T(L)I/ CY7C199(L)-15ZC</td>
+          <td>74HC系列</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="更高的波特率">更高的波特率</h2>
+<p>通过调整串口操作子例程中的延迟，系统在 16MHz 以上可以工作在 14400 波特率，在 22.1184MHz 可以工作在 19200 波特率。</p>
+<p><a href="/s/my4th/my4th-rom-ilk-altes-20250119.7z">这里</a>可以下载修改后的固件和工具。这一版本包含的改进如下：</p>
+<ul>
+<li>2025-01-19 更新：按标准将 <code>M*/</code> 改为使用 3 个单元的中间结果；为方便装入程序，增加 <code>FH</code> 和 <code>--&gt;</code> 两个词（详见 <em>Thinking Forth</em> 第五章）</li>
+<li>2025-01-13 更新：修复 14400/19200 波特率下 uart_recv 的一个 bug</li>
+</ul>
+<p>固件：</p>
+<ul>
+<li>改进的 EEPROM 搜索：相邻的块位于同一片 EEPROM 上（建议使用 24xx1026/BR24G1MFJ/M24M01），便于使用外接的 EEPROM 卡</li>
+<li>更快的 UART 波特率：16MHz 以上可用 14400，22.1184MHz 可用 19200</li>
+<li>为了提高性能，尽可能使用 NFD 扩展中的 <code>PLD</code>/<code>PHD</code> 指令操作数据栈</li>
+<li>改进 <code>tab_opcode</code>，使 BLOAD 的二进制模块可以使用 NFD 扩展指令</li>
+<li>对 <code>PARSE</code>、<code>WORD</code>、<code>ADDRESS-UNIT-BITS</code> 进行小改进，使它们符合 Forth 2012 标准</li>
+<li>增加 CH453 键盘和 PCA9557 I2C LCD4004 屏幕驱动（本系列中后面会详细介绍）</li>
+<li>为 Ctrl 组合键修改按键代码</li>
+<li>改进 <code>LIST</code>，使其可以与其他 I2C 外设共同工作</li>
+<li>改进 <code>LIST</code>、<code>DUMP</code>、<code>WORDS</code>，在 LCD 屏幕上显示时可以每页暂停</li>
+<li>增加词 <code>COLD</code> 用于在终端中复位系统</li>
+<li>按惯例，将 <code>EDIT</code> 和 <code>LIST</code> 的行号更改为 0..15（从 0 开始）</li>
+</ul>
+<p>用于 LCD 屏幕的 EDIT 实用程序（<code>m4-lcd-edit.bin</code>）增加了如下功能：</p>
+<ul>
+<li>Shift+Up: 向上 4 行</li>
+<li>Shift+Down: 向下 4 行</li>
+<li>Shift+Left: 回到行首</li>
+<li>Shift+Right: 去行尾</li>
+<li>Ctrl+Enter: 在当前行后插入一行</li>
+<li>Shift+Enter: 断开当前行（光标之后内容另起一行）</li>
+<li>Ctrl+C: 复制当前行</li>
+<li>Ctrl+K: 删除（剪切）当前行</li>
+<li>Ctrl+U: 反删除（粘贴）一行</li>
+<li>Ctrl+Space: 清除当前行</li>
+<li>Ctrl+Backspace: 将当前行与上一行合并</li>
+</ul>
+<p><code>my4th-tool</code>:</p>
+<ul>
+<li>传输数据和模拟时可以设定波特率</li>
+</ul>
+<h2 id="221184mhz-下的稳定性测试">22.1184MHz 下的稳定性测试</h2>
+<p>注意在 22.1184MHz 时，不是所有的 EPROM 都可以稳定工作。建议将 EPROM 放在恒温在 45°C 的加热板上，等几分钟使温度达到平衡后，进行如下测试：</p>
+<p><img src="/a/my4th_faster/EPROM_testbench.jpg" alt="EPROM test bench"></p>
+<p><img src="/a/my4th_faster/EPROM_on_heating_plate.jpg" alt="EPROM on heating plate"></p>
+<p>测试 1，输出应为 -1000：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">test1</span> <span class="mi">0</span> <span class="mi">1000</span> <span class="mi">0</span> <span class="k">do </span><span class="mi">1</span> <span class="mi">2</span> <span class="k">u&lt; + loop . ;	</span><span class="c1">\ 输出应为 -1000
+</span></span></span></code></pre></div><p>测试 2，输出应符合预期，不死机：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">test</span> <span class="mi">1000</span> <span class="k">. </span><span class="nf">;↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">test↵</span> <span class="mi">1000</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">test</span> <span class="mi">5000</span> <span class="k">. </span><span class="nf">;↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">test↵</span> <span class="mi">5000</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="k">forget </span><span class="nf">test↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">test↵</span> <span class="mi">1000</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="k">forget </span><span class="nf">test↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">test↵</span>  <span class="nf">?</span> <span class="nf">unknown</span> <span class="k">word </span><span class="nf">test</span>
+</span></span></code></pre></div><p>测试 3，输出应符合预期，不死机：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">+</span> <span class="mi">0</span><span class="k">. parse-name &gt;number 2drop d&gt;s + </span><span class="nf">;↵</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">3</span> <span class="k">+ </span><span class="mi">4</span> <span class="k">+ </span><span class="mi">5</span> <span class="kt">.</span><span class="nf">↵</span> <span class="mi">12</span>
+</span></span></code></pre></div><p>如果不能通过测试，可以采取如下方法之一：</p>
+<ul>
+<li>略微提高电源电压 0.05～0.1V（建议不要超过 5.5V）；</li>
+<li>更换 EPROM；</li>
+<li>降低考核温度到 40°C（在室温下也能稳定工作，只是余量没有那么足）。</li>
+</ul>
+<p>大部分 AM27H256-35/45DC 都能在 45°C 稳定工作。<del>但大部分 AM27H256-45DC 都不能在 45°C 稳定工作。降低考核温度到 40°C，部分 AM27H256-45DC 可以工作。</del><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<h2 id="三种改进的贴片版">三种改进的贴片版</h2>
+<ul>
+<li>
+<p>由于 TSSOP 封装没有 SOIC 封装容易焊接，设计了<a href="/s/my4th/kicad_my4th-sbc_v1.3-smt_R2_SO.7z">除 HC/LVC541、HC574 和 HC273 外其他逻辑电路均采用 SOIC 封装的版本</a>。</p>
+</li>
+<li>
+<p>由于在 20MHz/22.1184MHz 下工作需要提高电源电压，在上面的版本基础上设计了<a href="/s/my4th/kicad_my4th-sbc_v1.3-smt_R3_SO_Boost_Trim.7z">自带 Boost 电路将供电电压升至目标值的版本</a>。</p>
+</li>
+<li>
+<p>为了进一步的测试，在上面的版本基础上设计了<a href="/s/my4th/kicad_my4th-sbc_v1.3-smt_R3.1_SO_Boost_Trim.7z">方便引出内部重要信号的版本</a>。</p>
+</li>
+</ul>
+<p><img src="/a/my4th_faster/my4th_smt_r1_r3.jpg" alt="Some SMT Versions"></p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>之前的版本在 uart_recv 中存在一个 bug（<code>PSH R0</code> 包含在了等待起始位的循环中）。温度对时序的影响会触发这一 bug，导致压栈的内容未完整弹出。修复这一 bug 后，能稳定工作的 EPROM 数量增多了。——2025-01-13&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2025
+    <a href="/zh/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (window.location.host !== 'qsl.net')
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,154 @@
+----[350]-------------------------------------------------------
+\ C I2C 1602 LCD Clock with DS1307 (9 screens)
+\ : fh ( offset -- offset-block) blk @ + ;
+1 fh load      \ I2C PCA9557 and Buttons Driver
+2 fh load      \ I2C 1602 LCD Driver
+3 fh load      \ DS1307 Driver
+4 fh load      \ Button and UI utils
+5 fh load      \ RTC Display utils (LCD and Console)
+6 fh 8 fh thru \ UI
+
+
+
+
+
+
+
+\ copy: 350 50 9 cps
+----[351]-------------------------------------------------------
+\ C I2C PCA9557 and Buttons Driver
+: p57-pc ( addr -- ) $00 $02 rot i2c-wr drop ;
+: p57-dir ( dir addr -- ) swap $03 rot i2c-wr drop ;
+: p57-wo ( val addr -- ) swap $01 rot i2c-wr drop ;
+: p57-ro ( addr -- val ) $01 swap i2c-rr drop ;
+: p57-ri ( addr -- val ) $00 swap i2c-rr drop ;
+
+: k-plh  $32 p57-ro %00100000 or $32 p57-wo ;
+: k-pll  $32 p57-ro %11011111 and $32 p57-wo ;
+: k-cph  $32 p57-ro %00000010 or $32 p57-wo ;
+: k-cpl  $32 p57-ro %11111101 and $32 p57-wo ;
+
+: btns-init  $32 p57-pc k-cph k-plh %11000001 $32 p57-dir ;
+: get-btns ( -- btns ) k-pll k-cph k-plh 0 8 0 do
+   2* k-cpl $32 p57-ri k-cph 1 and or loop ;
+
+----[352]-------------------------------------------------------
+\ C I2C 1602 LCD Driver
+: lcd-wi ( instr -- ) $32 p57-ro %11101011 and %00001000 or swap
+   $30 p57-wo $32 p57-wo $32 p57-ro %11110111 and $32 p57-wo ;
+: lcd-wd ( data -- ) $32 p57-ro %11111011 and %00011000 or swap
+   $30 p57-wo $32 p57-wo $32 p57-ro %11110111 and $32 p57-wo ;
+: lcd-init  $30 p57-pc $32 p57-pc $00 $30 p57-dir
+   %11000001 $32 p57-dir %00111000 lcd-wi 1 ms
+   %00111000 lcd-wi 1 ms %00001100 lcd-wi $01 lcd-wi 2 ms
+   %00000110 lcd-wi ;
+: lcd-cls  1 lcd-wi ;   : lcd-home  2 lcd-wi ;
+: lcd-l0  128 lcd-wi ;   : lcd-l1  192 lcd-wi ;
+: lcd-con  14 lcd-wi ;   : lcd-coff  12 lcd-wi ;
+: lcd-l0x ( x -- ) 128 + lcd-wi ;
+: lcd-type ( c-addr u -- ) 0 do dup i + c@ lcd-wd loop drop ;
+\ Usage: lcd-init s" This is a test." lcd-type
+lcd-init s" Loading..." lcd-type
+----[353]-------------------------------------------------------
+\ C DS1307 Driver
+: dec2bcd ( dec -- bcd ) 10 /mod 16 * + ; \ 2 digits only
+: bcd2dec ( bcd -- dec ) 16 /mod 10 * + ;
+: rtc-rh  $d0 i2c-rr drop ;   : rtc-wh  $d0 i2c-wr drop ;
+\ 0:sec(use rtc-sc@/!) 1:min 2:hour 3:day 4:date 5:month 6:year
+: rtc-r ( reg -- dat ) rtc-rh bcd2dec ;
+: rtc-w ( dat reg -- ) swap dec2bcd swap rtc-wh ;
+: rtc-sc@  0 rtc-rh 127 and bcd2dec ;
+: rtc-sc!  dec2bcd 0 rtc-rh 128 and or 0 rtc-wh ;
+: rtc-stop  0 rtc-rh 128 or 0 rtc-wh ;
+: rtc-start  0 rtc-rh 127 and 0 rtc-wh ;
+\ Forth 2012 Facility Extension word TIME&DATE
+: time&date ( -- sec min hour date month year )
+   rtc-sc@ 1 rtc-r 2 rtc-r 4 rtc-r 5 rtc-r 6 rtc-r 2000 + ;
+
+
+----[354]-------------------------------------------------------
+\ C Button and UI utils
+: range ( n min max -- n1 ) \ if min<=n<max, n1=n; else n1=0
+  2 pick -rot within 0= if drop 0 then ;
+: get-msb  0 begin over while 1+ swap 1 rshift swap repeat nip ;
+: button? ( -- button-num ) get-btns get-msb 0 6 range ;
+: get-btn-xt ( table-ui btn -- xt )  2* cells + @ ;
+: get-btn-flag ( table-ui btn -- f ) 2* 1+ cells + @ ;
+: get-update-ui  0 get-btn-xt ;  : get-wait-ui  0 get-btn-flag ;
+: proc-ui ( table-ui -- ) dup get-update-ui execute
+   begin button? ?dup if
+      2dup get-btn-xt execute over get-update-ui execute
+      2dup get-btn-flag if 2drop exit else drop then
+   else dup get-wait-ui execute then  again ;
+
+
+
+----[355]-------------------------------------------------------
+\ C RTC Display utils (LCD and Console)
+: u2s ( 0~99 -- c-addr u ) abs 0 <# # # #> ;
+: .uu  u2s type ;   : .:  [char] : emit ;
+: .-  [char] - emit ;   : days c" MOTUWETHFRSASU" 1+ ;
+: day ( day -- c-addr u ) 1- 0 7 range 2* days + 2 ;
+: .time  2 rtc-r .uu .: 1 rtc-r .uu .: rtc-sc@ .uu ;
+: .date  6 rtc-r .uu .- 5 rtc-r .uu .- 4 rtc-r .uu ;
+: .day  3 rtc-r day type ;
+: .dt  .date space .time space .day ;
+: .uul  u2s lcd-type ;   : spl  32 lcd-wd ;
+: lcd.dt \ 241126 215534 TU
+   lcd-l0 6 rtc-r .uul 5 rtc-r .uul 4 rtc-r .uul spl
+   2 rtc-r .uul 1 rtc-r .uul rtc-sc@ .uul spl
+   3 rtc-r day lcd-type ;
+
+
+----[356]-------------------------------------------------------
+\ C UI
+\ Adjust
+variable cur-edit   2 cur-edit ! \ 0ss 1mm 2HH 3EE 4dd 5MM 6yy
+create csr-table  12 c, 10 c, 8 c, 15 c, 5 c, 3 c, 1 c,
+create start-table  0 c,  0 c,  0 c, 1 c,  1 c,  1 c,  0 c,
+create end-table   50 c, 59 c, 23 c, 7 c, 31 c, 12 c, 99 c,
+: update-ui-adjust  lcd.dt lcd-l1 s" ~   -   +  OK   " lcd-type
+   csr-table cur-edit @ chars + c@ lcd-l0x ;
+: wait-ui-adjust  50 ms ;
+: regu-dt ( val cur-edit -- regularized-result )
+   dup chars start-table + c@ rot max
+   swap chars end-table + c@ min ;
+: item-adj ( delta cur-edit -- ) \ delta=1/-1
+   ?dup if  dup rtc-r rot + over regu-dt swap rtc-w
+   else  10 * rtc-sc@ 10 / 10 * + 0 regu-dt rtc-sc!  then ;
+: next-item  cur-edit @ dup 0= if drop 7 then 1- cur-edit ! ;
+----[357]-------------------------------------------------------
+\ two xt's of :noname's in stack is stored in ui-adjust
+:noname  1 cur-edit @ item-adj ;
+:noname  -1 cur-edit @ item-adj ;
+create ui-adjust  ' update-ui-adjust , ' wait-ui-adjust ,
+   ' next-item , false , , false , , false ,
+   ' lcd.dt , true , ' lcd.dt , false ,
+
+\ Top
+: update-ui-top  lcd.dt lcd-l1 s" ADJ           x " lcd-type ;
+: wait-ui-top  lcd.dt begin  rinp $40 and
+   if exit then  1 ms  again ;
+: adjust-clock  rtc-stop lcd-con ui-adjust proc-ui
+   lcd-coff rtc-start ;
+
+
+
+----[358]-------------------------------------------------------
+create ui-top  ' update-ui-top , ' wait-ui-top ,
+   ' adjust-clock , false , ' lcd.dt , false ,
+   ' lcd.dt , false , ' lcd.dt , false , ' lcd.dt , true ,
+
+: lcd-clock  $10 $07 rtc-wh  btns-init lcd-init ui-top proc-ui
+   lcd-cls s" lcd-clock exited" lcd-type  $03 $07 rtc-wh ;
+: run  lcd-clock ;
+run
+
+
+
+
+
+
+
+
+----[EOF]-------------------------------------------------------

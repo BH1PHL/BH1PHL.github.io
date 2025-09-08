@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+    <link rel="stylesheet" href="/katex/katex.min.css">
+<script defer src="/katex/katex.min.js"></script>
+<script defer src="/katex/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '\\[', right: '\\]', display: true},   
+        {left: '$$', right: '$$', display: true},     
+        {left: '\\(', right: '\\)', display: false},  
+      ],
+      throwOnError : false
+    });
+  });
+</script>
+
+  
+  
+    
+      <title>使用 2N7002 的惠斯通电桥再生式 (WBR) 接收机 | BH1PHL 的 Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/zh/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/zh/"><h1>BH1PHL 的 Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/zh/"><b>Home</b></a>
+      
+         | 
+        <a href="/zh/about"><b>About</b></a>
+      
+         | 
+        <a href="/zh/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/zh/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/zh/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/posts/wbrrecv_2n7002/"><b>English</b></a>
+      
+    
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">使用 2N7002 的惠斯通电桥再生式 (WBR) 接收机</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2023-02-27</time>
+    
+    
+  </strong>
+  <span> • 3067 words</span>
+  <span> • 7 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/zh/tags/%E6%8E%A5%E6%94%B6%E6%9C%BA">接收机</a>, 
+        <a href="/zh/tags/2n7002">2N7002</a>, 
+        <a href="/zh/tags/wbr">WBR</a>
+    </div>
+  
+</div>
+
+      <div class="content"><h2 id="基本原理">基本原理</h2>
+<p>电路基于 N1BYT 的 WBR 接收机，如下图所示。以 Q1 为核心组成电容三点式振荡电路，RV2 和 RV5 调整是否起振（再生强弱）。L2、C7、C8 和 6 个二极管 D1~D6 构成振荡槽路。输入信号通过 RV1（起可调衰减作用）衰减和 L1，馈入 L2 中间抽头。变容二极管阳极的直流通路由 L1 提供。</p>
+<p>调谐电压由 RV3 和 R10 组成的分压器产生。当 J4 开路时，RV3 分出的电压与动触头 2 位置 \(a\)（取值范围 \(0\cdots1\)，动触头 2 位于 1 端时为 \(0\)，位于 3 端时为 \(1\)）成线性关系 (\(V_\mathrm{out}=V_\mathrm{cc}\cdot\frac{1+10a}{11}\))。由于变容二极管的容量随电压升高降低，并且在高电压时变化较小，故此时 RV3 动触头在图中下方（多圈电位器开始几圈）时，频率变化较快；动触头在图中上方（多圈电位器后面几圈）时，频率变化较慢。</p>
+<p>J4 短路时，输出电压和动触头 2 位置 \(a\) 的关系为 \(V_\mathrm{out}=V_\mathrm{cc}\cdot\frac{1}{1+10(1-a)}\)。显然，\(a=0\) 及 \(a=1\) 时，输出电压与 J4 开路时相同，而在中间状态时，变化呈先慢后快趋势。这种趋势比变容二极管的容量变化率随电压的变化趋势更为明显，故此时多圈电位器位于开始几圈时，频率变化较慢；位于后面几圈时，频率变化较快。</p>
+<p>原版 WBR 接收机采用结型场效应管 MPF102 检波，此处改为 MOS 型场效应管2N7002。由于 2N7002 是增强型器件，采用 R15、R16、C23 组成的分压电路供给栅极偏压。R14 的值足够大，因此偏压电路对振荡器的影响极小。Q2 工作在 \(I_\mathrm{d}\) 非常小的状态，起检波作用。Q3、U2 及外围元件构成音频放大器。U1 及外围元件构成稳压电源电路（VCC 电压 9V）。
+<img src="/a/WBRRecv_2N7002/wbr_sch.png" alt="电原理图"></p>
+<p>上图中振荡器和检波器的等效负载电容、C6、L2 的两部分构成惠斯通电桥（如下图）。图中 L11、L12 代表 L1 的两部分，L21、L22 代表 L2 的两部分，Cl 代表振荡器和检波器的等效负载电容，Ct 代表槽路电容，V1 代表等效输入电压，V2 代表等效振荡电压。
+<img src="/a/WBRRecv_2N7002/wbr_input.png" alt="输入部分电路">
+图中 OSC 和 INPUT 两端电压如下图。
+<img src="/a/WBRRecv_2N7002/wbr_voltages.png" alt="输入部分仿真结果">
+图中 INPUT 处几乎没有振荡电压（残余量取决于电桥的平衡情况），但从此处馈入的信号仍然能到达图中 OSC 处（也就是 Q1 的基极）。从此处馈入信号有如下好处：</p>
+<ol>
+<li>天线负载变化对振荡频率几乎没有影响；</li>
+<li>Q1 处于起振状态时，振荡器到天线的泄露极小（一般情况下很容易控制在 -70dBm 之内）。</li>
+</ol>
+<p>电桥平衡时的直流电位由 L1 下端的接地点提供。RV1 对输入信号起衰减作用。</p>
+<p>对基极上的外来信号而言，Q1 工作在具有正反馈的放大状态，与典型的再生接收机原理相同。在正反馈的作用下，接收的灵敏度和选择性都会得到很大的提高。工作在起振的临界点附近时，接收机的灵敏度和选择性都是最好的。如果 Q1 工作在刚好起振的状态，还可兼作拍频振荡器，接收 CW 和 SSB 信号。</p>
+<h2 id="工程">工程</h2>
+<p>工程用 KiCad 6.0 绘制。使用四层板，尺寸为 100mm×50mm。焊装完成后的实物如下图。
+<img src="/a/WBRRecv_2N7002/wbr_assembled.jpg" alt="实物图"></p>
+<p>工程文件在<a href="/a/WBRRecv_2N7002/WBRRecv_2N7002_20230227.7z">此处</a>下载，git 仓库在 <a href="https://gitee.com/BH1PHL/WBRRecv_2N7002">https://gitee.com/BH1PHL/WBRRecv_2N7002</a>。</p>
+<h2 id="元器件选择">元器件选择</h2>
+<ul>
+<li>固定电阻均选用 0805 1% 贴片电阻。</li>
+<li>F1选用 0805 封装 0.2A 自恢复保险丝（注意应选择耐压指标 24V 或以上者）。FB1 选用 0805 磁珠（1kΩ@100MHz）。这两个元件的值并不关键。</li>
+<li>二极管 D1～D7 选用<a href="https://item.szlcsc.com/139984.html">ES1JL</a>快恢复二极管（山东晶导微电子），也可试用其他型号、其他厂家产品。注意变容二极管D1~D6 采用整流二极管代用，不同型号、厂家的整流二极管反向电容特性不尽相同，并联数量需通过试验确定。</li>
+<li>Q1、Q3选用 MMBT3904（SOT-23 封装）。</li>
+<li>Q2 选用<a href="https://item.szlcsc.com/88113.html">WST2N7002</a>（WINSOK 微硕），也可试用其他厂家产品。</li>
+<li>固定电容均为多层陶瓷电容（MLCC），10uF 电容采用 1206 封装，其余电容采用 0805 封装。小于等于 1nF 的电容采用 NP0 材质，大于 1nF 的电容采用 X7R/X5R 材质。电容选用时注意耐压（使用 25V 以上耐压的是安全的）。</li>
+<li>可调电容 C8 选用常见的 6mm 塑封微调电容（9～30p，绿色）。注意质量不好的此类电容可能会遇到内部开路情况，建议焊机前先测量，或采用类似尺寸陶瓷外壳微调电容。</li>
+<li>电位器 RV1、RV2、RV4 选用与 ALPS RK097 单联同封装产品；RV3 选用多圈电位器（如 BOURNS 3590S-2），用 2.54mm 排针引出。RV5 选用与 BOURNS 3362P 同封装产品。</li>
+<li>U1 选用数据手册中明示支持陶瓷电容的 SOT-223 封装 1117 可调版，如AZ1117、SPX1117、AP1117 等。注意如果使用原版 LM1117 或最常见的 AMS1117，C26 可能必须采用钽电容。</li>
+<li>U2 可采用 LM386 或任何兼容产品。</li>
+<li>J1 采用夹板式 SMA 插座，J2 采用<a href="https://item.szlcsc.com/300204.html">5脚直插式耳机插座</a>，J3 采用 3.5mm 脚距插拔式接线端子（<a href="https://item.szlcsc.com/376575.html">插头</a>、<a href="https://item.szlcsc.com/376577.html">插座</a>），J4 采用 2.54mm 排针配合短路子。</li>
+<li>L1 采用 \(\mu_\mathrm{i}=300\)，OD×ID×h=12.7mm×7.9mm×6.4mm 的铁氧体磁环绕制，双线并绕 2 圈。</li>
+<li>L2 采用 T50-6 铁粉芯磁环绕制。不同波段的圈数（均为双线并绕）、C7、J4 的情况及频率范围见下表：</li>
+</ul>
+<table>
+  <thead>
+      <tr>
+          <th>波段</th>
+          <th>电感 (T50-6)</th>
+          <th>C7</th>
+          <th>J4</th>
+          <th>频率范围</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>40m</td>
+          <td>17T×2</td>
+          <td>47p</td>
+          <td>短路</td>
+          <td>约6990~7220kHz</td>
+      </tr>
+      <tr>
+          <td>30m</td>
+          <td>15T×2</td>
+          <td>0p</td>
+          <td>开路</td>
+          <td>约9.6~10.2MHz</td>
+      </tr>
+      <tr>
+          <td>20m</td>
+          <td>11T×2</td>
+          <td>0p</td>
+          <td>开路</td>
+          <td>约13.5~14.4MHz</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="调整方法">调整方法</h2>
+<p>必备设备：电源、信号发生器、耳机或扬声器</p>
+<p>可选设备：衰减器、示波器</p>
+<p>步骤：</p>
+<ol>
+<li>REGEN 电位器调整到 75%；VOLUME 电位器调整到中间；TUNE 多圈电位器调整到最小。</li>
+<li>连接电源、耳机或扬声器、信号发生器，电源设置到 12V。</li>
+<li>接入 0.1mV 左右的信号：信号发生器设置到 100mVpp+60dB 衰减器，ANT 电位器调整到最大；或 1mVpp + ANT 电位器调整到 1/10 左右。</li>
+<li>打开电源和信号发生器。调整 VOLUME 电位器至音量舒适。</li>
+<li>调整再生：调整 PRESET 微调电位器，使再生刚好起振（耳机内背景噪声从小突然变大）。注意：振荡过强时耳机内声音也可能很小。</li>
+<li>调低端覆盖：信号发生器设置到 SWEEP 模式，起始频率 6.5MHz，终止频率 7.5MHz，时间 0.2s，调整可调电容 C8，使耳机中出现声音。调整信号发生器扫频上下限和可调电容 C8，缩小频率范围，使 TUNE 多圈电位器在最小（接收频率最低）时接收频率在 6990kHz 左右。</li>
+<li>确认高端覆盖和再生控制：信号发生器设置到 7.2MHz，调整 TUNE 多圈电位器直到收到信号，调整 REGEN 电位器确认再生控制仍然起作用（从低向高调整时有一个背景噪声突然变大、啸叫突然出现的点）。</li>
+<li>如果需要，用热熔胶或蜡固封线圈（固封后可能需要微调可调电容 C8）。</li>
+</ol>
+<p>注：</p>
+<ul>
+<li>第 6 步粗调也可改为在 T50-6 磁环内穿线 2～3 圈并连接示波器或高阻输入的频率计，在再生出现时观察信号频率并调整可调电容。</li>
+<li>调整（尤其是微调）时，也可将信号输入端连接带频谱功能的成品接收机（如 G90S），用接收机看振荡器到天线泄露信号的频率。</li>
+</ul>
+<h2 id="使用方法">使用方法</h2>
+<ol>
+<li>
+<p>接入天线、电源、耳机或扬声器。电源电压应在 10.5V 以上，高压限制由所使用的 1117 和输入保险丝、滤波电容等元件的耐压决定。<strong>注意电源极性！</strong></p>
+</li>
+<li>
+<p>ANT 电位器、VOLUME 电位器调整到中间位置。REGEN 电位器调整到刚好起振（背景噪声突然变大）的位置。VOLUME 电位器调整至音量舒适。注意：没有起振时有广播干扰是正常现象。起振后若还有广播干扰，可适当左旋 ANT 电位器增加输入衰减量；若无论有无起振均无广播干扰，说明附近无强干扰广播电台，可适当右旋ANT 电位器减少输入衰减量。</p>
+</li>
+<li>
+<p>调整 TUNE 电位器选台。一般需要同时调整 REGEN 电位器，以使再生工作在起振点附近，获得最好的接收效果。注意随着调谐频率升高，再生会变强，如果要保持再生强度不变，应当适当左旋 REGEN 电位器，反之亦然。</p>
+</li>
+<li>
+<p>接收 CW/SSB 电台时，再生调节到<strong>刚好起振</strong>的位置（REGEN 电位器放在起振点略偏右侧）效果最好；接收 AM 电台时，再生调节到<strong>刚好不起振</strong>的位置（REGEN 电位器放在起振点略偏左侧）效果最好。</p>
+</li>
+</ol>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2025
+    <a href="/zh/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (window.location.host !== 'qsl.net')
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

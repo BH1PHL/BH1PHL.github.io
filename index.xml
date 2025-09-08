@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>BH1PHL&#39;s Blog</title>
+    <link>https://bh1phl.github.io/</link>
+    <description>Recent content on BH1PHL&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>en-US</language>
+    <lastBuildDate>Tue, 18 Feb 2025 09:30:39 +0800</lastBuildDate>
+    <atom:link href="https://bh1phl.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Some experiments on My4TH (4): Peripherals</title>
+      <link>https://bh1phl.github.io/posts/my4th_peripherals/</link>
+      <pubDate>Tue, 18 Feb 2025 09:30:39 +0800</pubDate>
+      <guid>https://bh1phl.github.io/posts/my4th_peripherals/</guid>
+      <description>&lt;h2 id=&#34;eeprom-card-and-backplane&#34;&gt;EEPROM Card and Backplane&lt;/h2&gt;&#xA;&lt;h3 id=&#34;eeprom-card&#34;&gt;EEPROM Card&lt;/h3&gt;&#xA;&lt;p&gt;For EEPROM cards, &lt;a href=&#34;https://bh1phl.github.io/posts/my4th_faster/&#34;&gt;firmware provided on this website&lt;/a&gt; arranges adjacent blocks on the same EEPROM chip, with block numbers ordered according to EEPROM addresses.&lt;/p&gt;&#xA;&lt;p&gt;The EEPROM card card uses a USB 3.0 Type-A interface, where the power contacts are compatible with standard USB interfaces, and the signal contacts are used for I2C interface and addressing:&lt;/p&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://bh1phl.github.io/a/my4th_peripherals/eeprom-card-interface.png&#34; alt=&#34;EEPROM Card Interface&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;SOCKET&lt;/code&gt; connects to EEPROM address line &lt;code&gt;A1&lt;/code&gt;：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Some experiments on My4TH (3): Faster speed</title>
+      <link>https://bh1phl.github.io/posts/my4th_faster/</link>
+      <pubDate>Thu, 26 Dec 2024 22:40:42 +0800</pubDate>
+      <guid>https://bh1phl.github.io/posts/my4th_faster/</guid>
+      <description>&lt;h2 id=&#34;working-at-20mhz-and-221184mhz&#34;&gt;Working at 20MHz and 22.1184MHz&lt;/h2&gt;&#xA;&lt;p&gt;Tests have shown that My4TH can operate stably at 20MHz (using the 10MHz ROM image file provided by the original author at baud rate 9600) by increasing Vcc to 5.2V with 74HC series logic circuits and AM27H256-45/35DC.&lt;/p&gt;&#xA;&lt;p&gt;This configuation can work at 22.1184MHz with Vcc=5.4V:&lt;/p&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;U2 U3&lt;/th&gt;&#xA;          &lt;th&gt;U4&lt;/th&gt;&#xA;          &lt;th&gt;U9&lt;/th&gt;&#xA;          &lt;th&gt;U15&lt;/th&gt;&#xA;          &lt;th&gt;U16&lt;/th&gt;&#xA;          &lt;th&gt;Others&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;74F161A(TI)/ 74AC161(TI)&lt;/td&gt;&#xA;          &lt;td&gt;74LVC541A(TI)&lt;/td&gt;&#xA;          &lt;td&gt;74ACT08/ 74LVC08&lt;/td&gt;&#xA;          &lt;td&gt;AM27H256-45/35DC (needs to be selected)&lt;/td&gt;&#xA;          &lt;td&gt;IS61C256AL-12T(L)I/ CY7C199(L)-15ZC&lt;/td&gt;&#xA;          &lt;td&gt;74HC series&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;h2 id=&#34;higher-baud-rate&#34;&gt;Higher baud rate&lt;/h2&gt;&#xA;&lt;p&gt;By adjusting the delays in serial subroutines, the system can operate at 14400 baud above 16MHz and 19200 at 22.1184MHz.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Some experiments on My4TH (2): Playing music</title>
+      <link>https://bh1phl.github.io/posts/my4th_music/</link>
+      <pubDate>Sun, 22 Dec 2024 15:15:02 +0800</pubDate>
+      <guid>https://bh1phl.github.io/posts/my4th_music/</guid>
+      <description>&lt;p&gt;In the 1960s and 1970s, Broadcast radio receiver was an &lt;a href=&#34;https://mp.weixin.qq.com/s/vhCskYx1rM5PPwvGXrFDcw&#34;&gt;essential tool&lt;/a&gt; for debugging computer memory. Users could use an ordinary broadcast radio to monitor the electromagnetic radiation emitted by the computer, confirming the operational status of magnetic core memory and the bus. Users quickly discovered that this phenomenon could be used to play music (e.g. &lt;a href=&#34;https://mp.weixin.qq.com/s/_qp-S85hQ-MsK3NrkBqjlw&#34;&gt;here&lt;/a&gt; and &lt;a href=&#34;https://www.honest-broker.com/p/how-an-ibm-computer-learned-to-sing/comment/13966958&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;&#xA;&lt;p&gt;While My4TH utilizes modern EPROM and SRAM, its bus still generates some electromagnetic radiation. Experiments have shown that a regular AM radio can pick up the electromagnetic radiation caused by status changes in the bus.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Some experiments on My4TH (1): Running at 16MHz</title>
+      <link>https://bh1phl.github.io/posts/my4th_16mhz/</link>
+      <pubDate>Thu, 19 Dec 2024 21:19:39 +0800</pubDate>
+      <guid>https://bh1phl.github.io/posts/my4th_16mhz/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;http://mynor.org/my4th&#34;&gt;My4TH&lt;/a&gt; is a minimalist computer designed by Dennis Kuschel. This computer is extremely simplified in its design, employing a serial ALU and utilizing 16 74HC series CMOS logic devices along with microcodes from  ROM for CPU. It runs the Forth system. Here are some experiments related to this computer.&lt;/p&gt;&#xA;&lt;h2 id=&#34;increasing-the-running-speed&#34;&gt;Increasing the running speed&lt;/h2&gt;&#xA;&lt;p&gt;To ensure the state of the bus during reset, the original version of My4TH employs 10k resistors to pull down the data bus to GND. This introduces compatibility issues between TTL and HCMOS voltage levels: the outputs of RAM 62256 and ROM 27C256 conform to TTL levels, with a minimum high-level output voltage (\(V_\mathrm{OH}\)) of 2.4V; whereas the minimum high-level input voltage (\(V_\mathrm{IH}\)) for 74HC devices is \(0.7 V_\mathrm{cc}\), which is 3.5 V when powered at 5 V.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>A Wheatstone bridge regenerative (WBR) receiver with 2N7002</title>
+      <link>https://bh1phl.github.io/posts/wbrrecv_2n7002/</link>
+      <pubDate>Mon, 27 Feb 2023 04:54:41 +0800</pubDate>
+      <guid>https://bh1phl.github.io/posts/wbrrecv_2n7002/</guid>
+      <description>&lt;h2 id=&#34;basic-principles&#34;&gt;Basic principles&lt;/h2&gt;&#xA;&lt;p&gt;The circuit is based on the N1BYT&amp;rsquo;s WBR receiver, as shown in the schematic below. Q1 is the core of a Colpitts oscillator circuit, and RV2 and RV5 adjust whether the circuit oscillates (i.e., regeneration strength). L2, C7, C8, and six diodes D1 to D6 form the oscillation tank circuit. The input signal is attenuated by RV1, and then fed into the middle tap of L2 with L1. The DC path of the variable capacitance diode anode is provided by L1.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Mirror site of www.fcz-lab.com</title>
+      <link>https://bh1phl.github.io/posts/mirror_fcz/</link>
+      <pubDate>Tue, 28 Mar 2017 12:40:41 +0800</pubDate>
+      <guid>https://bh1phl.github.io/posts/mirror_fcz/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://bh1phl.github.io/s/www.fcz-lab.com/index.html&#34;&gt;Mirror site of www.fcz-lab.com (March 28 2017)&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>About</title>
+      <link>https://bh1phl.github.io/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://bh1phl.github.io/about/</guid>
+      <description>&lt;p&gt;Welcome to the blog of BH1PHL.&lt;/p&gt;&#xA;&lt;p&gt;&lt;a href=&#34;http://www.qrz.com/db/BH1PHL&#34;&gt;http://www.qrz.com/db/BH1PHL&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;Email: bh1phl [at] hotmail.com&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

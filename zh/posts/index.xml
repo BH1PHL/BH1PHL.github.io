@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on BH1PHL 的 Blog</title>
+    <link>https://bh1phl.github.io/zh/posts/</link>
+    <description>Recent content in Posts on BH1PHL 的 Blog</description>
+    <generator>Hugo</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Mon, 08 Sep 2025 20:07:04 +0800</lastBuildDate>
+    <atom:link href="https://bh1phl.github.io/zh/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Atlast 手册</title>
+      <link>https://bh1phl.github.io/zh/posts/atlast/</link>
+      <pubDate>Mon, 08 Sep 2025 20:07:04 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/atlast/</guid>
+      <description>&lt;p&gt;按：Atlast 是 Autodesk 公司创始人、AutoCAD 原作者之一 John Walker 开发的工具包，用于给普通的应用增加可编程能力。本文是 &lt;a href=&#34;https://www.fourmilab.ch/atlast/&#34;&gt;Atlast&lt;/a&gt; 1.2 版（32 位）&lt;a href=&#34;https://www.fourmilab.ch/atlast/atlast.html&#34;&gt;手册&lt;/a&gt;的中文版，在公有领域发布。&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;Atlast 是一项旨在使软件组件技术和开放式架构应用在主流软件市场普及的尝试。它既是一个可轻松集成到现有应用中的软件组件，为其提供现成的宏语言及用户扩展与定制功能；同时也是一个基础平台，能以开放、面向组件的方式构建新应用。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>关于 My4TH 的一些试验（四）：一些外设</title>
+      <link>https://bh1phl.github.io/zh/posts/my4th_peripherals/</link>
+      <pubDate>Tue, 18 Feb 2025 09:30:39 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/my4th_peripherals/</guid>
+      <description>&lt;h2 id=&#34;存储扩展卡与底板&#34;&gt;存储扩展卡与底板&lt;/h2&gt;&#xA;&lt;h3 id=&#34;存储扩展卡&#34;&gt;存储扩展卡&lt;/h3&gt;&#xA;&lt;p&gt;为方便使用外接的 EEPROM 存储扩展卡，&lt;a href=&#34;https://bh1phl.github.io/zh/posts/my4th_faster/&#34;&gt;本站提供的固件&lt;/a&gt;中，相邻的块位于同一片 EEPROM 上，且块序号按 EEPROM 地址排列。&lt;/p&gt;&#xA;&lt;p&gt;外接存储扩展卡使用 USB 3.0 Type-A 接口，电源触点与标准 USB 接口兼容，信号触点用于 I2C 接口和寻址等：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Forth 语言基础（二）</title>
+      <link>https://bh1phl.github.io/zh/posts/forth_primer_2/</link>
+      <pubDate>Tue, 04 Feb 2025 16:17:17 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/forth_primer_2/</guid>
+      <description>&lt;p&gt;本部分是一些方法论性质的材料，与语言本身的关系没有那么大，供感兴趣的读者阅读。这一部分主要来自 &lt;a href=&#34;https://thinking-forth.sourceforge.net/thinking-forth-ans.pdf&#34;&gt;&lt;em&gt;Thinking Forth&lt;/em&gt;&lt;/a&gt; 的相关章节（但不是简单的翻译，部分内容经过了很激进的改编），有些例子也来自 &lt;a href=&#34;https://www.forth.com/product/forth-programmers-handbook/&#34;&gt;&lt;em&gt;Forth Programmer&amp;rsquo;s Handbook 3rd ed&lt;/em&gt;&lt;/a&gt; 以及 &lt;a href=&#34;#ZgotmplZ&#34;&gt;&lt;em&gt;Real Time Forth&lt;/em&gt;&lt;/a&gt;。这一部分的例子大部分都可在 My4TH Forth 上实际运行，但也有一些是纯粹用于说明概念的，不可实际运行。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Forth 语言基础（一）</title>
+      <link>https://bh1phl.github.io/zh/posts/forth_primer_1/</link>
+      <pubDate>Fri, 24 Jan 2025 11:17:21 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/forth_primer_1/</guid>
+      <description>&lt;h2 id=&#34;目的&#34;&gt;目的&lt;/h2&gt;&#xA;&lt;p&gt;本文的目的是以 My4TH Forth 为例，用&lt;strong&gt;尽量少的&lt;/strong&gt;篇幅&lt;strong&gt;尽可能全面地&lt;/strong&gt;介绍 Forth 语言。&lt;/p&gt;&#xA;&lt;p&gt;本文拟分为若干部分。本部分为第一部分，完整介绍了 Forth 语言本身，Forth 2012 标准中 Core、Core Extension、Block、Double-Number 等几个最基本的词集的内容，以及 My4TH Forth 部分扩展词的内容。这一部分的例子都可实际运行，在 My4TH Forth 上验证。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>关于 My4TH 的一些试验（三）：更快的运行速度</title>
+      <link>https://bh1phl.github.io/zh/posts/my4th_faster/</link>
+      <pubDate>Thu, 26 Dec 2024 22:40:42 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/my4th_faster/</guid>
+      <description>&lt;h2 id=&#34;工作在-20mhz-和-221184mhz&#34;&gt;工作在 20MHz 和 22.1184MHz&lt;/h2&gt;&#xA;&lt;p&gt;试验表明，使用 74HC 系列逻辑电路和 AM27H256-45/35DC，把电源电压提高到 5.2V，系统就可以稳定工作在 20MHz（使用原作者提供的 10MHz ROM 镜像文件，波特率 9600）。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>关于 My4TH 的一些试验（二）：演奏音乐</title>
+      <link>https://bh1phl.github.io/zh/posts/my4th_music/</link>
+      <pubDate>Sun, 22 Dec 2024 15:15:02 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/my4th_music/</guid>
+      <description>&lt;p&gt;在20世纪六七十年代，收音机是调试计算机存储器的&lt;a href=&#34;https://mp.weixin.qq.com/s/vhCskYx1rM5PPwvGXrFDcw&#34;&gt;必备工具&lt;/a&gt;。用户可以借助普通的广播收音机侦听计算机发出的电磁辐射，确认磁心存储器及总线的工作状态。当时的用户很快发现，这一现象可以用来演奏音乐（例如&lt;a href=&#34;https://mp.weixin.qq.com/s/_qp-S85hQ-MsK3NrkBqjlw&#34;&gt;这里&lt;/a&gt;和&lt;a href=&#34;https://www.honest-broker.com/p/how-an-ibm-computer-learned-to-sing/comment/13966958&#34;&gt;这里&lt;/a&gt;）。&lt;/p&gt;&#xA;&lt;p&gt;虽然 My4TH 使用了现代的存储器，但其总线或多或少也会产生一些电磁辐射。试验发现，使用调幅收音机可以明显地听到总线上的工作状态变化产生的电磁辐射。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>关于 My4TH 的一些试验（一）：提高运行速度到 16 MHz</title>
+      <link>https://bh1phl.github.io/zh/posts/my4th_16mhz/</link>
+      <pubDate>Thu, 19 Dec 2024 21:19:39 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/my4th_16mhz/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;http://mynor.org/my4th&#34;&gt;My4TH&lt;/a&gt; 是 Dennis Kuschel 设计的一款非常简单的计算机。这一计算机在设计上极度简化，采用串行运算器，用 16 个 74HC 系列 CMOS 逻辑电路及 ROM 中的微码组成运控，运行 Forth 系统。本系列文章是关于 My4TH 的一些试验。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>使用 2N7002 的惠斯通电桥再生式 (WBR) 接收机</title>
+      <link>https://bh1phl.github.io/zh/posts/wbrrecv_2n7002/</link>
+      <pubDate>Mon, 27 Feb 2023 04:54:41 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/wbrrecv_2n7002/</guid>
+      <description>&lt;h2 id=&#34;基本原理&#34;&gt;基本原理&lt;/h2&gt;&#xA;&lt;p&gt;电路基于 N1BYT 的 WBR 接收机，如下图所示。以 Q1 为核心组成电容三点式振荡电路，RV2 和 RV5 调整是否起振（再生强弱）。L2、C7、C8 和 6 个二极管 D1~D6 构成振荡槽路。输入信号通过 RV1（起可调衰减作用）衰减和 L1，馈入 L2 中间抽头。变容二极管阳极的直流通路由 L1 提供。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>www.fcz-lab.com 的镜像站</title>
+      <link>https://bh1phl.github.io/zh/posts/mirror_fcz/</link>
+      <pubDate>Tue, 28 Mar 2017 12:40:41 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/mirror_fcz/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://bh1phl.github.io/s/www.fcz-lab.com/index.html&#34;&gt;www.fcz-lab.com 的镜像站(2017年3月28日)&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>用于 GAL16V8 的 CUPL 语言概要</title>
+      <link>https://bh1phl.github.io/zh/posts/cupl_for_gal16v8/</link>
+      <pubDate>Thu, 09 Jan 2014 11:10:23 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/cupl_for_gal16v8/</guid>
+      <description>&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;&#xA;&lt;p&gt;首先去 Microchip 网站&lt;a href=&#34;https://www.microchip.com/en-us/products/fpgas-and-plds/spld-cplds/pld-design-resources&#34;&gt;下载 WinCupl&lt;/a&gt; 并安装. 第一次运行时, 需要输入注册码 60008009 (这个是官方放出来的). 安装前注意备份用户的 PATH 环境变量的值, 因为 WinCupl 安装程序可能会把这个环境变量覆盖掉.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

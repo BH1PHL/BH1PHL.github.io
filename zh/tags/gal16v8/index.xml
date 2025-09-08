@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>GAL16V8 on BH1PHL 的 Blog</title>
+    <link>https://bh1phl.github.io/zh/tags/gal16v8/</link>
+    <description>Recent content in GAL16V8 on BH1PHL 的 Blog</description>
+    <generator>Hugo</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Thu, 09 Jan 2014 11:10:23 +0800</lastBuildDate>
+    <atom:link href="https://bh1phl.github.io/zh/tags/gal16v8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>用于 GAL16V8 的 CUPL 语言概要</title>
+      <link>https://bh1phl.github.io/zh/posts/cupl_for_gal16v8/</link>
+      <pubDate>Thu, 09 Jan 2014 11:10:23 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/cupl_for_gal16v8/</guid>
+      <description>&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;&#xA;&lt;p&gt;首先去 Microchip 网站&lt;a href=&#34;https://www.microchip.com/en-us/products/fpgas-and-plds/spld-cplds/pld-design-resources&#34;&gt;下载 WinCupl&lt;/a&gt; 并安装. 第一次运行时, 需要输入注册码 60008009 (这个是官方放出来的). 安装前注意备份用户的 PATH 环境变量的值, 因为 WinCupl 安装程序可能会把这个环境变量覆盖掉.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

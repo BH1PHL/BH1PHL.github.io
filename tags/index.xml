@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on BH1PHL&#39;s Blog</title>
+    <link>https://bh1phl.github.io/tags/</link>
+    <description>Recent content in Tags on BH1PHL&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>en-US</language>
+    <lastBuildDate>Tue, 18 Feb 2025 09:30:39 +0800</lastBuildDate>
+    <atom:link href="https://bh1phl.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Forth</title>
+      <link>https://bh1phl.github.io/tags/forth/</link>
+      <pubDate>Tue, 18 Feb 2025 09:30:39 +0800</pubDate>
+      <guid>https://bh1phl.github.io/tags/forth/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>My4TH</title>
+      <link>https://bh1phl.github.io/tags/my4th/</link>
+      <pubDate>Tue, 18 Feb 2025 09:30:39 +0800</pubDate>
+      <guid>https://bh1phl.github.io/tags/my4th/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>2N7002</title>
+      <link>https://bh1phl.github.io/tags/2n7002/</link>
+      <pubDate>Mon, 27 Feb 2023 04:54:41 +0800</pubDate>
+      <guid>https://bh1phl.github.io/tags/2n7002/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Receiver</title>
+      <link>https://bh1phl.github.io/tags/receiver/</link>
+      <pubDate>Mon, 27 Feb 2023 04:54:41 +0800</pubDate>
+      <guid>https://bh1phl.github.io/tags/receiver/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>WBR</title>
+      <link>https://bh1phl.github.io/tags/wbr/</link>
+      <pubDate>Mon, 27 Feb 2023 04:54:41 +0800</pubDate>
+      <guid>https://bh1phl.github.io/tags/wbr/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Fcz-Lab</title>
+      <link>https://bh1phl.github.io/tags/fcz-lab/</link>
+      <pubDate>Tue, 28 Mar 2017 12:40:41 +0800</pubDate>
+      <guid>https://bh1phl.github.io/tags/fcz-lab/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Mirror Site</title>
+      <link>https://bh1phl.github.io/tags/mirror-site/</link>
+      <pubDate>Tue, 28 Mar 2017 12:40:41 +0800</pubDate>
+      <guid>https://bh1phl.github.io/tags/mirror-site/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>
