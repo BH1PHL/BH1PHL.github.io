@@ -82,6 +82,68 @@
 		
 		
 			<article class="summary">
+  <a href="/zh/posts/iq_correction/">
+    <h1 class="title">I/Q 不平衡校准的算法</h1>
+    
+  </a>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2025-09-15</time>
+    
+    
+  </strong>
+ <span> • 810 words</span>
+ <span> • 2 minute read</span>
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/zh/tags/%E6%8E%A5%E6%94%B6%E6%9C%BA">接收机</a>, 
+        <a href="/zh/tags/%E7%AE%97%E6%B3%95">算法</a>
+    </div>
+  
+</div>
+
+  <div class="content">
+    <p><h2 id="问题">问题</h2>
+<p>从采集到的信号：</p>
+\[
+\begin{align*}
+I_0(t)= & A \alpha \cos \omega t, \\
+Q_0(t)= & A \sin(\omega t+\psi) 
+\end{align*}
+\]<p>计算：</p>
+\[
+\begin{align*}
+I(t)= & A \cos\omega t, \\
+Q(t)= & A \sin \omega t. 
+\end{align*}
+\]<h2 id="校准公式">校准公式</h2>
+<p>由和角公式</p>
+\[\sin(\omega t + \psi)=\sin \omega t \cos\psi+\cos \omega t \sin\psi\]<p>易得</p>
+\[\begin{pmatrix}I_0(t) \\ Q_0(t)\end{pmatrix} = \begin{pmatrix}\alpha & 0 \\ \sin \psi & \cos \psi\end{pmatrix} \begin{pmatrix}I(t) \\ Q(t)\end{pmatrix} ; \]<p>矩阵求逆得</p></p>
+    
+      <a href="/zh/posts/iq_correction/">Read more...</a>
+    
+  </div>
+</article>
+
+		
+			<article class="summary">
   <a href="/zh/posts/atlast/">
     <h1 class="title">Atlast 手册</h1>
     
@@ -503,56 +565,11 @@
 </article>
 
 		
-			<article class="summary">
-  <a href="/zh/posts/cupl_for_gal16v8/">
-    <h1 class="title">用于 GAL16V8 的 CUPL 语言概要</h1>
-    
-  </a>
-  
-
-
-
-
-
-
-
-
-
-  
-
-
-<div class="post-meta">
-  <strong>
-    <span>Posted on</span>
-    <time>2014-01-09</time>
-    
-    
-  </strong>
- <span> • 2431 words</span>
- <span> • 5 minute read</span>
-  
-    <div>
-      <span>Tags:</span>
-      
-        <a href="/zh/tags/cupl">CUPL</a>, 
-        <a href="/zh/tags/gal16v8">GAL16V8</a>
-    </div>
-  
-</div>
-
-  <div class="content">
-    <p><h2 id="安装">安装</h2>
-<p>首先去 Microchip 网站<a href="https://www.microchip.com/en-us/products/fpgas-and-plds/spld-cplds/pld-design-resources">下载 WinCupl</a> 并安装. 第一次运行时, 需要输入注册码 60008009 (这个是官方放出来的). 安装前注意备份用户的 PATH 环境变量的值, 因为 WinCupl 安装程序可能会把这个环境变量覆盖掉.</p></p>
-    
-      <a href="/zh/posts/cupl_for_gal16v8/">Read more...</a>
-    
-  </div>
-</article>
-
-		
 		<div>
   
-  1 of 1
+  1 of 2
+  
+    <a href="/zh/page/2/">Next Page</a>
   
 </div>
 

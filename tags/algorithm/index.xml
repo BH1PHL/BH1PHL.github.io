@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Receiver on BH1PHL&#39;s Blog</title>
-    <link>https://bh1phl.github.io/tags/receiver/</link>
-    <description>Recent content in Receiver on BH1PHL&#39;s Blog</description>
+    <title>Algorithm on BH1PHL&#39;s Blog</title>
+    <link>https://bh1phl.github.io/tags/algorithm/</link>
+    <description>Recent content in Algorithm on BH1PHL&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-US</language>
     <lastBuildDate>Mon, 15 Sep 2025 18:50:31 +0800</lastBuildDate>
-    <atom:link href="https://bh1phl.github.io/tags/receiver/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://bh1phl.github.io/tags/algorithm/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>I/Q Imbalance Correction</title>
       <link>https://bh1phl.github.io/posts/iq_correction/</link>
       <pubDate>Mon, 15 Sep 2025 18:50:31 +0800</pubDate>
       <guid>https://bh1phl.github.io/posts/iq_correction/</guid>
       <description>&lt;h2 id=&#34;problem&#34;&gt;Problem&lt;/h2&gt;&#xA;&lt;p&gt;Calculate&lt;/p&gt;&#xA;\[&#xA;\begin{align*}&#xA;I(t)= &amp; A \cos\omega t, \\&#xA;Q(t)= &amp; A \sin \omega t \\&#xA;\end{align*}&#xA;\]&lt;p&gt;from acquired signal&lt;/p&gt;&#xA;\[&#xA;\begin{align*}&#xA;I_0(t)= &amp; A \alpha \cos \omega t, \\&#xA;Q_0(t)= &amp; A \sin(\omega t+\psi).&#xA;\end{align*}&#xA;\]&lt;h2 id=&#34;equations&#34;&gt;Equations&lt;/h2&gt;&#xA;&lt;p&gt;From&lt;/p&gt;&#xA;\[\sin(\omega t + \psi)=\sin \omega t \cos\psi+\cos \omega t \sin\psi\]&lt;p&gt;we have&lt;/p&gt;&#xA;\[\begin{pmatrix}I_0(t) \\ Q_0(t)\end{pmatrix} = \begin{pmatrix}\alpha &amp; 0 \\ \sin \psi &amp; \cos \psi\end{pmatrix} \begin{pmatrix}I(t) \\ Q(t)\end{pmatrix} ; \]&lt;p&gt;I(t) and Q(t) can be obtained by matrix inversion:&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>A Wheatstone bridge regenerative (WBR) receiver with 2N7002</title>
-      <link>https://bh1phl.github.io/posts/wbrrecv_2n7002/</link>
-      <pubDate>Mon, 27 Feb 2023 04:54:41 +0800</pubDate>
-      <guid>https://bh1phl.github.io/posts/wbrrecv_2n7002/</guid>
-      <description>&lt;h2 id=&#34;basic-principles&#34;&gt;Basic principles&lt;/h2&gt;&#xA;&lt;p&gt;The circuit is based on the N1BYT&amp;rsquo;s WBR receiver, as shown in the schematic below. Q1 is the core of a Colpitts oscillator circuit, and RV2 and RV5 adjust whether the circuit oscillates (i.e., regeneration strength). L2, C7, C8, and six diodes D1 to D6 form the oscillation tank circuit. The input signal is attenuated by RV1, and then fed into the middle tap of L2 with L1. The DC path of the variable capacitance diode anode is provided by L1.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

@@ -82,6 +82,68 @@
 		
 		
 			<article class="summary">
+  <a href="/posts/iq_correction/">
+    <h1 class="title">I/Q Imbalance Correction</h1>
+    
+  </a>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2025-09-15</time>
+    
+    
+  </strong>
+ <span> • 528 words</span>
+ <span> • 3 minute read</span>
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/receiver">Receiver</a>, 
+        <a href="/tags/algorithm">Algorithm</a>
+    </div>
+  
+</div>
+
+  <div class="content">
+    <p><h2 id="problem">Problem</h2>
+<p>Calculate</p>
+\[
+\begin{align*}
+I(t)= & A \cos\omega t, \\
+Q(t)= & A \sin \omega t \\
+\end{align*}
+\]<p>from acquired signal</p>
+\[
+\begin{align*}
+I_0(t)= & A \alpha \cos \omega t, \\
+Q_0(t)= & A \sin(\omega t+\psi).
+\end{align*}
+\]<h2 id="equations">Equations</h2>
+<p>From</p>
+\[\sin(\omega t + \psi)=\sin \omega t \cos\psi+\cos \omega t \sin\psi\]<p>we have</p>
+\[\begin{pmatrix}I_0(t) \\ Q_0(t)\end{pmatrix} = \begin{pmatrix}\alpha & 0 \\ \sin \psi & \cos \psi\end{pmatrix} \begin{pmatrix}I(t) \\ Q(t)\end{pmatrix} ; \]<p>I(t) and Q(t) can be obtained by matrix inversion:</p></p>
+    
+      <a href="/posts/iq_correction/">Read more...</a>
+    
+  </div>
+</article>
+
+		
+			<article class="summary">
   <a href="/posts/my4th_peripherals/">
     <h1 class="title">Some experiments on My4TH (4): Peripherals</h1>
     

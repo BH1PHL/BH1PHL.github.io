@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+    <link rel="stylesheet" href="/katex/katex.min.css">
+<script defer src="/katex/katex.min.js"></script>
+<script defer src="/katex/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '\\[', right: '\\]', display: true},   
+        {left: '$$', right: '$$', display: true},     
+        {left: '\\(', right: '\\)', display: false},  
+      ],
+      throwOnError : false
+    });
+  });
+</script>
+
+  
+  
+    
+      <title>I/Q 不平衡校准的算法 | BH1PHL 的 Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="android-chrome-512x512.png" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/zh/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/zh/"><h1>BH1PHL 的 Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/zh/"><b>Home</b></a>
+      
+         | 
+        <a href="/zh/about"><b>About</b></a>
+      
+         | 
+        <a href="/zh/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/zh/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/zh/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/posts/iq_correction/"><b>English</b></a>
+      
+    
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">I/Q 不平衡校准的算法</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2025-09-15</time>
+    
+    
+  </strong>
+  <span> • 810 words</span>
+  <span> • 2 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/zh/tags/%E6%8E%A5%E6%94%B6%E6%9C%BA">接收机</a>, 
+        <a href="/zh/tags/%E7%AE%97%E6%B3%95">算法</a>
+    </div>
+  
+</div>
+
+      <div class="content"><h2 id="问题">问题</h2>
+<p>从采集到的信号：</p>
+\[
+\begin{align*}
+I_0(t)= & A \alpha \cos \omega t, \\
+Q_0(t)= & A \sin(\omega t+\psi) 
+\end{align*}
+\]<p>计算：</p>
+\[
+\begin{align*}
+I(t)= & A \cos\omega t, \\
+Q(t)= & A \sin \omega t. 
+\end{align*}
+\]<h2 id="校准公式">校准公式</h2>
+<p>由和角公式</p>
+\[\sin(\omega t + \psi)=\sin \omega t \cos\psi+\cos \omega t \sin\psi\]<p>易得</p>
+\[\begin{pmatrix}I_0(t) \\ Q_0(t)\end{pmatrix} = \begin{pmatrix}\alpha & 0 \\ \sin \psi & \cos \psi\end{pmatrix} \begin{pmatrix}I(t) \\ Q(t)\end{pmatrix} ; \]<p>矩阵求逆得</p>
+\[\begin{pmatrix}I(t) \\ Q(t)\end{pmatrix} = \begin{pmatrix}\alpha^{-1} & 0 \\ -\alpha^{-1}\tan \psi & \frac{1}{\cos \psi}\end{pmatrix} \begin{pmatrix}I_0(t) \\ Q_0(t)\end{pmatrix}. \]<p>记</p>
+\[
+\begin{align*}
+a= & \alpha^{-1}, \\
+d= & \frac{1}{cos \psi}, \\
+c= & -ad\sin\psi
+\end{align*}
+\]<p>则</p>
+\[\begin{pmatrix}I(t) \\ Q(t)\end{pmatrix} = 
+\begin{pmatrix}a & 0 \\ c & d\end{pmatrix}
+\begin{pmatrix}I_0(t) \\ Q_0(t)\end{pmatrix} . \]<p>也就是</p>
+\[
+\begin{align*}
+I(t)= & aI_0(t), \\
+Q(t)= & cI_0(t) + dQ_0(t).
+\end{align*}
+\]<h2 id="时间平均的性质">时间平均的性质</h2>
+<p>记 \(x(t)\) 的时间平均为 \(\langle x(t) \rangle\). 注意常数的时间平均等于它本身，自变量中含有 \(t\) 的正弦和余弦函数的时间平均 \(\langle \sin(\omega t) \rangle=\langle \cos( \omega t) \rangle=0\). 以下推导需要用到上述结论。</p>
+<h2 id="的求解">\(\alpha\) 的求解</h2>
+\[
+\begin{align*}
+& \langle I_0(t) I_0(t)\rangle \\
+= & \langle A^2\alpha^2\cos^2\omega t \rangle \\
+= & A^2\alpha^2\langle \frac{1}{2}+\frac{1}{2}\cos 2\omega t \rangle（倍角公式）\\
+= & \frac{1}{2} A^2\alpha^2.
+\end{align*}
+\]<p>类似可得</p>
+\[\langle Q_0(t) Q_0(t)\rangle=\frac{1}{2} A^2 .\]<p>由以上两式可计算出</p>
+\[\alpha = \sqrt{\frac{\langle I_0(t) I_0(t)\rangle}{\langle Q_0(t) Q_0(t)\rangle}} .\]<h2 id="的求解-1">\(\psi\) 的求解</h2>
+\[
+\begin{align*}
+& \langle I_0(t) Q_0(t)\rangle \\
+= & A^2\alpha\langle \cos\omega t \sin (\omega t + \psi)\rangle \\
+= & A^2\alpha\langle \cos \omega t \cdot (\sin \omega t \cos\psi+\cos \omega t \sin\psi)\rangle \\
+= & A^2\alpha\langle \sin \omega t \cos \omega t \cos\psi+\cos^2 \omega t \sin\psi\rangle \\
+= & A^2\alpha\langle \frac{1}{2} \cos\psi \sin 2 \omega t+(\frac{1}{2}+\frac{1}{2}\cos 2\omega t) \sin\psi\rangle \\
+= & A^2\alpha\langle \frac{1}{2} \cos\psi \sin 2 \omega t+\frac{1}{2}\sin\psi+\frac{1}{2}\sin\psi\cos 2\omega t\rangle \\
+\end{align*}
+\]<p>尖括弧内第一项、第三项包括自变量中含有 \(t\) 的正弦和余弦函数，因此其时间平均为零，上式</p>
+\[=\frac{1}{2} A^2\alpha\sin\psi .\]<p>故</p>
+\[\sin\psi=\alpha \frac{\langle I_0(t) Q_0(t)\rangle}{\langle I_0(t) I_0(t)\rangle} = \alpha^{-1} \frac{\langle I_0(t) Q_0(t)\rangle}{\langle Q_0(t) Q_0(t)\rangle} ,\]\[\cos \psi = \sqrt{1-\sin^2 \psi}.\]<h2 id="离散时间信号的时间平均的计算">离散时间信号的时间平均的计算</h2>
+<p>离散时间信号 \(x(n)\) 的时间平均从信号处理的角度看也就是其直流分量。因此这一时间平均</p>
+\[\langle x(n) \rangle\]<p>可用直流消除滤波器</p>
+\[y(n)=x(n)-x(n-1)+Ry(n-1)\]<p>计算：</p>
+\[\langle x(n) \rangle=x(n)-y(n).\]<p>这一滤波器的时间常数为 \(1/(1-R)\) 个采样点。</p>
+<h2 id="实际校准中的注意事项">实际校准中的注意事项</h2>
+<p>实际校准时，让接收机接收一个正弦信号，按上述方法，用正交解调出的信号 \(I_0(t)\) 和 \(Q_0(t)\) 计算校准使用的参数 \(a\)、\(c\) 和 \(d\).</p>
+<p>在实际校准中，由于电路设计已经保证了 \(\psi\) 的值很小，\(\sin\psi\) 接近于 \(0\)， \(\langle I_0(t) Q_0(t)\rangle\) 的有效值往往淹没在噪声中。因此校准中可不用上述直接求解 \(\psi\) 的方法，改用对无用边带进行监测，直接调整 \(\sin\psi\)，使边带抑制比最佳的方法。</p>
+<h2 id="参考文献">参考文献</h2>
+<ul>
+<li><a href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms1-ebz/iq_correction">https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms1-ebz/iq_correction</a></li>
+<li><a href="https://varun19299.github.io/ID4100-Wireless-Lab-IITM/posts/10-iq-imbalance/">https://varun19299.github.io/ID4100-Wireless-Lab-IITM/posts/10-iq-imbalance/</a></li>
+<li><a href="http://argus.naapo.org/~rchilders/swe_argus_pubs/iqbal.pdf">http://argus.naapo.org/~rchilders/swe_argus_pubs/iqbal.pdf</a></li>
+</ul>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+         | 
+        <a href="https://qsl.net/bh1phl">qsl.net</a>
+      
+         | 
+        <a href="https://bh1phl.github.io">github.io</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2025
+    <a href="/zh/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (window.location.host !== 'qsl.net')
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

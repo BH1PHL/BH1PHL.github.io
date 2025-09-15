@@ -2,8 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://bh1phl.github.io/tags/algorithm/</loc>
+    <lastmod>2025-09-15T18:50:31+08:00</lastmod>
+  </url><url>
     <loc>https://bh1phl.github.io/</loc>
-    <lastmod>2025-02-18T09:30:39+08:00</lastmod>
+    <lastmod>2025-09-15T18:50:31+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-Hans"
@@ -13,6 +16,48 @@
                 rel="alternate"
                 hreflang="en-US"
                 href="https://bh1phl.github.io/"
+                />
+  </url><url>
+    <loc>https://bh1phl.github.io/posts/iq_correction/</loc>
+    <lastmod>2025-09-15T18:50:31+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-Hans"
+                href="https://bh1phl.github.io/zh/posts/iq_correction/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-US"
+                href="https://bh1phl.github.io/posts/iq_correction/"
+                />
+  </url><url>
+    <loc>https://bh1phl.github.io/posts/</loc>
+    <lastmod>2025-09-15T18:50:31+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-Hans"
+                href="https://bh1phl.github.io/zh/posts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-US"
+                href="https://bh1phl.github.io/posts/"
+                />
+  </url><url>
+    <loc>https://bh1phl.github.io/tags/receiver/</loc>
+    <lastmod>2025-09-15T18:50:31+08:00</lastmod>
+  </url><url>
+    <loc>https://bh1phl.github.io/tags/</loc>
+    <lastmod>2025-09-15T18:50:31+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-Hans"
+                href="https://bh1phl.github.io/zh/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-US"
+                href="https://bh1phl.github.io/tags/"
                 />
   </url><url>
     <loc>https://bh1phl.github.io/tags/forth/</loc>
@@ -41,19 +86,6 @@
                 href="https://bh1phl.github.io/tags/my4th/"
                 />
   </url><url>
-    <loc>https://bh1phl.github.io/posts/</loc>
-    <lastmod>2025-02-18T09:30:39+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-Hans"
-                href="https://bh1phl.github.io/zh/posts/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-US"
-                href="https://bh1phl.github.io/posts/"
-                />
-  </url><url>
     <loc>https://bh1phl.github.io/posts/my4th_peripherals/</loc>
     <lastmod>2025-02-18T09:30:39+08:00</lastmod>
     <xhtml:link
@@ -65,19 +97,6 @@
                 rel="alternate"
                 hreflang="en-US"
                 href="https://bh1phl.github.io/posts/my4th_peripherals/"
-                />
-  </url><url>
-    <loc>https://bh1phl.github.io/tags/</loc>
-    <lastmod>2025-02-18T09:30:39+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-Hans"
-                href="https://bh1phl.github.io/zh/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-US"
-                href="https://bh1phl.github.io/tags/"
                 />
   </url><url>
     <loc>https://bh1phl.github.io/posts/my4th_faster/</loc>
@@ -144,9 +163,6 @@
                 hreflang="en-US"
                 href="https://bh1phl.github.io/posts/wbrrecv_2n7002/"
                 />
-  </url><url>
-    <loc>https://bh1phl.github.io/tags/receiver/</loc>
-    <lastmod>2023-02-27T04:54:41+08:00</lastmod>
   </url><url>
     <loc>https://bh1phl.github.io/tags/wbr/</loc>
     <lastmod>2023-02-27T04:54:41+08:00</lastmod>

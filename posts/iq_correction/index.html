@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+    <link rel="stylesheet" href="/katex/katex.min.css">
+<script defer src="/katex/katex.min.js"></script>
+<script defer src="/katex/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '\\[', right: '\\]', display: true},   
+        {left: '$$', right: '$$', display: true},     
+        {left: '\\(', right: '\\)', display: false},  
+      ],
+      throwOnError : false
+    });
+  });
+</script>
+
+  
+  
+    
+      <title>I/Q Imbalance Correction | BH1PHL&#39;s Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="android-chrome-512x512.png" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/"><h1>BH1PHL&#39;s Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/"><b>Home</b></a>
+      
+         | 
+        <a href="/about"><b>About</b></a>
+      
+         | 
+        <a href="/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/zh/posts/iq_correction/"><b>中文</b></a>
+      
+    
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">I/Q Imbalance Correction</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2025-09-15</time>
+    
+    
+  </strong>
+  <span> • 528 words</span>
+  <span> • 3 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/receiver">Receiver</a>, 
+        <a href="/tags/algorithm">Algorithm</a>
+    </div>
+  
+</div>
+
+      <div class="content"><h2 id="problem">Problem</h2>
+<p>Calculate</p>
+\[
+\begin{align*}
+I(t)= & A \cos\omega t, \\
+Q(t)= & A \sin \omega t \\
+\end{align*}
+\]<p>from acquired signal</p>
+\[
+\begin{align*}
+I_0(t)= & A \alpha \cos \omega t, \\
+Q_0(t)= & A \sin(\omega t+\psi).
+\end{align*}
+\]<h2 id="equations">Equations</h2>
+<p>From</p>
+\[\sin(\omega t + \psi)=\sin \omega t \cos\psi+\cos \omega t \sin\psi\]<p>we have</p>
+\[\begin{pmatrix}I_0(t) \\ Q_0(t)\end{pmatrix} = \begin{pmatrix}\alpha & 0 \\ \sin \psi & \cos \psi\end{pmatrix} \begin{pmatrix}I(t) \\ Q(t)\end{pmatrix} ; \]<p>I(t) and Q(t) can be obtained by matrix inversion:</p>
+\[\begin{pmatrix}I(t) \\ Q(t)\end{pmatrix} = \begin{pmatrix}\alpha^{-1} & 0 \\ -\alpha^{-1}\tan \psi & \frac{1}{\cos \psi}\end{pmatrix} \begin{pmatrix}I_0(t) \\ Q_0(t)\end{pmatrix}. \]<p>The equation above can be written as</p>
+\[\begin{pmatrix}I(t) \\ Q(t)\end{pmatrix} = 
+\begin{pmatrix}a & 0 \\ c & d\end{pmatrix} 
+\begin{pmatrix}I_0(t) \\ Q_0(t)\end{pmatrix} \]<p>where</p>
+\[
+\begin{align*}
+a= & \alpha^{-1}, \\
+d= & \frac{1}{cos \psi}, \\
+c= & -ad\sin\psi
+\end{align*}
+\]<p>i. e.</p>
+\[
+\begin{align*}
+I(t)= & aI_0(t), \\
+Q(t)= & cI_0(t) + dQ_0(t).
+\end{align*}
+\]<h2 id="properties-of-time-averages">Properties of Time Averages</h2>
+<p>Let the time average of \(x(t)\) be denoted as \(\langle x(t) \rangle\). Note that the time average of a constant is equal to itself, and the time averages of sine and cosine functions with  \(t\) are \(\langle \sin(\omega t) \rangle=\langle \cos( \omega t) \rangle=0\). The following derivations will utilize the above conclusions.</p>
+<h2 id="solving-for">Solving for \(\alpha\)</h2>
+\[
+\begin{align*}
+& \langle I_0(t) I_0(t)\rangle \\
+= & \langle A^2\alpha^2\cos^2\omega t \rangle \\
+= & A^2\alpha^2\langle \frac{1}{2}+\frac{1}{2}\cos 2\omega t \rangle（\text{double-angle formula}）\\
+= & \frac{1}{2} A^2\alpha^2.
+\end{align*}
+\]<p>Similarly,</p>
+\[\langle Q_0(t) Q_0(t)\rangle=\frac{1}{2} A^2 .\]<p>From above two equations, we have</p>
+\[\alpha = \sqrt{\frac{\langle I_0(t) I_0(t)\rangle}{\langle Q_0(t) Q_0(t)\rangle}} .\]<h2 id="solving-for-1">Solving for \(\psi\)</h2>
+\[
+\begin{align*}
+& \langle I_0(t) Q_0(t)\rangle \\
+= & A^2\alpha\langle \cos\omega t \sin (\omega t + \psi)\rangle \\
+= & A^2\alpha\langle \cos \omega t \cdot (\sin \omega t \cos\psi+\cos \omega t \sin\psi)\rangle \\
+= & A^2\alpha\langle \sin \omega t \cos \omega t \cos\psi+\cos^2 \omega t \sin\psi\rangle \\
+= & A^2\alpha\langle \frac{1}{2} \cos\psi \sin 2 \omega t+(\frac{1}{2}+\frac{1}{2}\cos 2\omega t) \sin\psi\rangle \\
+= & A^2\alpha\langle \frac{1}{2} \cos\psi \sin 2 \omega t+\frac{1}{2}\sin\psi+\frac{1}{2}\sin\psi\cos 2\omega t\rangle \\
+\end{align*}
+\]<p>The first and third terms within the angle brackets involve sine and cosine functions with \(t\), so their time average is zero. The above equation</p>
+\[=\frac{1}{2} A^2\alpha\sin\psi .\]<p>So</p>
+\[\sin\psi=\alpha \frac{\langle I_0(t) Q_0(t)\rangle}{\langle I_0(t) I_0(t)\rangle} = \alpha^{-1} \frac{\langle I_0(t) Q_0(t)\rangle}{\langle Q_0(t) Q_0(t)\rangle} ,\]\[\cos \psi = \sqrt{1-\sin^2 \psi}.\]<h2 id="calculation-of-time-average-for-discrete-time-signals">Calculation of Time Average for Discrete-Time Signals</h2>
+<p>From the perspective of signal processing, the time average of a discrete-time signal \(x(n)\) is essentially its DC component. Therefore, this time average</p>
+\[\langle x(n) \rangle\]<p>can be computed using a DC removal filter</p>
+\[y(n)=x(n)-x(n-1)+Ry(n-1)\]<p>as follows:</p>
+\[\langle x(n) \rangle=x(n)-y(n).\]<p>The time constant of this filter is \(1/(1-R)\) samples.</p>
+<h2 id="considerations-in-practical-calibration">Considerations in Practical Calibration</h2>
+<p>During actual calibration, the receiver is set to receive a sinusoidal signal. Using the method described above, the parameters \(a\), \(c\), and \(d\) for calibration are calculated from the quadrature-demodulated signals \(I_0(t)\) and \(Q_0(t)\).</p>
+<p>Since the circuit design already ensures that the value of \(\psi\) is very small, \(\sin\psi\) is close to \(0\), and the RMS value of \(\langle I_0(t) Q_0(t)\rangle\) is often buried in noise. Therefore, the direct method of solving for \(\psi\) described above may not be used. Instead, the unused sideband can be monitored, and \(\sin\psi\) can be adjusted directly to optimize the sideband suppression ratio.</p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms1-ebz/iq_correction">https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms1-ebz/iq_correction</a></li>
+<li><a href="https://varun19299.github.io/ID4100-Wireless-Lab-IITM/posts/10-iq-imbalance/">https://varun19299.github.io/ID4100-Wireless-Lab-IITM/posts/10-iq-imbalance/</a></li>
+<li><a href="http://argus.naapo.org/~rchilders/swe_argus_pubs/iqbal.pdf">http://argus.naapo.org/~rchilders/swe_argus_pubs/iqbal.pdf</a></li>
+</ul>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+         | 
+        <a href="https://qsl.net/bh1phl">qsl.net</a>
+      
+         | 
+        <a href="https://bh1phl.github.io">github.io</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2025
+    <a href="/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (window.location.host !== 'qsl.net')
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>
