@@ -5,13 +5,13 @@
   --cbcolor: #e6e6e6;
 }
 p > code {
-  font-family: Iosevka, monospace;
+  font-family: 'Iosevka','Sarasa Mono SC','Noto Sans Mono CJK SC','Microsoft YaHei','PingFang SC','Hiragino Sans GB','Heiti SC','Source Han Mono SC','WenQuanYi Micro Hei',monospace;
   color: var(--ccolor);
   background: var(--cbcolor);
   padding: 2px;
 }
 code {
-  font-family: Iosevka, monospace;
+  font-family: 'Iosevka','Sarasa Mono SC','Noto Sans Mono CJK SC','Microsoft YaHei','PingFang SC','Hiragino Sans GB','Heiti SC','Source Han Mono SC','WenQuanYi Micro Hei',monospace;
   color: var(--ccolor);
   background: var(--cbcolor);
 }
