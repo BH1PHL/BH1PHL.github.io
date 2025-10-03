@@ -6,8 +6,15 @@
     <description>Recent content in Posts on BH1PHL 的 Blog</description>
     <generator>Hugo</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Mon, 15 Sep 2025 18:50:31 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 03 Oct 2025 21:49:58 +0800</lastBuildDate>
     <atom:link href="https://bh1phl.github.io/zh/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>两位数字&#43;一位字母的 E96 0603 贴片电阻标记法</title>
+      <link>https://bh1phl.github.io/zh/posts/0603_codes/</link>
+      <pubDate>Fri, 03 Oct 2025 21:49:58 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/0603_codes/</guid>
+      <description>&lt;p&gt;贴片电阻最常见的标记法是三/四位数字标记法，其中前面两/三位数字是有效值，最后一位数字是数量级（以 Ω 计，有效值后面添加的零的个数），不到 10 Ω 或 100 Ω 的电阻的小数点用 R 表示。例如：&lt;/p&gt;</description>
+    </item>
     <item>
       <title>I/Q 不平衡校准的算法</title>
       <link>https://bh1phl.github.io/zh/posts/iq_correction/</link>

@@ -2,11 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://bh1phl.github.io/tags/algorithm/</loc>
-    <lastmod>2025-09-15T18:50:31+08:00</lastmod>
-  </url><url>
     <loc>https://bh1phl.github.io/</loc>
-    <lastmod>2025-09-15T18:50:31+08:00</lastmod>
+    <lastmod>2025-10-03T21:49:58+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-Hans"
@@ -17,6 +14,35 @@
                 hreflang="en-US"
                 href="https://bh1phl.github.io/"
                 />
+  </url><url>
+    <loc>https://bh1phl.github.io/posts/0603_codes/</loc>
+    <lastmod>2025-10-03T21:49:58+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-Hans"
+                href="https://bh1phl.github.io/zh/posts/0603_codes/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-US"
+                href="https://bh1phl.github.io/posts/0603_codes/"
+                />
+  </url><url>
+    <loc>https://bh1phl.github.io/posts/</loc>
+    <lastmod>2025-10-03T21:49:58+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-Hans"
+                href="https://bh1phl.github.io/zh/posts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-US"
+                href="https://bh1phl.github.io/posts/"
+                />
+  </url><url>
+    <loc>https://bh1phl.github.io/tags/algorithm/</loc>
+    <lastmod>2025-09-15T18:50:31+08:00</lastmod>
   </url><url>
     <loc>https://bh1phl.github.io/posts/iq_correction/</loc>
     <lastmod>2025-09-15T18:50:31+08:00</lastmod>
@@ -29,19 +55,6 @@
                 rel="alternate"
                 hreflang="en-US"
                 href="https://bh1phl.github.io/posts/iq_correction/"
-                />
-  </url><url>
-    <loc>https://bh1phl.github.io/posts/</loc>
-    <lastmod>2025-09-15T18:50:31+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-Hans"
-                href="https://bh1phl.github.io/zh/posts/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-US"
-                href="https://bh1phl.github.io/posts/"
                 />
   </url><url>
     <loc>https://bh1phl.github.io/tags/receiver/</loc>
