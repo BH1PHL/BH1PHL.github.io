@@ -28,6 +28,22 @@
                 href="https://bh1phl.github.io/zh/posts/"
                 />
   </url><url>
+    <loc>https://bh1phl.github.io/zh/tags/</loc>
+    <lastmod>2025-10-03T21:49:58+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-US"
+                href="https://bh1phl.github.io/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-Hans"
+                href="https://bh1phl.github.io/zh/tags/"
+                />
+  </url><url>
+    <loc>https://bh1phl.github.io/zh/tags/%E7%94%B5%E9%98%BB/</loc>
+    <lastmod>2025-10-03T21:49:58+08:00</lastmod>
+  </url><url>
     <loc>https://bh1phl.github.io/zh/posts/0603_codes/</loc>
     <lastmod>2025-10-03T21:49:58+08:00</lastmod>
     <xhtml:link
@@ -41,6 +57,9 @@
                 href="https://bh1phl.github.io/zh/posts/0603_codes/"
                 />
   </url><url>
+    <loc>https://bh1phl.github.io/zh/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/</loc>
+    <lastmod>2025-10-03T21:49:58+08:00</lastmod>
+  </url><url>
     <loc>https://bh1phl.github.io/zh/posts/iq_correction/</loc>
     <lastmod>2025-09-15T18:50:31+08:00</lastmod>
     <xhtml:link
@@ -52,19 +71,6 @@
                 rel="alternate"
                 hreflang="zh-Hans"
                 href="https://bh1phl.github.io/zh/posts/iq_correction/"
-                />
-  </url><url>
-    <loc>https://bh1phl.github.io/zh/tags/</loc>
-    <lastmod>2025-09-15T18:50:31+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-US"
-                href="https://bh1phl.github.io/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-Hans"
-                href="https://bh1phl.github.io/zh/tags/"
                 />
   </url><url>
     <loc>https://bh1phl.github.io/zh/tags/%E6%8E%A5%E6%94%B6%E6%9C%BA/</loc>

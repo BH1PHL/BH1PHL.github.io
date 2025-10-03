@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>知识库 on BH1PHL 的 Blog</title>
+    <link>https://bh1phl.github.io/zh/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/</link>
+    <description>Recent content in 知识库 on BH1PHL 的 Blog</description>
+    <generator>Hugo</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Fri, 03 Oct 2025 21:49:58 +0800</lastBuildDate>
+    <atom:link href="https://bh1phl.github.io/zh/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>两位数字&#43;一位字母的 E96 0603 贴片电阻标记法</title>
+      <link>https://bh1phl.github.io/zh/posts/0603_codes/</link>
+      <pubDate>Fri, 03 Oct 2025 21:49:58 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/0603_codes/</guid>
+      <description>&lt;p&gt;贴片电阻最常见的标记法是三/四位数字标记法，其中前面两/三位数字是有效值，最后一位数字是数量级（以 Ω 计，有效值后面添加的零的个数），不到 10 Ω 或 100 Ω 的电阻的小数点用 R 表示。例如：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>I/Q 不平衡校准的算法</title>
+      <link>https://bh1phl.github.io/zh/posts/iq_correction/</link>
+      <pubDate>Mon, 15 Sep 2025 18:50:31 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/iq_correction/</guid>
+      <description>&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;&#xA;&lt;p&gt;从采集到的信号：&lt;/p&gt;&#xA;\[&#xA;\begin{align*}&#xA;I_0(t)= &amp; A \alpha \cos \omega t, \\&#xA;Q_0(t)= &amp; A \sin(\omega t+\psi) &#xA;\end{align*}&#xA;\]&lt;p&gt;计算：&lt;/p&gt;&#xA;\[&#xA;\begin{align*}&#xA;I(t)= &amp; A \cos\omega t, \\&#xA;Q(t)= &amp; A \sin \omega t. &#xA;\end{align*}&#xA;\]&lt;h2 id=&#34;校准公式&#34;&gt;校准公式&lt;/h2&gt;&#xA;&lt;p&gt;由和角公式&lt;/p&gt;&#xA;\[\sin(\omega t + \psi)=\sin \omega t \cos\psi+\cos \omega t \sin\psi\]&lt;p&gt;易得&lt;/p&gt;&#xA;\[\begin{pmatrix}I_0(t) \\ Q_0(t)\end{pmatrix} = \begin{pmatrix}\alpha &amp; 0 \\ \sin \psi &amp; \cos \psi\end{pmatrix} \begin{pmatrix}I(t) \\ Q(t)\end{pmatrix} ; \]&lt;p&gt;矩阵求逆得&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Atlast 手册</title>
+      <link>https://bh1phl.github.io/zh/posts/atlast/</link>
+      <pubDate>Mon, 08 Sep 2025 20:07:04 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/atlast/</guid>
+      <description>&lt;p&gt;按：Atlast 是 Autodesk 公司创始人、AutoCAD 原作者之一 John Walker 开发的工具包，用于给普通的应用增加可编程能力。本文是 &lt;a href=&#34;https://www.fourmilab.ch/atlast/&#34;&gt;Atlast&lt;/a&gt; 1.2 版（&lt;a href=&#34;https://bh1phl.github.io/a/atlast/atlast-1.2.tar.gz&#34;&gt;32 位&lt;/a&gt;）&lt;a href=&#34;https://www.fourmilab.ch/atlast/atlast.html&#34;&gt;手册&lt;/a&gt;的中文版，在公有领域发布。&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;Atlast 是一项旨在使软件组件技术和开放式架构应用在主流软件市场普及的尝试。它既是一个可轻松集成到现有应用中的软件组件，为其提供现成的宏语言及用户扩展与定制功能；同时也是一个基础平台，能以开放、面向组件的方式构建新应用。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Forth 语言基础（二）</title>
+      <link>https://bh1phl.github.io/zh/posts/forth_primer_2/</link>
+      <pubDate>Tue, 04 Feb 2025 16:17:17 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/forth_primer_2/</guid>
+      <description>&lt;p&gt;本部分是一些方法论性质的材料，与语言本身的关系没有那么大，供感兴趣的读者阅读。这一部分主要来自 &lt;a href=&#34;https://thinking-forth.sourceforge.net/thinking-forth-ans.pdf&#34;&gt;&lt;em&gt;Thinking Forth&lt;/em&gt;&lt;/a&gt; 的相关章节（但不是简单的翻译，部分内容经过了很激进的改编），有些例子也来自 &lt;a href=&#34;https://www.forth.com/product/forth-programmers-handbook/&#34;&gt;&lt;em&gt;Forth Programmer&amp;rsquo;s Handbook 3rd ed&lt;/em&gt;&lt;/a&gt; 以及 &lt;a href=&#34;#ZgotmplZ&#34;&gt;&lt;em&gt;Real Time Forth&lt;/em&gt;&lt;/a&gt;。这一部分的例子大部分都可在 My4TH Forth 上实际运行，但也有一些是纯粹用于说明概念的，不可实际运行。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Forth 语言基础（一）</title>
+      <link>https://bh1phl.github.io/zh/posts/forth_primer_1/</link>
+      <pubDate>Fri, 24 Jan 2025 11:17:21 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/forth_primer_1/</guid>
+      <description>&lt;h2 id=&#34;目的&#34;&gt;目的&lt;/h2&gt;&#xA;&lt;p&gt;本文的目的是以 My4TH Forth 为例，用&lt;strong&gt;尽量少的&lt;/strong&gt;篇幅&lt;strong&gt;尽可能全面地&lt;/strong&gt;介绍 Forth 语言。&lt;/p&gt;&#xA;&lt;p&gt;本文拟分为若干部分。本部分为第一部分，完整介绍了 Forth 语言本身，Forth 2012 标准中 Core、Core Extension、Block、Double-Number 等几个最基本的词集的内容，以及 My4TH Forth 部分扩展词的内容。这一部分的例子都可实际运行，在 My4TH Forth 上验证。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>用于 GAL16V8 的 CUPL 语言概要</title>
+      <link>https://bh1phl.github.io/zh/posts/cupl_for_gal16v8/</link>
+      <pubDate>Thu, 09 Jan 2014 11:10:23 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/cupl_for_gal16v8/</guid>
+      <description>&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;&#xA;&lt;p&gt;首先去 Microchip 网站&lt;a href=&#34;https://www.microchip.com/en-us/products/fpgas-and-plds/spld-cplds/pld-design-resources&#34;&gt;下载 WinCupl&lt;/a&gt; 并安装. 第一次运行时, 需要输入注册码 60008009 (这个是官方放出来的). 安装前注意备份用户的 PATH 环境变量的值, 因为 WinCupl 安装程序可能会把这个环境变量覆盖掉.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
