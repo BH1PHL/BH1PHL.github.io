@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CachyOS on BH1PHL 的 Blog</title>
+    <link>https://bh1phl.github.io/zh/tags/cachyos/</link>
+    <description>Recent content in CachyOS on BH1PHL 的 Blog</description>
+    <generator>Hugo</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Tue, 07 Oct 2025 20:46:44 +0800</lastBuildDate>
+    <atom:link href="https://bh1phl.github.io/zh/tags/cachyos/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>在安装 CachyOS 时指定镜像</title>
+      <link>https://bh1phl.github.io/zh/posts/cachyos_install_specify_mirror/</link>
+      <pubDate>Tue, 07 Oct 2025 20:46:44 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/cachyos_install_specify_mirror/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://cachyos.org/&#34;&gt;CachyOS&lt;/a&gt; 是一个基于 &lt;a href=&#34;https://archlinux.org/&#34;&gt;Arch Linux&lt;/a&gt; 的不错的 Linux 发行版。安装时，它会寻找全网最快的镜像。由于众所周知的原因，这一步经常会超时，导致安装失败。下面的方法可以在安装时指定镜像：&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

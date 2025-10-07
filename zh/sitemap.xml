@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://bh1phl.github.io/zh/</loc>
-    <lastmod>2025-10-03T21:49:58+08:00</lastmod>
+    <lastmod>2025-10-07T20:46:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-US"
@@ -15,8 +15,14 @@
                 href="https://bh1phl.github.io/zh/"
                 />
   </url><url>
+    <loc>https://bh1phl.github.io/zh/tags/cachyos/</loc>
+    <lastmod>2025-10-07T20:46:44+08:00</lastmod>
+  </url><url>
+    <loc>https://bh1phl.github.io/zh/tags/linux/</loc>
+    <lastmod>2025-10-07T20:46:44+08:00</lastmod>
+  </url><url>
     <loc>https://bh1phl.github.io/zh/posts/</loc>
-    <lastmod>2025-10-03T21:49:58+08:00</lastmod>
+    <lastmod>2025-10-07T20:46:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-US"
@@ -29,7 +35,7 @@
                 />
   </url><url>
     <loc>https://bh1phl.github.io/zh/tags/</loc>
-    <lastmod>2025-10-03T21:49:58+08:00</lastmod>
+    <lastmod>2025-10-07T20:46:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-US"
@@ -40,6 +46,12 @@
                 hreflang="zh-Hans"
                 href="https://bh1phl.github.io/zh/tags/"
                 />
+  </url><url>
+    <loc>https://bh1phl.github.io/zh/posts/cachyos_install_specify_mirror/</loc>
+    <lastmod>2025-10-07T20:46:44+08:00</lastmod>
+  </url><url>
+    <loc>https://bh1phl.github.io/zh/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/</loc>
+    <lastmod>2025-10-07T20:46:44+08:00</lastmod>
   </url><url>
     <loc>https://bh1phl.github.io/zh/tags/%E7%94%B5%E9%98%BB/</loc>
     <lastmod>2025-10-03T21:49:58+08:00</lastmod>
@@ -56,9 +68,6 @@
                 hreflang="zh-Hans"
                 href="https://bh1phl.github.io/zh/posts/0603_codes/"
                 />
-  </url><url>
-    <loc>https://bh1phl.github.io/zh/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/</loc>
-    <lastmod>2025-10-03T21:49:58+08:00</lastmod>
   </url><url>
     <loc>https://bh1phl.github.io/zh/posts/iq_correction/</loc>
     <lastmod>2025-09-15T18:50:31+08:00</lastmod>

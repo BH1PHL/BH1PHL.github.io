@@ -6,8 +6,15 @@
     <description>Recent content on BH1PHL 的 Blog</description>
     <generator>Hugo</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Fri, 03 Oct 2025 21:49:58 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 07 Oct 2025 20:46:44 +0800</lastBuildDate>
     <atom:link href="https://bh1phl.github.io/zh/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>在安装 CachyOS 时指定镜像</title>
+      <link>https://bh1phl.github.io/zh/posts/cachyos_install_specify_mirror/</link>
+      <pubDate>Tue, 07 Oct 2025 20:46:44 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/cachyos_install_specify_mirror/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://cachyos.org/&#34;&gt;CachyOS&lt;/a&gt; 是一个基于 &lt;a href=&#34;https://archlinux.org/&#34;&gt;Arch Linux&lt;/a&gt; 的不错的 Linux 发行版。安装时，它会寻找全网最快的镜像。由于众所周知的原因，这一步经常会超时，导致安装失败。下面的方法可以在安装时指定镜像：&lt;/p&gt;</description>
+    </item>
     <item>
       <title>两位数字&#43;一位字母的 E96 0603 贴片电阻标记法</title>
       <link>https://bh1phl.github.io/zh/posts/0603_codes/</link>

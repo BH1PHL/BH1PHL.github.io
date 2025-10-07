@@ -88,7 +88,7 @@
     
     
   </strong>
-  <span> • 642 words</span>
+  <span> • 675 words</span>
   <span> • 4 minute read</span>
   
   
@@ -128,8 +128,9 @@
 </table>
 <h2 id="higher-baud-rate">Higher baud rate</h2>
 <p>By adjusting the delays in serial subroutines, the system can operate at 14400 baud above 16MHz and 19200 at 22.1184MHz.</p>
-<p>Modified firmware and tools can be downloaded <a href="/s/my4th/my4th-rom-ilk-altes-20250119.7z">here</a>. Major changes:</p>
+<p>Modified firmware and tools can be downloaded <a href="/s/my4th/my4th-rom-ilk-altes-20251007.7z">here</a>. Major changes:</p>
 <ul>
+<li>Updated 2025-10-07：finetune timing for 19200 baud for some CH340Ns (note: CH340 supports arbitrary baud rate. if cannot decode output when running version 20150119 at 19200 baud, try increase baud rate to approx 20000.）</li>
 <li>Updated 2025-01-19: <code>M*/</code> now with 3-cell intermediate results; add  <code>FH</code> and <code>--&gt;</code> for screen load（see <em>Thinking Forth</em>, Ch.5）</li>
 <li>Updated 2025-01-13: fixed a bug in uart_recv at 14400/19200 baud</li>
 </ul>

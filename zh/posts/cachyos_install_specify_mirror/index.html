@@ -10,7 +10,7 @@
   
   
     
-      <title>Tags | BH1PHL 的 Blog</title>
+      <title>在安装 CachyOS 时指定镜像 | BH1PHL 的 Blog</title>
     
   
   <link rel="stylesheet" href="/css/reset.css"/>
@@ -68,187 +68,51 @@
     |
     
       
-        <a href="/tags/"><b>English</b></a>
+        <a href="/"><b>English</b></a>
       
-    
+	
   </nav>
   <hr />
 </header>
 
       <div id="content">
         
-  <main id="terms">
+  <main>
+    <article>
+      <h1 class="title">在安装 CachyOS 时指定镜像</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2025-10-07</time>
+    
+    
+  </strong>
+  <span> • 238 words</span>
+  <span> • 1 minute read</span>
   
-<h1>Tags</h1>
-<ul id="terms">
   
-    
-      <li class="term">
-        <a
-          href="/zh/tags/%E7%9F%A5%E8%AF%86%E5%BA%93"
-        >
-          <span>知识库</span>
-          <span> (7)</span>
-        </a>
-      </li>
-    
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/zh/tags/%E7%9F%A5%E8%AF%86%E5%BA%93">知识库</a>, 
+        <a href="/zh/tags/cachyos">CachyOS</a>, 
+        <a href="/zh/tags/linux">Linux</a>
+    </div>
   
-    
-      <li class="term">
-        <a
-          href="/zh/tags/forth"
-        >
-          <span>forth</span>
-          <span> (6)</span>
-        </a>
-      </li>
-    
-  
-    
-      <li class="term">
-        <a
-          href="/zh/tags/my4th"
-        >
-          <span>my4th</span>
-          <span> (6)</span>
-        </a>
-      </li>
-    
-  
-    
-      <li class="term">
-        <a
-          href="/zh/tags/%E6%8E%A5%E6%94%B6%E6%9C%BA"
-        >
-          <span>接收机</span>
-          <span> (2)</span>
-        </a>
-      </li>
-    
-  
-    
-      <li class="term">
-        <a
-          href="/zh/tags/2n7002"
-        >
-          <span>2n7002</span>
-          <span> (1)</span>
-        </a>
-      </li>
-    
-  
-    
-      <li class="term">
-        <a
-          href="/zh/tags/atlast"
-        >
-          <span>atlast</span>
-          <span> (1)</span>
-        </a>
-      </li>
-    
-  
-    
-      <li class="term">
-        <a
-          href="/zh/tags/cachyos"
-        >
-          <span>cachyos</span>
-          <span> (1)</span>
-        </a>
-      </li>
-    
-  
-    
-      <li class="term">
-        <a
-          href="/zh/tags/cupl"
-        >
-          <span>cupl</span>
-          <span> (1)</span>
-        </a>
-      </li>
-    
-  
-    
-      <li class="term">
-        <a
-          href="/zh/tags/fcz-lab"
-        >
-          <span>fcz-lab</span>
-          <span> (1)</span>
-        </a>
-      </li>
-    
-  
-    
-      <li class="term">
-        <a
-          href="/zh/tags/gal16v8"
-        >
-          <span>gal16v8</span>
-          <span> (1)</span>
-        </a>
-      </li>
-    
-  
-    
-      <li class="term">
-        <a
-          href="/zh/tags/linux"
-        >
-          <span>linux</span>
-          <span> (1)</span>
-        </a>
-      </li>
-    
-  
-    
-      <li class="term">
-        <a
-          href="/zh/tags/wbr"
-        >
-          <span>wbr</span>
-          <span> (1)</span>
-        </a>
-      </li>
-    
-  
-    
-      <li class="term">
-        <a
-          href="/zh/tags/%E7%94%B5%E9%98%BB"
-        >
-          <span>电阻</span>
-          <span> (1)</span>
-        </a>
-      </li>
-    
-  
-    
-      <li class="term">
-        <a
-          href="/zh/tags/%E7%AE%97%E6%B3%95"
-        >
-          <span>算法</span>
-          <span> (1)</span>
-        </a>
-      </li>
-    
-  
-    
-      <li class="term">
-        <a
-          href="/zh/tags/%E9%95%9C%E5%83%8F%E7%AB%99"
-        >
-          <span>镜像站</span>
-          <span> (1)</span>
-        </a>
-      </li>
-    
-  
-</ul>
+</div>
 
+      <div class="content"><p><a href="https://cachyos.org/">CachyOS</a> 是一个基于 <a href="https://archlinux.org/">Arch Linux</a> 的不错的 Linux 发行版。安装时，它会寻找全网最快的镜像。由于众所周知的原因，这一步经常会超时，导致安装失败。下面的方法可以在安装时指定镜像：</p>
+<p>首先用 <a href="https://cdn77.cachyos.org/ISO/desktop/250828/cachyos-desktop-linux-250828.iso">Live ISO</a> 启动系统，然后在 root 下（<code>sudo su -</code>）运行下面的命令：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> /etc/pacman.d/
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Server = https://mirrors.ustc.edu.cn/cachyos/repo/\$arch/\$repo&#34;</span> &gt; cachyos-mirrorlist
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Server = https://mirrors.ustc.edu.cn/cachyos/repo/\$arch_v3/\$repo&#34;</span> &gt; cachyos-v3-mirrorlist
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Server = https://mirrors.ustc.edu.cn/cachyos/repo/\$arch_v4/\$repo&#34;</span> &gt; cachyos-v4-mirrorlist
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Server = https://mirrors.ustc.edu.cn/archlinux/\$repo/os/\$arch&#34;</span> &gt; mirrorlist
+</span></span></code></pre></div><p>然后运行安装程序。正常继续，到 Summary 页面时，修改 <code>/etc/calamares/scripts</code> 下面的 <code>update-mirrorlist</code> ，将这个脚本的内容全部用 <code>#</code> 注释掉，再点击下一步。</p>
+<p>有时用 <code>ssh</code> 登录到 Live ISO 更方便操作。Live ISO 的用户名是 <code>liveuser</code>，用 <code>passwd</code> 命令设置密码后即可在其他终端用 <code>ssh</code> 登录。</p>
+</div>
+    </article>
   </main>
 
       </div>
