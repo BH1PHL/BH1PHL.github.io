@@ -88,7 +88,7 @@
     
     
   </strong>
-  <span> • 238 words</span>
+  <span> • 453 words</span>
   <span> • 1 minute read</span>
   
   
@@ -103,7 +103,7 @@
 </div>
 
       <div class="content"><p><a href="https://cachyos.org/">CachyOS</a> 是一个基于 <a href="https://archlinux.org/">Arch Linux</a> 的不错的 Linux 发行版。安装时，它会寻找全网最快的镜像。由于众所周知的原因，这一步经常会超时，导致安装失败。下面的方法可以在安装时指定镜像：</p>
-<p>首先用 <a href="https://cdn77.cachyos.org/ISO/desktop/250828/cachyos-desktop-linux-250828.iso">Live ISO</a> 启动系统，然后在 root 下（<code>sudo su -</code>）运行下面的命令：</p>
+<p>首先用 <a href="https://cdn77.cachyos.org/ISO/desktop/250828/cachyos-desktop-linux-250828.iso">Live ISO</a> 启动系统，然后在 root 下（<code>sudo su -</code>）运行下面的：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> /etc/pacman.d/
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Server = https://mirrors.ustc.edu.cn/cachyos/repo/\$arch/\$repo&#34;</span> &gt; cachyos-mirrorlist
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Server = https://mirrors.ustc.edu.cn/cachyos/repo/\$arch_v3/\$repo&#34;</span> &gt; cachyos-v3-mirrorlist
@@ -111,6 +111,19 @@
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Server = https://mirrors.ustc.edu.cn/archlinux/\$repo/os/\$arch&#34;</span> &gt; mirrorlist
 </span></span></code></pre></div><p>然后运行安装程序。正常继续，到 Summary 页面时，修改 <code>/etc/calamares/scripts</code> 下面的 <code>update-mirrorlist</code> ，将这个脚本的内容全部用 <code>#</code> 注释掉，再点击下一步。</p>
 <p>有时用 <code>ssh</code> 登录到 Live ISO 更方便操作。Live ISO 的用户名是 <code>liveuser</code>，用 <code>passwd</code> 命令设置密码后即可在其他终端用 <code>ssh</code> 登录。</p>
+<h2 id="amd-zen-4-系统下报签名错误问题">AMD Zen 4 系统下报签名错误问题</h2>
+<p>在 AMD Zen 4 系统下安装时，发现安装程序报 <code>The package manager could not prepare updates. The command &lt;pre&gt;pacman&lt;/pre&gt; returned error code 1.</code> 错误。</p>
+<p>查看 <code>/home/liveuser/.cache/calamares/session.log</code>，发现是执行 <code>pacman -Sy</code> 时报 <code>cachyos-extra-znver4: signature from &quot;CachyOS &lt;admin@cachyos.org&gt;&quot; is invalid</code>.</p>
+<p>通过以下方式解决：</p>
+<p>（root 下，安装程序到 Summary 页面时，已经换源并注释 <code>update-mirrorlist</code>）</p>
+<ol>
+<li><code>pacman -Sy base-devel</code></li>
+<li><code>/etc/calamares/scripts/try-v3</code></li>
+<li><code>pacman -Sy</code> 确认不报错</li>
+<li>清空 <code>/etc/calamares/scripts/try-v3</code> 脚本除第一行 <code>#!/bin/bash</code> 外的所有内容</li>
+<li>继续安装</li>
+</ol>
+<p>（注：没有重新安装以确认是否是源出现了短暂的问题）</p>
 </div>
     </article>
   </main>
