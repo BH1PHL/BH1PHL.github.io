@@ -6,8 +6,15 @@
     <description>Recent content in Posts on BH1PHL&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-US</language>
-    <lastBuildDate>Fri, 03 Oct 2025 21:49:58 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 14 Oct 2025 18:38:32 +0800</lastBuildDate>
     <atom:link href="https://bh1phl.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Mental calculation of decibel</title>
+      <link>https://bh1phl.github.io/posts/db_calculation/</link>
+      <pubDate>Tue, 14 Oct 2025 18:38:32 +0800</pubDate>
+      <guid>https://bh1phl.github.io/posts/db_calculation/</guid>
+      <description>&lt;p&gt;The decibel (dB) is widely used in electronics to describe ratios. Many people find this logarithmic unit difficult to understand, but in fact, it was designed for mental calculation and should not be perceived as overly complicated.&lt;/p&gt;&#xA;&lt;p&gt;dB is suitable for situations where the dynamic range is large but the requirement for significant digits is not high. For example, whether the exact value of ripple rejection ratio is ten thousand times (80 dB) or fifteen thousand times (83 dB) is not particularly important; it is sufficient to know that it is not one thousand times (60 dB).&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Marking Codes for E96 0603 Resistors</title>
       <link>https://bh1phl.github.io/posts/0603_codes/</link>

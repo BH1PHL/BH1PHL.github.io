@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+    <link rel="stylesheet" href="/katex/katex.min.css">
+<script defer src="/katex/katex.min.js"></script>
+<script defer src="/katex/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '\\[', right: '\\]', display: true},   
+        {left: '$$', right: '$$', display: true},     
+        {left: '\\(', right: '\\)', display: false},  
+      ],
+      throwOnError : false
+    });
+  });
+</script>
+
+  
+  
+    
+      <title>Mental calculation of decibel | BH1PHL&#39;s Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="android-chrome-512x512.png" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/"><h1>BH1PHL&#39;s Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/"><b>Home</b></a>
+      
+         | 
+        <a href="/about"><b>About</b></a>
+      
+         | 
+        <a href="/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/zh/posts/db_calculation/"><b>中文</b></a>
+      
+    
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">Mental calculation of decibel</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2025-10-14</time>
+    
+    
+  </strong>
+  <span> • 310 words</span>
+  <span> • 2 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/knowledge-base">Knowledge base</a>, 
+        <a href="/tags/decibel">Decibel</a>, 
+        <a href="/tags/calculation">Calculation</a>
+    </div>
+  
+</div>
+
+      <div class="content"><p>The decibel (dB) is widely used in electronics to describe ratios. Many people find this logarithmic unit difficult to understand, but in fact, it was designed for mental calculation and should not be perceived as overly complicated.</p>
+<p>dB is suitable for situations where the dynamic range is large but the requirement for significant digits is not high. For example, whether the exact value of ripple rejection ratio is ten thousand times (80 dB) or fifteen thousand times (83 dB) is not particularly important; it is sufficient to know that it is not one thousand times (60 dB).</p>
+<p>One common point of confusion is why the decibel value for power (energy) ratio is calculated as \(10 \log(\mathrm{ratio})\), while for voltage ratio it becomes \(20 \log(\mathrm{ratio})\)? This is because \(P=U²/R\), i.e., a voltage ratio of \(10\) times <em>is</em> a power ratio of \(100\) times. Keeping this in mind will prevent confusion.</p>
+<p>For mental calculation, it is essential to know the relationships between common dB values and ratios. At a minimum, remember that 3 dB is \(2\) times, and 10 dB is \(10\) times:</p>
+<table>
+  <thead>
+      <tr>
+          <th>dB (power)</th>
+          <th>dB (voltage)</th>
+          <th>ratio (approx.)</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1</td>
+          <td>2</td>
+          <td>\(5/4\)</td>
+      </tr>
+      <tr>
+          <td>3</td>
+          <td>6</td>
+          <td>\(2\)</td>
+      </tr>
+      <tr>
+          <td>5</td>
+          <td>10</td>
+          <td>\(3\)</td>
+      </tr>
+      <tr>
+          <td>7</td>
+          <td>14</td>
+          <td>\(5\)</td>
+      </tr>
+      <tr>
+          <td>10</td>
+          <td>20</td>
+          <td>\(10\)</td>
+      </tr>
+  </tbody>
+</table>
+<p>Additionally, understand that adding and subtracting dB is equivalent to multiplying and dividing ratios, and negative dB values correspond to fractions. By breaking down dB values into sums of numbers in the table and using interpolation, mental calculation becomes possible.</p>
+<p>For example:</p>
+<ul>
+<li>27 dB = (10 + 10 + 7) dB → \(10 \times 10 \times 5=500\) times
+<ul>
+<li>When calculating voltage ratio：<br>
+27 dB ≈ (14 + 14 ) dB → \( 5 \times 5 = 25\) times (the exact value is 22.4 times)</li>
+</ul>
+</li>
+<li>-34 dB = -(10 + 10 + 10 + 3 + 1) dB → \(1/2500\)
+<ul>
+<li>Voltage ratio:-34 dB =-(20 + 14) dB → \(1/50\)</li>
+</ul>
+</li>
+</ul>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+         | 
+        <a href="https://qsl.net/bh1phl">qsl.net</a>
+      
+         | 
+        <a href="https://bh1phl.github.io">github.io</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2025
+    <a href="/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (!(/(qsl.net)|(github.io)/.test(window.location.host)))
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>
