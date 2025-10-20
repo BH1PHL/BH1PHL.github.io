@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>数字信号处理 on BH1PHL 的 Blog</title>
+    <link>https://bh1phl.github.io/zh/tags/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/</link>
+    <description>Recent content in 数字信号处理 on BH1PHL 的 Blog</description>
+    <generator>Hugo</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Mon, 15 Sep 2025 18:50:31 +0800</lastBuildDate>
+    <atom:link href="https://bh1phl.github.io/zh/tags/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>I/Q 不平衡校准的算法</title>
+      <link>https://bh1phl.github.io/zh/posts/iq_correction/</link>
+      <pubDate>Mon, 15 Sep 2025 18:50:31 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/iq_correction/</guid>
+      <description>&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;&#xA;&lt;p&gt;从采集到的信号：&lt;/p&gt;&#xA;\[&#xA;\begin{align*}&#xA;I_0(t)= &amp; A \alpha \cos \omega t, \\&#xA;Q_0(t)= &amp; A \sin(\omega t+\psi) &#xA;\end{align*}&#xA;\]&lt;p&gt;计算：&lt;/p&gt;&#xA;\[&#xA;\begin{align*}&#xA;I(t)= &amp; A \cos\omega t, \\&#xA;Q(t)= &amp; A \sin \omega t. &#xA;\end{align*}&#xA;\]&lt;h2 id=&#34;校准公式&#34;&gt;校准公式&lt;/h2&gt;&#xA;&lt;p&gt;由和角公式&lt;/p&gt;&#xA;\[\sin(\omega t + \psi)=\sin \omega t \cos\psi+\cos \omega t \sin\psi\]&lt;p&gt;易得&lt;/p&gt;&#xA;\[\begin{pmatrix}I_0(t) \\ Q_0(t)\end{pmatrix} = \begin{pmatrix}\alpha &amp; 0 \\ \sin \psi &amp; \cos \psi\end{pmatrix} \begin{pmatrix}I(t) \\ Q(t)\end{pmatrix} ; \]&lt;p&gt;矩阵求逆得&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

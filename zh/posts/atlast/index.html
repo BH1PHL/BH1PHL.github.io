@@ -403,12 +403,12 @@
 </li>
 <li>
 <p><code>READONLYSTRINGS</code><br>
-启用 <code>WORDSUSED</code> 包时，Atlast 会追踪程序中使用的原语和用户定义词，以便确定所需包及测试覆盖率。此功能通过修改词定义标志实现，对内置原语需修改 C 常量字符串。若C实现不允许此操作，则定义 <code>READONLYSTRINGS</code> 将预定义词复制到可修改的动态分配缓冲区中。注意此功能仅在启用 <code>WORDSUSED</code> 包时生效。</p>
+启用 <code>WORDSUSED</code> 包时，Atlast 会追踪程序中使用的原语和用户定义词，以便确定所需包及测试覆盖率。此功能通过修改词定义标志实现，对内置原语需修改 C 常量字符串。若 C 实现不允许此操作，则定义 <code>READONLYSTRINGS</code> 将预定义词复制到可修改的动态分配缓冲区中。注意此功能仅在启用 <code>WORDSUSED</code> 包时生效。</p>
 </li>
 </ul>
 <p>在 MS-DOS 或 16 位 OS/2 上构建 Atlast 时，必须使用大模式（32 位数据地址）。Atlast 将所有整数视为 32 位并假定数据指针长度至少为此值。尝试用 16 位数据地址构建将引发违反设计假设的编译错误。</p>
 <h3 id="初始化atl_init">初始化：<code>atl_init()</code></h3>
-<p>在应用程序调用其他 Atlast 功能前，必须调用 <code>atl_init()</code> 初始化动态存储并创建用于求值的数据结构。</p>
+<p>在应用程序调用其他 Atlast 函数前，必须调用 <code>atl_init()</code> 初始化动态存储并创建用于求值的数据结构。</p>
 <p>使用默认内存配置初始化 Atlast 只需调用：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">atl_init</span><span class="p">();</span>
 </span></span></code></pre></div><p>此时将创建栈、返回栈、堆和初始词典，Atlast 进入可执行状态。通过在调用 <code>atl_init()</code> 前设置以下变量（定义于 <code>atlast.h</code> 中）可调整内存分配大小：</p>
