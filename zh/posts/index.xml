@@ -6,8 +6,15 @@
     <description>Recent content in Posts on BH1PHL 的 Blog</description>
     <generator>Hugo</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Sat, 25 Oct 2025 15:52:31 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 26 Oct 2025 00:18:21 +0800</lastBuildDate>
     <atom:link href="https://bh1phl.github.io/zh/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>在 RP2040 的多核模式下使用 littlefs 文件系统</title>
+      <link>https://bh1phl.github.io/zh/posts/rp2040_multicore_littlefs/</link>
+      <pubDate>Sun, 26 Oct 2025 00:18:21 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/rp2040_multicore_littlefs/</guid>
+      <description>&lt;p&gt;RP2040 的程序存储在 SPI Flash 中，运行时会随机读取 Flash 中的程序到内部的高速缓存以便执行。这在单核工作时并不构成问题，但是在多核模式下，如果一个核在执行程序，另一个核在写 Flash（例如使用 &lt;a href=&#34;https://github.com/littlefs-project/littlefs&#34;&gt;littlefs&lt;/a&gt; 文件系统管理 SPI Flash 中不存储程序的剩余空间），则有可能造成同时读写 Flash 的状况，导致一个或两个核上的程序停止运行。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>《运算放大器权威指南》（第5版）中文版补充材料</title>
       <link>https://bh1phl.github.io/zh/posts/opamps5_sup/</link>

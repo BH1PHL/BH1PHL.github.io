@@ -82,6 +82,53 @@
 		
 		
 			<article class="summary">
+  <a href="/zh/posts/rp2040_multicore_littlefs/">
+    <h1 class="title">在 RP2040 的多核模式下使用 littlefs 文件系统</h1>
+    
+  </a>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2025-10-26</time>
+    
+    
+  </strong>
+ <span> • 479 words</span>
+ <span> • 1 minute read</span>
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/zh/tags/%E7%9F%A5%E8%AF%86%E5%BA%93">知识库</a>, 
+        <a href="/zh/tags/rp2040">RP2040</a>, 
+        <a href="/zh/tags/littlefs">littlefs</a>
+    </div>
+  
+</div>
+
+  <div class="content">
+    <p><p>RP2040 的程序存储在 SPI Flash 中，运行时会随机读取 Flash 中的程序到内部的高速缓存以便执行。这在单核工作时并不构成问题，但是在多核模式下，如果一个核在执行程序，另一个核在写 Flash（例如使用 <a href="https://github.com/littlefs-project/littlefs">littlefs</a> 文件系统管理 SPI Flash 中不存储程序的剩余空间），则有可能造成同时读写 Flash 的状况，导致一个或两个核上的程序停止运行。</p></p>
+    
+      <a href="/zh/posts/rp2040_multicore_littlefs/">Read more...</a>
+    
+  </div>
+</article>
+
+		
+			<article class="summary">
   <a href="/zh/posts/opamps5_sup/">
     <h1 class="title">《运算放大器权威指南》（第5版）中文版补充材料</h1>
     
@@ -642,53 +689,6 @@ Q(t)= & A \sin \omega t.
 <p>本文拟分为若干部分。本部分为第一部分，完整介绍了 Forth 语言本身，Forth 2012 标准中 Core、Core Extension、Block、Double-Number 等几个最基本的词集的内容，以及 My4TH Forth 部分扩展词的内容。这一部分的例子都可实际运行，在 My4TH Forth 上验证。</p></p>
     
       <a href="/zh/posts/forth_primer_1/">Read more...</a>
-    
-  </div>
-</article>
-
-		
-			<article class="summary">
-  <a href="/zh/posts/my4th_faster/">
-    <h1 class="title">关于 My4TH 的一些试验（三）：更快的运行速度</h1>
-    
-  </a>
-  
-
-
-
-
-
-
-
-
-
-  
-
-
-<div class="post-meta">
-  <strong>
-    <span>Posted on</span>
-    <time>2024-12-26</time>
-    
-    
-  </strong>
- <span> • 1448 words</span>
- <span> • 3 minute read</span>
-  
-    <div>
-      <span>Tags:</span>
-      
-        <a href="/zh/tags/my4th">My4TH</a>, 
-        <a href="/zh/tags/forth">Forth</a>
-    </div>
-  
-</div>
-
-  <div class="content">
-    <p><h2 id="工作在-20mhz-和-221184mhz">工作在 20MHz 和 22.1184MHz</h2>
-<p>试验表明，使用 74HC 系列逻辑电路和 AM27H256-45/35DC，把电源电压提高到 5.2V，系统就可以稳定工作在 20MHz（使用原作者提供的 10MHz ROM 镜像文件，波特率 9600）。</p></p>
-    
-      <a href="/zh/posts/my4th_faster/">Read more...</a>
     
   </div>
 </article>

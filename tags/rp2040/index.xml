@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RP2040 on BH1PHL&#39;s Blog</title>
+    <link>https://bh1phl.github.io/tags/rp2040/</link>
+    <description>Recent content in RP2040 on BH1PHL&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>en-US</language>
+    <lastBuildDate>Sun, 26 Oct 2025 00:18:21 +0800</lastBuildDate>
+    <atom:link href="https://bh1phl.github.io/tags/rp2040/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using the littlefs file system in RP2040&#39;s multicore mode</title>
+      <link>https://bh1phl.github.io/posts/rp2040_multicore_littlefs/</link>
+      <pubDate>Sun, 26 Oct 2025 00:18:21 +0800</pubDate>
+      <guid>https://bh1phl.github.io/posts/rp2040_multicore_littlefs/</guid>
+      <description>&lt;p&gt;The program of the RP2040 is stored in the SPI Flash, and during runtime, the program in the Flash is randomly read into the internal cache for execution. This does not pose a problem when working in single-core mode. However, in multicore mode, if one core is executing the program while another core is writing to the Flash (for example, using the &lt;a href=&#34;https://github.com/littlefs-project/littlefs&#34;&gt;littlefs&lt;/a&gt; file system to manage the remaining space in the SPI Flash that does not store the program), it may cause simultaneous reading and writing of the Flash, leading to the program on one or both cores hanging.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

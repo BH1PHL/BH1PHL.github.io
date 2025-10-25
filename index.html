@@ -82,6 +82,53 @@
 		
 		
 			<article class="summary">
+  <a href="/posts/rp2040_multicore_littlefs/">
+    <h1 class="title">Using the littlefs file system in RP2040&#39;s multicore mode</h1>
+    
+  </a>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2025-10-26</time>
+    
+    
+  </strong>
+ <span> • 389 words</span>
+ <span> • 2 minute read</span>
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/knowledge-base">Knowledge base</a>, 
+        <a href="/tags/rp2040">RP2040</a>, 
+        <a href="/tags/littlefs">littlefs</a>
+    </div>
+  
+</div>
+
+  <div class="content">
+    <p><p>The program of the RP2040 is stored in the SPI Flash, and during runtime, the program in the Flash is randomly read into the internal cache for execution. This does not pose a problem when working in single-core mode. However, in multicore mode, if one core is executing the program while another core is writing to the Flash (for example, using the <a href="https://github.com/littlefs-project/littlefs">littlefs</a> file system to manage the remaining space in the SPI Flash that does not store the program), it may cause simultaneous reading and writing of the Flash, leading to the program on one or both cores hanging.</p></p>
+    
+      <a href="/posts/rp2040_multicore_littlefs/">Read more...</a>
+    
+  </div>
+</article>
+
+		
+			<article class="summary">
   <a href="/posts/db_calculation/">
     <h1 class="title">Mental calculation of decibel</h1>
     
@@ -131,7 +178,7 @@
 		
 			<article class="summary">
   <a href="/posts/0603_codes/">
-    <h1 class="title">Marking Codes for E96 0603 Resistors</h1>
+    <h1 class="title">Marking codes for E96 0603 resistors</h1>
     
   </a>
   
@@ -209,7 +256,7 @@
 		
 			<article class="summary">
   <a href="/posts/iq_correction/">
-    <h1 class="title">I/Q Imbalance Correction</h1>
+    <h1 class="title">I/Q imbalance correction</h1>
     
   </a>
   
