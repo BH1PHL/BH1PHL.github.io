@@ -88,8 +88,8 @@
     
     
   </strong>
-  <span> • 421 words</span>
-  <span> • 2 minute read</span>
+  <span> • 433 words</span>
+  <span> • 3 minute read</span>
   
   
     <div>
@@ -127,13 +127,18 @@
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>   
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">//calls on core0 to stop core1
+</span></span><span class="line"><span class="cl"><span class="c1">//call on core0 to stop core1
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">core1_stop</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">    <span class="n">Pause_core1</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>   <span class="c1">//pause core1
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Core1_paused</span><span class="p">){</span>    <span class="c1">//wait until core1 paused
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nf">tight_loop_contents</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//call on core0 to resume core1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">core1_resume</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Pause_core1</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>   <span class="c1">//resume core1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">//core1_process() must be a __time_critical_func
 </span></span></span><span class="line"><span class="cl"><span class="c1">//but it can call normal xip functions
