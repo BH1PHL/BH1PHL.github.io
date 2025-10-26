@@ -88,8 +88,8 @@
     
     
   </strong>
-  <span> • 479 words</span>
-  <span> • 1 minute read</span>
+  <span> • 511 words</span>
+  <span> • 2 minute read</span>
   
   
     <div>
@@ -110,42 +110,47 @@
 </span></span><span class="line"><span class="cl"><span class="k">volatile</span> <span class="kt">int</span> <span class="n">Pause_core1</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="k">volatile</span> <span class="kt">int</span> <span class="n">Core1_paused</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="c1">//set as &#34;paused&#34; initially (before core 1 starts)
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">core1_process</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">    <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">	    <span class="c1">// ... Signal processing codes ...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	    <span class="c1">// ...............................
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	    <span class="c1">// ...............................
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	    <span class="k">if</span> <span class="p">(</span><span class="n">Pause_core1</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">	        <span class="kt">int</span> <span class="n">s</span><span class="o">=</span><span class="nf">save_and_disable_interrupts</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">	        <span class="n">Core1_paused</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">	        <span class="k">while</span><span class="p">(</span><span class="n">Pause_core1</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">	            <span class="nf">tight_loop_contents</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">	        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">	        <span class="c1">// Necessary re-init codes for resume processing here
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	        <span class="c1">// .........
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	        <span class="c1">// .........
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	        <span class="nf">restore_interrupts_from_disabled</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">	        <span class="n">Core1_paused</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">	    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//call on core1 to pause at Pause_core1
+</span></span></span><span class="line"><span class="cl"><span class="c1">//must be called in a __time_critical_func
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">__time_critical_func</span><span class="p">(</span><span class="n">core1_pause</span><span class="p">)(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">Pause_core1</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">s</span><span class="o">=</span><span class="nf">save_and_disable_interrupts</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Core1_paused</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span><span class="p">(</span><span class="n">Pause_core1</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">            <span class="nf">tight_loop_contents</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// Necessary re-init codes for resume processing here
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// .........
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// .........
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nf">restore_interrupts_from_disabled</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Core1_paused</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>   
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">//call from core0
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">core1_launch</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">	<span class="n">Core1_paused</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">multicore_launch_core1</span><span class="p">(</span><span class="n">core1_process</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">core1_stop</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//calls on core0 to stop core1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">core1_stop</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">    <span class="n">Pause_core1</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>   <span class="c1">//pause core1
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Core1_paused</span><span class="p">){</span>    <span class="c1">//wait until core1 paused
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nf">tight_loop_contents</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">core1_resume</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">    <span class="n">Pause_core1</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>   <span class="c1">//resume core1
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//core1_process() must be a __time_critical_func
+</span></span></span><span class="line"><span class="cl"><span class="c1">//but it can call normal xip functions
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">__time_critical_func</span><span class="p">(</span><span class="n">core1_process</span><span class="p">)(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">	    <span class="c1">// ... Signal processing codes ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	    <span class="c1">// ...............................
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	    <span class="c1">// ...............................
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	    <span class="nf">core1_pause</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//call on core0 to launch core1_process
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">core1_launch</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">	<span class="n">Core1_paused</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">multicore_launch_core1</span><span class="p">(</span><span class="n">core1_process</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>在写 Flash 之前用 <code>core1_stop()</code> 暂停核 1 的运行，写 Flash 之后用 <code>core1_resume()</code> 恢复核 1 的运行，即可安全地写 Flash。例如（例子修改自<a href="https://mkusunoki.net/?p=8196">这里</a>）：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">pico_flash_prog</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">lfs_config</span> <span class="o">*</span><span class="n">c</span><span class="p">,</span> 
