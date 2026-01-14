@@ -187,16 +187,16 @@
 </span></span></code></pre></div><p>例如，您可以加载 Atlast 并尝试 π 的不同有理数近似值：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">%</span> <span class="nf">atlast</span>
 </span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">22</span><span class="kt">.0</span> <span class="mi">7</span><span class="kt">.0</span> <span class="k">f/ f.
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">3</span><span class="kt">.14286</span> <span class="nf">-&gt;</span> <span class="mi">377</span><span class="kt">.0</span> <span class="mi">120</span><span class="kt">.0</span> <span class="k">f/ f.
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">3</span><span class="kt">.14167</span> <span class="nf">-&gt;</span> <span class="nf">^D</span>
+</span></span></span><span class="line"><span class="cl"><span class="mi">3</span><span class="kt">.14286</span> <span class="nf">-&gt;</span> <span class="mi">377</span><span class="kt">.0</span> <span class="mi">120</span><span class="kt">.0</span> <span class="k">f/ f.
+</span></span></span><span class="line"><span class="cl"><span class="mi">3</span><span class="kt">.14167</span> <span class="nf">-&gt;</span> <span class="nf">^D</span>
 </span></span><span class="line"><span class="cl"><span class="nf">%</span>
 </span></span></code></pre></div><p>注意：Atlast 输出后不会自动换行，如需换行请使用 <code>CR</code> 原语。与其手动打印每个数并与 π 对比，我们可以定义 π 的常量值和一个新词（或函数），用于计算与 π 的误差并打印残差。示例如下：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">%</span> <span class="nf">atlast</span>
 </span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">1</span><span class="kt">.0</span> <span class="nf">atan</span> <span class="mi">4</span><span class="kt">.0</span> <span class="k">f* 2constant </span><span class="nf">pi</span>
 </span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="kn">:</span> <span class="nc">pierr</span>
 </span></span><span class="line"><span class="cl"><span class="nf">:&gt;</span>   <span class="nf">pi</span> <span class="k">f- fabs f. cr
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">:&gt;</span> <span class="k">;
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">-&gt;</span> <span class="mi">3</span><span class="kt">.0</span> <span class="nf">pierr</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">:&gt;</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">3</span><span class="kt">.0</span> <span class="nf">pierr</span>
 </span></span><span class="line"><span class="cl"><span class="kt">.141593</span>
 </span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">22</span><span class="kt">.0</span> <span class="mi">7</span><span class="kt">.0</span> <span class="k">f/ </span><span class="nf">pierr</span>
 </span></span><span class="line"><span class="cl"><span class="mi">0</span><span class="kt">.00126449</span>
@@ -208,32 +208,32 @@
 <p>π/4 = 1 − 1/3 + 1/5 − 1/7 + 1/9 − …</p>
 <p>用文本编辑器创建包含以下内容的文件：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="c1">\   Series approximations of Pi
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">\   Leibniz: pi/4 = 1 - 1/3 + 1/5 - 1/7 ...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">leibniz</span>      <span class="c1">( n -- fpi )</span>
 </span></span><span class="line"><span class="cl">    <span class="mi">1</span><span class="kt">.0</span> <span class="mi">1</span><span class="kt">.0</span>
 </span></span><span class="line"><span class="cl">    <span class="mi">4</span> <span class="k">pick </span><span class="mi">1</span> <span class="k">do
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="mi">2</span><span class="kt">.0</span> <span class="k">f+ </span> <span class="c1">\ denom += 2
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">2dup
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="k">i </span><span class="mi">1</span> <span class="k">and if
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>            <span class="k">fnegate
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="k">then
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="mi">1</span><span class="kt">.0</span> <span class="k">2swap f/
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="k">2rot f+
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="k">2swap
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="k">loop
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="k">2drop
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="k">rot drop
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="mi">4</span><span class="kt">.0</span> <span class="k">f*
+</span></span></span><span class="line"><span class="cl">        <span class="mi">2</span><span class="kt">.0</span> <span class="k">f+ </span> <span class="c1">\ denom += 2
+</span></span></span><span class="line"><span class="cl">        <span class="k">2dup
+</span></span></span><span class="line"><span class="cl">        <span class="k">i </span><span class="mi">1</span> <span class="k">and if
+</span></span></span><span class="line"><span class="cl">            <span class="k">fnegate
+</span></span></span><span class="line"><span class="cl">        <span class="k">then
+</span></span></span><span class="line"><span class="cl">        <span class="mi">1</span><span class="kt">.0</span> <span class="k">2swap f/
+</span></span></span><span class="line"><span class="cl">        <span class="k">2rot f+
+</span></span></span><span class="line"><span class="cl">        <span class="k">2swap
+</span></span></span><span class="line"><span class="cl">    <span class="k">loop
+</span></span></span><span class="line"><span class="cl">    <span class="k">2drop
+</span></span></span><span class="line"><span class="cl">    <span class="k">rot drop
+</span></span></span><span class="line"><span class="cl">    <span class="mi">4</span><span class="kt">.0</span> <span class="k">f*
 </span></span></span><span class="line"><span class="cl"><span class="k">;
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">\   Reference value of Pi
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="mi">1</span><span class="kt">.0</span> <span class="nf">atan</span> <span class="mi">4</span><span class="kt">.0</span> <span class="k">f* 2constant </span><span class="nf">pi</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">\ Calculate and print error
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">pierr</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">pi</span> <span class="k">f- fabs f. cr
 </span></span></span><span class="line"><span class="cl"><span class="k">;
@@ -244,14 +244,14 @@
 <p>测试示例：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">%</span> <span class="nf">atlast</span> <span class="nf">-ileibniz</span>
 </span></span><span class="line"><span class="cl"><span class="mi">10</span> <span class="nf">leibniz</span> <span class="k">f.
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">3</span><span class="kt">.04184</span> <span class="nf">-&gt;</span> <span class="mi">100</span> <span class="nf">leibniz</span> <span class="k">f.
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">3</span><span class="kt">.13159</span> <span class="nf">-&gt;</span> <span class="mi">1000</span> <span class="nf">leibniz</span> <span class="k">f.
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">3</span><span class="kt">.14059</span> <span class="nf">-&gt;</span> <span class="mi">10000</span> <span class="nf">leibniz</span> <span class="k">f.
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">3</span><span class="kt">.14149</span> <span class="nf">-&gt;</span>
+</span></span></span><span class="line"><span class="cl"><span class="mi">3</span><span class="kt">.04184</span> <span class="nf">-&gt;</span> <span class="mi">100</span> <span class="nf">leibniz</span> <span class="k">f.
+</span></span></span><span class="line"><span class="cl"><span class="mi">3</span><span class="kt">.13159</span> <span class="nf">-&gt;</span> <span class="mi">1000</span> <span class="nf">leibniz</span> <span class="k">f.
+</span></span></span><span class="line"><span class="cl"><span class="mi">3</span><span class="kt">.14059</span> <span class="nf">-&gt;</span> <span class="mi">10000</span> <span class="nf">leibniz</span> <span class="k">f.
+</span></span></span><span class="line"><span class="cl"><span class="mi">3</span><span class="kt">.14149</span> <span class="nf">-&gt;</span>
 </span></span></code></pre></div><p>可见收敛速度确实缓慢。由于支持即时定义并编译新词，我们可以临时编写一个打印每 10,000 次迭代结果及误差的程序：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="kn">:</span> <span class="nc">itest</span> <span class="mi">0</span> <span class="k">do i 1+ </span><span class="mi">10000</span> <span class="k">* dup .
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">:&gt;</span> <span class="nf">leibniz</span> <span class="k">2dup f. </span><span class="nf">pierr</span>  <span class="k">loop ;
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">-&gt;</span> <span class="mi">5</span> <span class="nf">itest</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">:&gt;</span> <span class="nf">leibniz</span> <span class="k">2dup f. </span><span class="nf">pierr</span>  <span class="k">loop ;
+</span></span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">5</span> <span class="nf">itest</span>
 </span></span><span class="line"><span class="cl"><span class="mi">10000</span> <span class="mi">3</span><span class="kt">.14149</span> <span class="mi">0</span><span class="kt">.0001</span> 
 </span></span><span class="line"><span class="cl"><span class="mi">20000</span> <span class="mi">3</span><span class="kt">.14154</span> <span class="mi">5</span><span class="nf">e-05</span> 
 </span></span><span class="line"><span class="cl"><span class="mi">30000</span> <span class="mi">3</span><span class="kt">.14156</span> <span class="mi">3</span><span class="kt">.33333</span><span class="nf">e-05</span> 
@@ -262,14 +262,14 @@
 </span></span></code></pre></div><p>（即使不理解代码）可以看到我们无缝混合了已经编译的代码、解释执行代码，以及即时定义并编译的函数。</p>
 <p>通过命令行指定文件名可直接以批处理模式运行 Atlast 程序。例如在 <code>leibniz.atl</code> 末尾添加：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="c1">\   Run iteration vs. error report
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">itest</span>
 </span></span><span class="line"><span class="cl">    <span class="mi">0</span> <span class="k">do </span>
 </span></span><span class="line"><span class="cl">        <span class="k">i 1+ </span><span class="mi">10000</span> <span class="k">* dup . </span><span class="nf">leibniz</span>
 </span></span><span class="line"><span class="cl">        <span class="k">2dup f. </span><span class="nf">pierr</span>
 </span></span><span class="line"><span class="cl">    <span class="k">loop
 </span></span></span><span class="line"><span class="cl"><span class="k">;
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="mi">10</span> <span class="nf">itest</span>  
 </span></span></code></pre></div><p>另存为 <code>leibbat.atl</code> 后，批处理执行结果如下：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">%</span> <span class="nf">atlast</span> <span class="nf">leibbat</span> 
@@ -286,7 +286,7 @@
 </span></span><span class="line"><span class="cl"><span class="nf">%</span> 
 </span></span></code></pre></div><p>（显然这不是计算 π 的高效方法！若需精确计算 π，可尝试以下田村—金田快速 π 算法：）</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="c1">\   Tamura-Kanada fast Pi algorithm
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">2variable </span><span class="nf">a</span>
 </span></span><span class="line"><span class="cl"><span class="k">2variable </span><span class="nf">b</span>
 </span></span><span class="line"><span class="cl"><span class="k">2variable </span><span class="nf">c</span>
@@ -294,18 +294,18 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">tamura-kanada</span> <span class="c1">( n -- fpi )</span>
 </span></span><span class="line"><span class="cl">    <span class="mi">1</span><span class="kt">.0</span> <span class="nf">a</span> <span class="k">2!
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="mi">1</span><span class="kt">.0</span> <span class="mi">2</span><span class="kt">.0</span> <span class="nf">sqrt</span> <span class="k">f/ </span><span class="nf">b</span> <span class="k">2!
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="mi">0</span><span class="kt">.25</span> <span class="nf">c</span> <span class="k">2!
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="mi">1</span><span class="kt">.0</span>
+</span></span></span><span class="line"><span class="cl">    <span class="mi">1</span><span class="kt">.0</span> <span class="mi">2</span><span class="kt">.0</span> <span class="nf">sqrt</span> <span class="k">f/ </span><span class="nf">b</span> <span class="k">2!
+</span></span></span><span class="line"><span class="cl">    <span class="mi">0</span><span class="kt">.25</span> <span class="nf">c</span> <span class="k">2!
+</span></span></span><span class="line"><span class="cl">    <span class="mi">1</span><span class="kt">.0</span>
 </span></span><span class="line"><span class="cl">    <span class="k">rot </span><span class="mi">1</span> <span class="k">do
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="nf">a</span> <span class="k">2@ 2dup </span><span class="nf">y</span> <span class="k">2!
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="nf">b</span> <span class="k">2@ f+ </span><span class="mi">2</span><span class="kt">.0</span> <span class="k">f/ </span><span class="nf">a</span> <span class="k">2!
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="nf">b</span> <span class="k">2@ </span><span class="nf">y</span> <span class="k">2@ f* </span><span class="nf">sqrt</span> <span class="nf">b</span> <span class="k">2!
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="nf">c</span> <span class="k">2@ 2over </span><span class="nf">a</span> <span class="k">2@ </span><span class="nf">y</span> <span class="k">2@ f-
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="k">2dup f* f* f- </span><span class="nf">c</span> <span class="k">2! </span><span class="mi">2</span><span class="kt">.0</span> <span class="k">f*
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="k">loop
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="k">2drop
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>    <span class="nf">a</span> <span class="k">2@ </span><span class="nf">b</span> <span class="k">2@ f+ 2dup f* </span><span class="mi">4</span><span class="kt">.0</span> <span class="nf">c</span> <span class="k">2@ f* f/
+</span></span></span><span class="line"><span class="cl">        <span class="nf">a</span> <span class="k">2@ 2dup </span><span class="nf">y</span> <span class="k">2!
+</span></span></span><span class="line"><span class="cl">        <span class="nf">b</span> <span class="k">2@ f+ </span><span class="mi">2</span><span class="kt">.0</span> <span class="k">f/ </span><span class="nf">a</span> <span class="k">2!
+</span></span></span><span class="line"><span class="cl">        <span class="nf">b</span> <span class="k">2@ </span><span class="nf">y</span> <span class="k">2@ f* </span><span class="nf">sqrt</span> <span class="nf">b</span> <span class="k">2!
+</span></span></span><span class="line"><span class="cl">        <span class="nf">c</span> <span class="k">2@ 2over </span><span class="nf">a</span> <span class="k">2@ </span><span class="nf">y</span> <span class="k">2@ f-
+</span></span></span><span class="line"><span class="cl">        <span class="k">2dup f* f* f- </span><span class="nf">c</span> <span class="k">2! </span><span class="mi">2</span><span class="kt">.0</span> <span class="k">f*
+</span></span></span><span class="line"><span class="cl">    <span class="k">loop
+</span></span></span><span class="line"><span class="cl">    <span class="k">2drop
+</span></span></span><span class="line"><span class="cl">    <span class="nf">a</span> <span class="k">2@ </span><span class="nf">b</span> <span class="k">2@ f+ 2dup f* </span><span class="mi">4</span><span class="kt">.0</span> <span class="nf">c</span> <span class="k">2@ f* f/
 </span></span></span><span class="line"><span class="cl"><span class="k">;
 </span></span></span></code></pre></div><h2 id="调试">调试</h2>
 <p>作为一门交互式语言，Atlast 自然提供了调试支持。您可以通过启用 <code>TRACE</code> 功能逐词追踪程序执行过程。要开启追踪，请输入以下命令：</p>
@@ -313,16 +313,16 @@
 </span></span></code></pre></div><p>如果您已加载如下阶乘函数定义：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">factorial</span>
 </span></span><span class="line"><span class="cl">        <span class="k">dup 0= if
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>           <span class="k">drop </span><span class="mi">1</span>
+</span></span></span><span class="line"><span class="cl">           <span class="k">drop </span><span class="mi">1</span>
 </span></span><span class="line"><span class="cl">        <span class="k">else
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>           <span class="k">dup 1- </span><span class="nf">factorial</span> <span class="k">*
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>        <span class="k">then
+</span></span></span><span class="line"><span class="cl">           <span class="k">dup 1- </span><span class="nf">factorial</span> <span class="k">*
+</span></span></span><span class="line"><span class="cl">        <span class="k">then
 </span></span></span><span class="line"><span class="cl"><span class="k">;
 </span></span></span></code></pre></div><p>并在追踪模式下执行，您将看到如下输出：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">%</span> <span class="nf">atlast</span> <span class="nf">-ifact</span>
 </span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">1</span> <span class="nf">trace</span>
 </span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">3</span> <span class="nf">factorial</span> <span class="k">.
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="nf">FACTORIAL</span> 
 </span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">DUP </span>
 </span></span><span class="line"><span class="cl"><span class="nf">Trace:</span> <span class="k">0= </span>
@@ -364,13 +364,13 @@
 </span></span><span class="line"><span class="cl"><span class="nf">Stack</span> <span class="nf">underflow.</span>
 </span></span><span class="line"><span class="cl"><span class="nf">Walkback:</span>
 </span></span><span class="line"><span class="cl">   <span class="k">ROT
-</span></span></span><span class="line"><span class="cl"><span class="k"></span>   <span class="nf">LEIBNIZ</span>
+</span></span></span><span class="line"><span class="cl">   <span class="nf">LEIBNIZ</span>
 </span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span>
 </span></span></code></pre></div><h2 id="集成-atlast">集成 Atlast</h2>
 <p>与大多数语言不同，Atlast 并非作为主程序构建，而是一个子例程。您可以在应用程序中随时随地调用它，根据需要提供或多或少的可编程性。在深入探讨应用程序与 Atlast 的接口细节前，通过示例展示一个能访问前述所有 Atlast 功能的简单程序很有意义。以下主程序与 Atlast 目标模块连接后，即构成一个功能完整的交互式 Atlast 解释器。它虽缺少交互式 Atlast 的增强功能（如控制台中断处理、批处理模式、加载定义文件、编译状态提示等），但通过输入重定向提交的任何能被交互式 Atlast 运行的程序，该程序均可执行。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;atlast.h&#34;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">t</span><span class="p">[</span><span class="mi">132</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">atl_init</span><span class="p">();</span>
@@ -520,7 +520,7 @@
 <h3 id="撤销更改atl_unwind">撤销更改：<code>atl_unwind()</code></h3>
 <p>要回滚栈、返回栈、堆分配和词典的所有更改至通过 <code>atl_mark()</code> 保存在 <code>atl_statemark</code> 类型对象中的状态，调用：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">//atl_statemark mk;
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">atl_unwind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mk</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">atl_unwind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mk</span><span class="p">);</span>
 </span></span></code></pre></div><p>所有存储区域的分配指针会被重置为调用 <code>atl_mark()</code> 时的位置，但通过指针在 <code>atl_mark()</code> 之后对堆变量进行的存储更改不会撤销。</p>
 <h3 id="异步中断atl_break">异步中断：<code>atl_break()</code></h3>
 <p>Atlast 的交互式应用必须允许用户跳出无限循环或其他意外触发的长时间计算。若系统支持响应用户中断请求，Atlast 可通过 <code>atl_break()</code> 机制终止其控制下的程序执行。</p>
@@ -705,15 +705,15 @@
 <p>安装这些新原语后，现在可以从 Atlast 交互式地试用它们。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">%</span> <span class="nf">atlast</span>
 </span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="nf">time</span> <span class="k">.
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">634539503</span> <span class="nf">-&gt;</span> <span class="nf">time</span> <span class="k">.
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">634539505</span> <span class="nf">-&gt;</span> <span class="nf">time</span> <span class="k">.
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">634539508</span> <span class="nf">-&gt;</span> <span class="nf">time</span> <span class="k">.s
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">Stack:</span> <span class="mi">634539512</span> <span class="nf">-&gt;</span> <span class="nf">hhmmss</span>
+</span></span></span><span class="line"><span class="cl"><span class="mi">634539503</span> <span class="nf">-&gt;</span> <span class="nf">time</span> <span class="k">.
+</span></span></span><span class="line"><span class="cl"><span class="mi">634539505</span> <span class="nf">-&gt;</span> <span class="nf">time</span> <span class="k">.
+</span></span></span><span class="line"><span class="cl"><span class="mi">634539508</span> <span class="nf">-&gt;</span> <span class="nf">time</span> <span class="k">.s
+</span></span></span><span class="line"><span class="cl"><span class="nf">Stack:</span> <span class="mi">634539512</span> <span class="nf">-&gt;</span> <span class="nf">hhmmss</span>
 </span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="k">.s
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">Stack:</span> <span class="mi">20</span> <span class="mi">58</span> <span class="mi">32</span> <span class="nf">-&gt;</span> <span class="nf">clear</span> <span class="nf">time</span> <span class="nf">hhmmss</span> <span class="k">.s
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">Stack:</span> <span class="mi">20</span> <span class="mi">58</span> <span class="mi">44</span> <span class="nf">-&gt;</span> <span class="nf">clear</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">Stack:</span> <span class="mi">20</span> <span class="mi">58</span> <span class="mi">32</span> <span class="nf">-&gt;</span> <span class="nf">clear</span> <span class="nf">time</span> <span class="nf">hhmmss</span> <span class="k">.s
+</span></span></span><span class="line"><span class="cl"><span class="nf">Stack:</span> <span class="mi">20</span> <span class="mi">58</span> <span class="mi">44</span> <span class="nf">-&gt;</span> <span class="nf">clear</span>
 </span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="nf">time</span> <span class="nf">hhmmss</span> <span class="k">.s
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">Stack:</span> <span class="mi">20</span> <span class="mi">58</span> <span class="mi">52</span> <span class="nf">-&gt;</span> <span class="nf">^D</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">Stack:</span> <span class="mi">20</span> <span class="mi">58</span> <span class="mi">52</span> <span class="nf">-&gt;</span> <span class="nf">^D</span>
 </span></span><span class="line"><span class="cl"><span class="nf">%</span>
 </span></span></code></pre></div><p>一切似乎都按预期运行。我们的新原语起作用了！</p>
 <p>最后，让我们看一个更复杂的涉及浮点数的原语。再次回到 π 的莱布尼茨级数，这里是一个用于计算它的原语函数的 C 语言定义。该函数与我们之前在 Atlast 中实现的函数兼容：它期望堆栈顶部有项数，并将 π 的近似值作为浮点值返回到堆栈顶部的两个项中。</p>
@@ -749,10 +749,10 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">%</span> <span class="nf">atlast</span>
 </span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="k">2variable </span><span class="nf">pi</span>
 </span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">1</span><span class="kt">.0</span> <span class="nf">atan</span> <span class="mi">4</span><span class="kt">.0</span> <span class="k">f* </span><span class="nf">pi</span> <span class="k">2!
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="nf">-&gt;</span> <span class="nf">pi</span> <span class="k">2@ f. </span><span class="nf">c</span> 
+</span></span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="nf">pi</span> <span class="k">2@ f. </span><span class="nf">c</span> 
 </span></span><span class="line"><span class="cl"><span class="mi">3</span><span class="kt">.14159</span>
 </span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="mi">500000</span> <span class="nf">leibniz</span> <span class="nf">pi</span> <span class="k">2@ f- f. cr
-</span></span></span><span class="line"><span class="cl"><span class="k"></span><span class="mi">-2</span><span class="nf">e-06</span>
+</span></span></span><span class="line"><span class="cl"><span class="mi">-2</span><span class="nf">e-06</span>
 </span></span><span class="line"><span class="cl"><span class="nf">-&gt;</span> <span class="nf">^D</span>
 </span></span><span class="line"><span class="cl"><span class="nf">%</span>
 </span></span></code></pre></div><p>从这些示例原语的简洁性和直接性可以看出，向 Atlast 添加原语并不复杂或困难。从 Atlast 执行原语函数而非从 C 程序调用它，其开销仅涉及几条指令。若需实现与 Atlast 以更复杂方式交互的原语，最佳信息来源是 <code>atlast.c</code> 的源代码；找到一个参数和结果与你计划添加的原语类似的标准原语，查阅其实现函数。这应能消除关于栈和堆操作细节的任何困惑。</p>
@@ -761,7 +761,7 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#define INDIVIDUALLY
 </span></span></span><span class="line"><span class="cl"><span class="cp">#define Package_1
 </span></span></span><span class="line"><span class="cl"><span class="cp">#define Package_2
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>              <span class="err">⋮</span>
+</span></span></span><span class="line"><span class="cl">              <span class="err">⋮</span>
 </span></span><span class="line"><span class="cl"><span class="cp">#define Package_n
 </span></span></span></code></pre></div><p><code>Package_i</code> 定义用于选择您希望在应用程序中包含的 Atlast 子包。各个子包将在以下段落中描述。作为 <code>WORDSUSED</code> 包的一部分提供的 <code>WORDSUSED</code> 和 <code>WORDSUNUSED</code> 原语，可让您确定 Atlast 程序中使用了哪些原语，从而确定执行该程序需要哪些包。</p>
 <ul>
@@ -966,7 +966,7 @@ AMIX 1.0 版：1992 年 9 月<br>
     </p>
   
   <p class="copyright">
-    Copyright © 2014-2025
+    Copyright © 2014-2026
     <a href="/zh/"><strong>BH1PHL</strong></a>.
     Licensed under the
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.

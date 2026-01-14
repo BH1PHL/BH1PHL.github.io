@@ -106,13 +106,13 @@
 <p>In common scenarios, writing to the Flash only occurs on one core. For example, Core 0 (the default startup core) handles complex operations such as the user interface, while Core 1 is used as a digital signal processor, handling only signal chain-related tasks. In this case, the issue can be easily resolved with the following method.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;pico/multicore.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;hardware/irq.h&#34;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">volatile</span> <span class="kt">int</span> <span class="n">Pause_core1</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="k">volatile</span> <span class="kt">int</span> <span class="n">Core1_paused</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="c1">//set as &#34;paused&#34; initially (before core 1 starts)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">//call on core1 to pause at Pause_core1
 </span></span></span><span class="line"><span class="cl"><span class="c1">//must be called in a __time_critical_func
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">__time_critical_func</span><span class="p">(</span><span class="n">core1_pause</span><span class="p">)(</span><span class="kt">void</span><span class="p">){</span>
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">__time_critical_func</span><span class="p">(</span><span class="n">core1_pause</span><span class="p">)(</span><span class="kt">void</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">Pause_core1</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">s</span><span class="o">=</span><span class="nf">save_and_disable_interrupts</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">        <span class="n">Core1_paused</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
@@ -120,39 +120,39 @@
 </span></span><span class="line"><span class="cl">            <span class="nf">tight_loop_contents</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// Necessary re-init codes for resume processing here
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// .........
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// .........
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nf">restore_interrupts_from_disabled</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">        <span class="c1">// .........
+</span></span></span><span class="line"><span class="cl">        <span class="c1">// .........
+</span></span></span><span class="line"><span class="cl">        <span class="nf">restore_interrupts_from_disabled</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="n">Core1_paused</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>   
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">//call on core0 to stop core1
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">core1_stop</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">core1_stop</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">    <span class="n">Pause_core1</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>   <span class="c1">//pause core1
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Core1_paused</span><span class="p">){</span>    <span class="c1">//wait until core1 paused
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nf">tight_loop_contents</span><span class="p">();</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Core1_paused</span><span class="p">){</span>    <span class="c1">//wait until core1 paused
+</span></span></span><span class="line"><span class="cl">        <span class="nf">tight_loop_contents</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">//call on core0 to resume core1
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">core1_resume</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">core1_resume</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">    <span class="n">Pause_core1</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>   <span class="c1">//resume core1
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">//core1_process() must be a __time_critical_func
 </span></span></span><span class="line"><span class="cl"><span class="c1">//but it can call normal xip functions
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">__time_critical_func</span><span class="p">(</span><span class="n">core1_process</span><span class="p">)(</span><span class="kt">void</span><span class="p">){</span>
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">__time_critical_func</span><span class="p">(</span><span class="n">core1_process</span><span class="p">)(</span><span class="kt">void</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">    <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">	    <span class="c1">// ... Signal processing codes ...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	    <span class="c1">// ...............................
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	    <span class="c1">// ...............................
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	    <span class="nf">core1_pause</span><span class="p">();</span>
+</span></span></span><span class="line"><span class="cl">	    <span class="c1">// ...............................
+</span></span></span><span class="line"><span class="cl">	    <span class="c1">// ...............................
+</span></span></span><span class="line"><span class="cl">	    <span class="nf">core1_pause</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">//call on core0 to launch core1_process
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">core1_launch</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">core1_launch</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">	<span class="n">Core1_paused</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">multicore_launch_core1</span><span class="p">(</span><span class="n">core1_process</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
@@ -162,25 +162,25 @@
 </span></span><span class="line"><span class="cl">    <span class="kt">lfs_block_t</span> <span class="n">block</span><span class="p">,</span> <span class="kt">lfs_off_t</span> <span class="n">off</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span> <span class="kt">lfs_size_t</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">LFS_ASSERT</span><span class="p">(</span><span class="n">block</span> <span class="o">&lt;</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">block_count</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// program with SDK
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">core1_stop</span><span class="p">();</span>    <span class="c1">// stop core1 when writing to flash (read is OK)    
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint32_t</span> <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span><span class="p">)</span><span class="n">FS_BASE</span> <span class="o">+</span> <span class="p">(</span><span class="n">block</span> <span class="o">*</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">block_size</span><span class="p">)</span> <span class="o">+</span> <span class="n">off</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">    <span class="nf">core1_stop</span><span class="p">();</span>    <span class="c1">// stop core1 when writing to flash (read is OK)    
+</span></span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span><span class="p">)</span><span class="n">FS_BASE</span> <span class="o">+</span> <span class="p">(</span><span class="n">block</span> <span class="o">*</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">block_size</span><span class="p">)</span> <span class="o">+</span> <span class="n">off</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">ints</span> <span class="o">=</span> <span class="nf">save_and_disable_interrupts</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">flash_range_program</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">restore_interrupts</span><span class="p">(</span><span class="n">ints</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">core1_resume</span><span class="p">();</span>	<span class="c1">// resume core1
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="n">LFS_ERR_OK</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">LFS_ERR_OK</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">pico_flash_erase</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">lfs_config</span> <span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="kt">lfs_block_t</span> <span class="n">block</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">LFS_ASSERT</span><span class="p">(</span><span class="n">block</span> <span class="o">&lt;</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">block_count</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// erase with SDK
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">core1_stop</span><span class="p">();</span>    <span class="c1">// stop core1 when writing to flash (read is OK)    
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint32_t</span> <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span><span class="p">)</span><span class="n">FS_BASE</span> <span class="o">+</span> <span class="n">block</span> <span class="o">*</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">block_size</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">    <span class="nf">core1_stop</span><span class="p">();</span>    <span class="c1">// stop core1 when writing to flash (read is OK)    
+</span></span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span><span class="p">)</span><span class="n">FS_BASE</span> <span class="o">+</span> <span class="n">block</span> <span class="o">*</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">block_size</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">ints</span> <span class="o">=</span> <span class="nf">save_and_disable_interrupts</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">flash_range_erase</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">block_size</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">restore_interrupts</span><span class="p">(</span><span class="n">ints</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">core1_resume</span><span class="p">();</span>	<span class="c1">//resume core1
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="n">LFS_ERR_OK</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">LFS_ERR_OK</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div></div>
     </article>
@@ -209,7 +209,7 @@
     </p>
   
   <p class="copyright">
-    Copyright © 2014-2025
+    Copyright © 2014-2026
     <a href="/"><strong>BH1PHL</strong></a>.
     Licensed under the
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.
