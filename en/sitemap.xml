@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://bh1phl.github.io/</loc>
-    <lastmod>2025-10-26T00:18:21+08:00</lastmod>
+    <lastmod>2026-02-02T12:58:50+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-Hans"
@@ -15,8 +15,53 @@
                 href="https://bh1phl.github.io/"
                 />
   </url><url>
+    <loc>https://bh1phl.github.io/posts/exposure_times/</loc>
+    <lastmod>2026-02-02T12:58:50+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-Hans"
+                href="https://bh1phl.github.io/zh/posts/exposure_times/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-US"
+                href="https://bh1phl.github.io/posts/exposure_times/"
+                />
+  </url><url>
+    <loc>https://bh1phl.github.io/tags/camera/</loc>
+    <lastmod>2026-02-02T12:58:50+08:00</lastmod>
+  </url><url>
     <loc>https://bh1phl.github.io/tags/knowledge-base/</loc>
-    <lastmod>2025-10-26T00:18:21+08:00</lastmod>
+    <lastmod>2026-02-02T12:58:50+08:00</lastmod>
+  </url><url>
+    <loc>https://bh1phl.github.io/posts/</loc>
+    <lastmod>2026-02-02T12:58:50+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-Hans"
+                href="https://bh1phl.github.io/zh/posts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-US"
+                href="https://bh1phl.github.io/posts/"
+                />
+  </url><url>
+    <loc>https://bh1phl.github.io/tags/shutter/</loc>
+    <lastmod>2026-02-02T12:58:50+08:00</lastmod>
+  </url><url>
+    <loc>https://bh1phl.github.io/tags/</loc>
+    <lastmod>2026-02-02T12:58:50+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-Hans"
+                href="https://bh1phl.github.io/zh/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-US"
+                href="https://bh1phl.github.io/tags/"
+                />
   </url><url>
     <loc>https://bh1phl.github.io/tags/littlefs/</loc>
     <lastmod>2025-10-26T00:18:21+08:00</lastmod>
@@ -31,19 +76,6 @@
                 href="https://bh1phl.github.io/tags/littlefs/"
                 />
   </url><url>
-    <loc>https://bh1phl.github.io/posts/</loc>
-    <lastmod>2025-10-26T00:18:21+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-Hans"
-                href="https://bh1phl.github.io/zh/posts/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-US"
-                href="https://bh1phl.github.io/posts/"
-                />
-  </url><url>
     <loc>https://bh1phl.github.io/tags/rp2040/</loc>
     <lastmod>2025-10-26T00:18:21+08:00</lastmod>
     <xhtml:link
@@ -55,19 +87,6 @@
                 rel="alternate"
                 hreflang="en-US"
                 href="https://bh1phl.github.io/tags/rp2040/"
-                />
-  </url><url>
-    <loc>https://bh1phl.github.io/tags/</loc>
-    <lastmod>2025-10-26T00:18:21+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-Hans"
-                href="https://bh1phl.github.io/zh/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-US"
-                href="https://bh1phl.github.io/tags/"
                 />
   </url><url>
     <loc>https://bh1phl.github.io/posts/rp2040_multicore_littlefs/</loc>
