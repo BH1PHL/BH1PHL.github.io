@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Linux on BH1PHL 的 Blog</title>
-    <link>https://bh1phl.github.io/zh/tags/linux/</link>
-    <description>Recent content in Linux on BH1PHL 的 Blog</description>
+    <title>RISC-V on BH1PHL 的 Blog</title>
+    <link>https://bh1phl.github.io/zh/tags/risc-v/</link>
+    <description>Recent content in RISC-V on BH1PHL 的 Blog</description>
     <generator>Hugo</generator>
     <language>zh-Hans</language>
     <lastBuildDate>Wed, 25 Feb 2026 22:50:02 +0800</lastBuildDate>
-    <atom:link href="https://bh1phl.github.io/zh/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://bh1phl.github.io/zh/tags/risc-v/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>在 VisionFive 2 上用 16GB 傲腾启动 Arch Linux</title>
       <link>https://bh1phl.github.io/zh/posts/archlinux_on_visionfive_2_optane/</link>
       <pubDate>Wed, 25 Feb 2026 22:50:02 +0800</pubDate>
       <guid>https://bh1phl.github.io/zh/posts/archlinux_on_visionfive_2_optane/</guid>
       <description>&lt;p&gt;cwt 为 &lt;a href=&#34;https://doc.rvspace.org/Doc_Center/visionfive_2.html&#34;&gt;VisionFive 2&lt;/a&gt; RISC-V 单板计算机提供了 &lt;a href=&#34;https://forum.rvspace.org/t/arch-linux-image-for-visionfive-2/1459&#34;&gt;Arch Linux 镜像&lt;/a&gt;。这一镜像中，U-Boot 采用主线版本，与 StarFive 提供的版本相比，在启动时无法识别 16GB 傲腾 M10（MEMPEK1J016GAL）。以下是使用 StarFive 提供的 U-Boot 在 VisionFive 2 上用 16GB 傲腾启动 Arch Linux 的方法。&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>在安装 CachyOS 时指定镜像</title>
-      <link>https://bh1phl.github.io/zh/posts/cachyos_install_specify_mirror/</link>
-      <pubDate>Tue, 07 Oct 2025 20:46:44 +0800</pubDate>
-      <guid>https://bh1phl.github.io/zh/posts/cachyos_install_specify_mirror/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;https://cachyos.org/&#34;&gt;CachyOS&lt;/a&gt; 是一个基于 &lt;a href=&#34;https://archlinux.org/&#34;&gt;Arch Linux&lt;/a&gt; 的不错的 Linux 发行版。安装时，它会寻找全网最快的镜像。由于众所周知的原因，这一步经常会超时，导致安装失败。下面的方法可以在安装时指定镜像：&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

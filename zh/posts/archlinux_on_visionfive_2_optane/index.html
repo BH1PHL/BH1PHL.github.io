@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+  
+    
+      <title>在 VisionFive 2 上用 16GB 傲腾启动 Arch Linux | BH1PHL 的 Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="android-chrome-512x512.png" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/zh/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/zh/"><h1>BH1PHL 的 Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/zh/"><b>Home</b></a>
+      
+         | 
+        <a href="/zh/about"><b>About</b></a>
+      
+         | 
+        <a href="/zh/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/zh/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/zh/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/posts/archlinux_on_visionfive_2_optane/"><b>English</b></a>
+      
+    
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">在 VisionFive 2 上用 16GB 傲腾启动 Arch Linux</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2026-02-25</time>
+    
+    
+  </strong>
+  <span> • 1143 words</span>
+  <span> • 3 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/zh/tags/%E7%9F%A5%E8%AF%86%E5%BA%93">知识库</a>, 
+        <a href="/zh/tags/linux">Linux</a>, 
+        <a href="/zh/tags/arch-linux">Arch Linux</a>, 
+        <a href="/zh/tags/risc-v">RISC-V</a>
+    </div>
+  
+</div>
+
+      <div class="content"><p>cwt 为 <a href="https://doc.rvspace.org/Doc_Center/visionfive_2.html">VisionFive 2</a> RISC-V 单板计算机提供了 <a href="https://forum.rvspace.org/t/arch-linux-image-for-visionfive-2/1459">Arch Linux 镜像</a>。这一镜像中，U-Boot 采用主线版本，与 StarFive 提供的版本相比，在启动时无法识别 16GB 傲腾 M10（MEMPEK1J016GAL）。以下是使用 StarFive 提供的 U-Boot 在 VisionFive 2 上用 16GB 傲腾启动 Arch Linux 的方法。</p>
+<h2 id="准备">准备</h2>
+<p>在<a href="https://github.com/cwt-vf2/archlinux-image-vf2/releases/download/cwt25/ArchLinux-VF2_6.12_v6.0.0-cwt25.img.zst">这里</a>下载镜像 <code>ArchLinux-VF2_6.12_v6.0.0-cwt25.img.zst</code>，烧录到 micro SD 卡。</p>
+<p>在<a href="/a/archlinux_on_visionfive_2_optane/spl_u-boot_202510.7z">这里</a>下载 StarFive 版 SPL（<code>u-boot-spl.bin.normal.out</code>）和 U-Boot（<code>visionfive2_fw_payload.img</code>）。</p>
+<h2 id="启动-visionfive-2">启动 VisionFive 2</h2>
+<p>插入傲腾和 SD 卡，<code>RGPIO_0</code> 开关拨向 <code>H</code>（左侧），连接网线和电源，系统启动，使用 <code>ssh</code> 登录。</p>
+<ul>
+<li>默认用户名：<code>user</code>；密码：<code>user</code></li>
+<li><code>root</code> 密码：<code>archriscv</code></li>
+<li>主机名：<code>ArchVF2</code></li>
+</ul>
+<p>如果尚未扩展 <code>/dev/mmcblk1p4</code> 分区，则扩展之（参考后面“扩展分区”章节，但将 <code>/dev/nvme0n1</code> 改为 <code>/dev/mmcblk1</code>，或直接参考<a href="https://forum.rvspace.org/t/arch-linux-image-for-visionfive-2/1459">这里</a>及<a href="https://milkv.io/zh/docs/mars/getting-started/extendpartition">这里</a>），以便容纳较大的镜像文件。</p>
+<p>用 <code>scp</code> 将 镜像 <code>ArchLinux-VF2_6.12_v6.0.0-cwt25.img.zst</code>、StarFive 版 <code>u-boot-spl.bin.normal.out</code> 与 <code>visionfive2_fw_payload.img</code> 拷贝到卡内。</p>
+<h2 id="烧录-starfive-提供的-u-boot">烧录 StarFive 提供的 U-Boot</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo flashcp -v u-boot-spl.bin.normal.out /dev/mtd0
+</span></span><span class="line"><span class="cl">sudo flashcp -v visionfive2_fw_payload.img /dev/mtd2
+</span></span></code></pre></div><h2 id="安装系统到傲腾">安装系统到傲腾</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo blkdiscard /dev/nvme0n1 -f	<span class="c1"># 注意：将清空傲腾上的数据</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">zstd -c -T0 -d ArchLinux-VF2_6.12_v6.0.0-cwt25.img.zst <span class="se">\
+</span></span></span><span class="line"><span class="cl">  <span class="p">|</span> sudo dd <span class="nv">of</span><span class="o">=</span>/dev/nvme0n1 <span class="nv">bs</span><span class="o">=</span>32M <span class="se">\
+</span></span></span><span class="line"><span class="cl">    <span class="nv">iflag</span><span class="o">=</span>fullblock <span class="nv">oflag</span><span class="o">=</span>direct <span class="se">\
+</span></span></span><span class="line"><span class="cl">    <span class="nv">status</span><span class="o">=</span>progress
+</span></span></code></pre></div><p>注意：此时如果重新启动，即使仍然插着 SD 卡，<code>/home</code> 分区也将使用傲腾上的版本而非 SD 卡上的版本。</p>
+<h2 id="修改-uenvtxt">修改 <code>uEnv.txt</code></h2>
+<p>挂载傲腾上的 <code>/boot</code> 分区：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo mkdir /mnt/optaneboot
+</span></span><span class="line"><span class="cl">sudo mount /dev/nvme0n1p3 /mnt/optaneboot
+</span></span></code></pre></div><p>在 <code>uEnv.txt</code> 最后加入如下内容（注意权限）：</p>
+<pre tabindex="0"><code># Fix wrong fdtfile name
+fdtfile=starfive/jh7110-starfive-visionfive-2-v1.3b.dtb
+</code></pre><p>卸载傲腾上的 <code>/boot</code> 分区并关机：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo umount /dev/nvme0n1p3
+</span></span><span class="line"><span class="cl">sudo poweroff
+</span></span></code></pre></div><h2 id="重启">重启</h2>
+<p>拔出 SD 卡、将 <code>RGPIO_0</code> 开关拨向 <code>L</code>（右侧），重新上电或按 <code>RESET</code> 开关</p>
+<p>此时应能正常启动（可看到心跳灯闪烁）。</p>
+<p>如果无法正常启动，则连接 TTL 串口，进入 U-Boot，将 <code>env</code> 恢复到缺省状态：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">env default -f -a
+</span></span><span class="line"><span class="cl">env save
+</span></span></code></pre></div><h2 id="扩展分区">扩展分区</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo fdisk /dev/nvme0n1
+</span></span></code></pre></div><p>用 <code>p</code> 指令查看现分区表：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Command <span class="o">(</span>m <span class="k">for</span> <span class="nb">help</span><span class="o">)</span>: p
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Disk /dev/nvme0n1: 13.41 GiB, <span class="m">14403239936</span> bytes, <span class="m">28131328</span> sectors
+</span></span><span class="line"><span class="cl">Disk model: INTEL MEMPEK1J016GAL
+</span></span><span class="line"><span class="cl">Units: sectors of <span class="m">1</span> * <span class="nv">512</span> <span class="o">=</span> <span class="m">512</span> bytes
+</span></span><span class="line"><span class="cl">Sector size <span class="o">(</span>logical/physical<span class="o">)</span>: <span class="m">512</span> bytes / <span class="m">512</span> bytes
+</span></span><span class="line"><span class="cl">I/O size <span class="o">(</span>minimum/optimal<span class="o">)</span>: <span class="m">512</span> bytes / <span class="m">512</span> bytes
+</span></span><span class="line"><span class="cl">Disklabel type: gpt
+</span></span><span class="line"><span class="cl">Disk identifier: 57A4CE7A-AB9C-4AA5-9B07-5FD3BA412477
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Device          Start     End Sectors  Size Type
+</span></span><span class="line"><span class="cl">/dev/nvme0n1p1   <span class="m">4096</span>    <span class="m">8191</span>    <span class="m">4096</span>    2M HiFive BBL
+</span></span><span class="line"><span class="cl">/dev/nvme0n1p2   <span class="m">8192</span>   <span class="m">16383</span>    <span class="m">8192</span>    4M HiFive FSBL
+</span></span><span class="line"><span class="cl">/dev/nvme0n1p3  <span class="m">16384</span>  <span class="m">221183</span>  <span class="m">204800</span>  100M EFI System
+</span></span><span class="line"><span class="cl">/dev/nvme0n1p4 <span class="m">221184</span> <span class="m">4605951</span> <span class="m">4384768</span>  2.1G Linux filesystem
+</span></span></code></pre></div><p>用 <code>d</code> 指令删除分区 <code>4</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Command <span class="o">(</span>m <span class="k">for</span> <span class="nb">help</span><span class="o">)</span>: d
+</span></span><span class="line"><span class="cl">Partition number <span class="o">(</span>1-4, default 4<span class="o">)</span>: <span class="m">4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Partition <span class="m">4</span> has been deleted.
+</span></span></code></pre></div><p>用 <code>n</code> 指令重建分区 <code>4</code>	：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Command <span class="o">(</span>m <span class="k">for</span> <span class="nb">help</span><span class="o">)</span>: n
+</span></span><span class="line"><span class="cl">Partition number <span class="o">(</span>4-128, default 4<span class="o">)</span>:	<span class="c1"># 直接回车</span>
+</span></span><span class="line"><span class="cl">First sector <span class="o">(</span>221184-28131294, default 221184<span class="o">)</span>:	<span class="c1"># 直接回车</span>
+</span></span><span class="line"><span class="cl">Last sector, +/-sectors or +/-size<span class="o">{</span>K,M,G,T,P<span class="o">}</span> <span class="o">(</span>221184-28131294, default 28129279<span class="o">)</span>:	<span class="c1"># 直接回车</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Created a new partition <span class="m">4</span> of <span class="nb">type</span> <span class="s1">&#39;Linux filesystem&#39;</span> and of size 13.3 GiB.
+</span></span><span class="line"><span class="cl">Partition <span class="c1">#4 contains a btrfs signature.</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Do you want to remove the signature? <span class="o">[</span>Y<span class="o">]</span>es/<span class="o">[</span>N<span class="o">]</span>o: n	<span class="c1"># 输入 n 回车</span>
+</span></span></code></pre></div><p>确认分区表情况并写入：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Command <span class="o">(</span>m <span class="k">for</span> <span class="nb">help</span><span class="o">)</span>: p
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Disk /dev/nvme0n1: 13.41 GiB, <span class="m">14403239936</span> bytes, <span class="m">28131328</span> sectors
+</span></span><span class="line"><span class="cl">Disk model: INTEL MEMPEK1J016GAL
+</span></span><span class="line"><span class="cl">Units: sectors of <span class="m">1</span> * <span class="nv">512</span> <span class="o">=</span> <span class="m">512</span> bytes
+</span></span><span class="line"><span class="cl">Sector size <span class="o">(</span>logical/physical<span class="o">)</span>: <span class="m">512</span> bytes / <span class="m">512</span> bytes
+</span></span><span class="line"><span class="cl">I/O size <span class="o">(</span>minimum/optimal<span class="o">)</span>: <span class="m">512</span> bytes / <span class="m">512</span> bytes
+</span></span><span class="line"><span class="cl">Disklabel type: gpt
+</span></span><span class="line"><span class="cl">Disk identifier: 57A4CE7A-AB9C-4AA5-9B07-5FD3BA412477
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Device          Start      End  Sectors  Size Type
+</span></span><span class="line"><span class="cl">/dev/nvme0n1p1   <span class="m">4096</span>     <span class="m">8191</span>     <span class="m">4096</span>    2M HiFive BBL
+</span></span><span class="line"><span class="cl">/dev/nvme0n1p2   <span class="m">8192</span>    <span class="m">16383</span>     <span class="m">8192</span>    4M HiFive FSBL
+</span></span><span class="line"><span class="cl">/dev/nvme0n1p3  <span class="m">16384</span>   <span class="m">221183</span>   <span class="m">204800</span>  100M EFI System
+</span></span><span class="line"><span class="cl">/dev/nvme0n1p4 <span class="m">221184</span> <span class="m">28129279</span> <span class="m">27908096</span> 13.3G Linux filesystem
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Command <span class="o">(</span>m <span class="k">for</span> <span class="nb">help</span><span class="o">)</span>: w
+</span></span><span class="line"><span class="cl">The partition table has been altered.
+</span></span><span class="line"><span class="cl">Syncing disks.
+</span></span></code></pre></div><p>扩展文件系统：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo btrfs filesystem resize max /
+</span></span></code></pre></div><p>用 <code>df -h</code> 确认：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ df -h
+</span></span><span class="line"><span class="cl">Filesystem      Size  Used Avail Use% Mounted on
+</span></span><span class="line"><span class="cl">/dev/nvme0n1p4   14G  1.6G   12G  12% /
+</span></span><span class="line"><span class="cl">devtmpfs        4.0M     <span class="m">0</span>  4.0M   0% /dev
+</span></span><span class="line"><span class="cl">tmpfs           3.9G     <span class="m">0</span>  3.9G   0% /dev/shm
+</span></span><span class="line"><span class="cl">tmpfs           1.6G  1.8M  1.6G   1% /run
+</span></span><span class="line"><span class="cl">none            1.0M     <span class="m">0</span>  1.0M   0% /run/credentials/systemd-journald.service
+</span></span><span class="line"><span class="cl">tmpfs           3.9G     <span class="m">0</span>  3.9G   0% /tmp
+</span></span><span class="line"><span class="cl">tmpfs           3.9G     <span class="m">0</span>  3.9G   0% /var/tmp
+</span></span><span class="line"><span class="cl">/dev/nvme0n1p3  100M   22M   79M  22% /boot
+</span></span><span class="line"><span class="cl">/dev/nvme0n1p4   14G  1.6G   12G  12% /.snapshots
+</span></span><span class="line"><span class="cl">/dev/nvme0n1p4   14G  1.6G   12G  12% /home
+</span></span><span class="line"><span class="cl">/dev/nvme0n1p4   14G  1.6G   12G  12% /var/cache/pacman/pkg
+</span></span><span class="line"><span class="cl">/dev/nvme0n1p4   14G  1.6G   12G  12% /var/log
+</span></span><span class="line"><span class="cl">none            1.0M     <span class="m">0</span>  1.0M   0% /run/credentials/serial-getty@ttyS0.service
+</span></span><span class="line"><span class="cl">none            1.0M     <span class="m">0</span>  1.0M   0% /run/credentials/getty@tty1.service
+</span></span><span class="line"><span class="cl">tmpfs           790M  4.0K  790M   1% /run/user/1000
+</span></span></code></pre></div></div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+         | 
+        <a href="https://qsl.net/bh1phl">qsl.net</a>
+      
+         | 
+        <a href="https://bh1phl.github.io">github.io</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2026
+    <a href="/zh/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.<br>May contain LLM-translated-and-human-proofread materials.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (!(/(qsl.net)|(github.io)/.test(window.location.host)))
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

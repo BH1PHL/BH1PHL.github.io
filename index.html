@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-	<meta name="generator" content="Hugo 0.154.5">
+	<meta name="generator" content="Hugo 0.155.3">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
@@ -80,6 +80,57 @@
         
 	<main>
 		
+		
+			<article class="summary">
+  <a href="/posts/archlinux_on_visionfive_2_optane/">
+    <h1 class="title">Booting Arch Linux on the VisionFive 2 SBC with 16GB Intel Optane M10</h1>
+    
+  </a>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2026-02-25</time>
+    
+    
+  </strong>
+ <span> • 771 words</span>
+ <span> • 4 minute read</span>
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/knowledge-base">Knowledge Base</a>, 
+        <a href="/tags/linux">Linux</a>, 
+        <a href="/tags/arch-linux">Arch Linux</a>, 
+        <a href="/tags/risc-v">RISC-V</a>
+    </div>
+  
+</div>
+
+  <div class="content">
+    <p><p>cwt provides an <a href="https://forum.rvspace.org/t/arch-linux-image-for-visionfive-2/1459">Arch Linux image</a> for the <a href="https://doc-en.rvspace.org/Doc_Center/visionfive_2.html">VisionFive 2</a> RISC-V single-board computer. In this image, U-Boot uses the mainline version, which, compared to the version provided by StarFive, cannot recognize the 16GB Optane M10 (MEMPEK1J016GAL) at boot. Here is the method to boot Arch Linux with 16GB Optane on the VisionFive 2 using the U-Boot provided by StarFive.</p>
+<h2 id="preparation">Preparation</h2>
+<p>Download the image <code>ArchLinux-VF2_6.12_v6.0.0-cwt25.img.zst</code> <a href="https://github.com/cwt-vf2/archlinux-image-vf2/releases/download/cwt25/ArchLinux-VF2_6.12_v6.0.0-cwt25.img.zst">here</a>，burn it to a micro SD card.</p>
+<p>Download the SPL (<code>u-boot-spl.bin.normal.out</code>) and U-Boot (<code>visionfive2_fw_payload.img</code>) provided by StarFive <a href="/a/archlinux_on_visionfive_2_optane/spl_u-boot_202510.7z">here</a>.</p></p>
+    
+      <a href="/posts/archlinux_on_visionfive_2_optane/">Read more...</a>
+    
+  </div>
+</article>
+
 		
 			<article class="summary">
   <a href="/posts/exposure_times/">
@@ -687,54 +738,6 @@ Q_0(t)= & A \sin(\omega t+\psi).
 <p>To ensure the state of the bus during reset, the original version of My4TH employs 10k resistors to pull down the data bus to GND. This introduces compatibility issues between TTL and HCMOS voltage levels: the outputs of RAM 62256 and ROM 27C256 conform to TTL levels, with a minimum high-level output voltage (\(V_\mathrm{OH}\)) of 2.4V; whereas the minimum high-level input voltage (\(V_\mathrm{IH}\)) for 74HC devices is \(0.7 V_\mathrm{cc}\), which is 3.5 V when powered at 5 V.</p></p>
     
       <a href="/posts/my4th_16mhz/">Read more...</a>
-    
-  </div>
-</article>
-
-		
-			<article class="summary">
-  <a href="/posts/wbrrecv_2n7002/">
-    <h1 class="title">A Wheatstone bridge regenerative (WBR) receiver with 2N7002</h1>
-    
-  </a>
-  
-
-
-
-
-
-
-
-
-
-  
-
-
-<div class="post-meta">
-  <strong>
-    <span>Posted on</span>
-    <time>2023-02-27</time>
-    
-    
-  </strong>
- <span> • 1801 words</span>
- <span> • 9 minute read</span>
-  
-    <div>
-      <span>Tags:</span>
-      
-        <a href="/tags/receiver">Receiver</a>, 
-        <a href="/tags/2n7002">2N7002</a>, 
-        <a href="/tags/wbr">WBR</a>
-    </div>
-  
-</div>
-
-  <div class="content">
-    <p><h2 id="basic-principles">Basic principles</h2>
-<p>The circuit is based on the N1BYT&rsquo;s WBR receiver, as shown in the schematic below. Q1 is the core of a Colpitts oscillator circuit, and RV2 and RV5 adjust whether the circuit oscillates (i.e., regeneration strength). L2, C7, C8, and six diodes D1 to D6 form the oscillation tank circuit. The input signal is attenuated by RV1, and then fed into the middle tap of L2 with L1. The DC path of the variable capacitance diode anode is provided by L1.</p></p>
-    
-      <a href="/posts/wbrrecv_2n7002/">Read more...</a>
     
   </div>
 </article>

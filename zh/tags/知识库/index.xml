@@ -6,8 +6,15 @@
     <description>Recent content in 知识库 on BH1PHL 的 Blog</description>
     <generator>Hugo</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Mon, 02 Feb 2026 12:58:50 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 25 Feb 2026 22:50:02 +0800</lastBuildDate>
     <atom:link href="https://bh1phl.github.io/zh/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>在 VisionFive 2 上用 16GB 傲腾启动 Arch Linux</title>
+      <link>https://bh1phl.github.io/zh/posts/archlinux_on_visionfive_2_optane/</link>
+      <pubDate>Wed, 25 Feb 2026 22:50:02 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/archlinux_on_visionfive_2_optane/</guid>
+      <description>&lt;p&gt;cwt 为 &lt;a href=&#34;https://doc.rvspace.org/Doc_Center/visionfive_2.html&#34;&gt;VisionFive 2&lt;/a&gt; RISC-V 单板计算机提供了 &lt;a href=&#34;https://forum.rvspace.org/t/arch-linux-image-for-visionfive-2/1459&#34;&gt;Arch Linux 镜像&lt;/a&gt;。这一镜像中，U-Boot 采用主线版本，与 StarFive 提供的版本相比，在启动时无法识别 16GB 傲腾 M10（MEMPEK1J016GAL）。以下是使用 StarFive 提供的 U-Boot 在 VisionFive 2 上用 16GB 傲腾启动 Arch Linux 的方法。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>0°C～40°C 范围内的曝光时间的计算目标值（根据 GB/T 8338-2023）</title>
       <link>https://bh1phl.github.io/zh/posts/exposure_times/</link>

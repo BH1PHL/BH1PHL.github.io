@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Arch Linux on BH1PHL&#39;s Blog</title>
+    <link>https://bh1phl.github.io/tags/arch-linux/</link>
+    <description>Recent content in Arch Linux on BH1PHL&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>en-US</language>
+    <lastBuildDate>Wed, 25 Feb 2026 22:50:02 +0800</lastBuildDate>
+    <atom:link href="https://bh1phl.github.io/tags/arch-linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Booting Arch Linux on the VisionFive 2 SBC with 16GB Intel Optane M10</title>
+      <link>https://bh1phl.github.io/posts/archlinux_on_visionfive_2_optane/</link>
+      <pubDate>Wed, 25 Feb 2026 22:50:02 +0800</pubDate>
+      <guid>https://bh1phl.github.io/posts/archlinux_on_visionfive_2_optane/</guid>
+      <description>&lt;p&gt;cwt provides an &lt;a href=&#34;https://forum.rvspace.org/t/arch-linux-image-for-visionfive-2/1459&#34;&gt;Arch Linux image&lt;/a&gt; for the &lt;a href=&#34;https://doc-en.rvspace.org/Doc_Center/visionfive_2.html&#34;&gt;VisionFive 2&lt;/a&gt; RISC-V single-board computer. In this image, U-Boot uses the mainline version, which, compared to the version provided by StarFive, cannot recognize the 16GB Optane M10 (MEMPEK1J016GAL) at boot. Here is the method to boot Arch Linux with 16GB Optane on the VisionFive 2 using the U-Boot provided by StarFive.&lt;/p&gt;&#xA;&lt;h2 id=&#34;preparation&#34;&gt;Preparation&lt;/h2&gt;&#xA;&lt;p&gt;Download the image &lt;code&gt;ArchLinux-VF2_6.12_v6.0.0-cwt25.img.zst&lt;/code&gt; &lt;a href=&#34;https://github.com/cwt-vf2/archlinux-image-vf2/releases/download/cwt25/ArchLinux-VF2_6.12_v6.0.0-cwt25.img.zst&#34;&gt;here&lt;/a&gt;，burn it to a micro SD card.&lt;/p&gt;&#xA;&lt;p&gt;Download the SPL (&lt;code&gt;u-boot-spl.bin.normal.out&lt;/code&gt;) and U-Boot (&lt;code&gt;visionfive2_fw_payload.img&lt;/code&gt;) provided by StarFive &lt;a href=&#34;https://bh1phl.github.io/a/archlinux_on_visionfive_2_optane/spl_u-boot_202510.7z&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
