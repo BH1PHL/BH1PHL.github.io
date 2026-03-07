@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+    <link rel="stylesheet" href="/katex/katex.min.css">
+<script defer src="/katex/katex.min.js"></script>
+<script defer src="/katex/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '\\[', right: '\\]', display: true},   
+        {left: '$$', right: '$$', display: true},     
+        {left: '\\(', right: '\\)', display: false},  
+      ],
+      throwOnError : false
+    });
+  });
+</script>
+
+  
+  
+    
+      <title>Plotting the Mandelbrot set with Forth | BH1PHL&#39;s Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="android-chrome-512x512.png" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/"><h1>BH1PHL&#39;s Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/"><b>Home</b></a>
+      
+         | 
+        <a href="/about"><b>About</b></a>
+      
+         | 
+        <a href="/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/index.xml"><b>RSS</b></a>
+      
+    
+    |
+    
+      
+        <a href="/zh/posts/forth_mandelbrot_set/"><b>中文</b></a>
+      
+    
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">Plotting the Mandelbrot set with Forth</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2026-03-07</time>
+    
+    
+  </strong>
+  <span> • 1419 words</span>
+  <span> • 3 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/my4th">My4TH</a>, 
+        <a href="/tags/forth">Forth</a>, 
+        <a href="/tags/fractal">Fractal</a>, 
+        <a href="/tags/fixed-point-numbers">Fixed-point numbers</a>
+    </div>
+  
+</div>
+
+      <div class="content"><p><a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a> is one of the most famous fractal images. The following Forth program is used to plot the Mandelbrot set.</p>
+<h2 id="representation-of-fixed-point-numbers">Representation of Fixed-Point Numbers</h2>
+<p>Fixed-point numbers in <a href="https://en.wikipedia.org/wiki/Q_%28number_format%29"><code>Qint.frac</code></a> format are used for computation. <code>int</code> is the number of bits for the integer part (including the sign bit, if any), and <code>frac</code> is the number of bits for the fractional part. In the following program, the width of the fixed-point number is 16 bits (the same as a single-precision integer in Forth), i.e., <code>int+frac=16</code>.</p>
+<p>Fixed-point numbers in <code>Qint.frac</code> format are essentially <a href="https://ozendumh.miraheze.org/%E5%88%86%E6%95%B0">fractions</a> with a denominator of \(2^{\mathtt{frac}}\), storing only the numerator. Addition and subtraction of fixed-point numbers in this format are the same as integer operations, and multiplication of a fixed-point number by an integer is also the same as multiplication of two integers. When multiplying two fixed-point numbers, they are first multiplied as integers (the intermediate result is a <a href="/zh/posts/forth_primer_1">double-precision integer</a>), and then right-shifted by <code>frac</code> bits (i.e., divided by \(2^{\mathtt{frac}}\)). If the multiplied result does not overflow, the lower 16 bits are retained as the result.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<h3 id="fixed-point-arithmetic-implementation-in-forth">Fixed-Point Arithmetic Implementation in Forth</h3>
+<p>Using <code>Q6.10</code> as an example. Define</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">10</span> <span class="kn">constant</span> <span class="nc">FRAC</span>
+</span></span><span class="line"><span class="cl"><span class="mi">1</span> <span class="nf">frac</span> <span class="k">lshift </span><span class="kn">constant</span> <span class="nc">ONE</span>  <span class="c1">\ 2^10=1024
+</span></span></span><span class="line"><span class="cl"><span class="nf">one</span> <span class="k">1- </span><span class="kn">constant</span> <span class="nc">MASK</span>        <span class="c1">\ 1023
+</span></span></span><span class="line"><span class="cl"><span class="mi">16</span> <span class="nf">frac</span> <span class="k">- </span><span class="kn">constant</span> <span class="nc">INT</span>      <span class="c1">\ 6
+</span></span></span></code></pre></div><p>To convert a single-precision integer to a <code>Qint.frac</code> fixed-point number, use <code>frac LSHIFT ( d -- q )</code>; to convert a single-precision integer and a fractional part (less than <code>one</code>) to a <code>Qint.frac</code> fixed-point number, use <code>frac LSHIFT OR ( d_frac d_int -- q )</code>.</p>
+<p>Shift the double-precision intermediate result right by <code>frac</code> bits, retaining the lower 16 bits:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">QRSHIFT</span>   <span class="c1">( L H -- H_L&gt;&gt;frac )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">swap </span>    <span class="c1">( H L )</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">frac</span> <span class="k">rshift </span> <span class="c1">( H L&gt;&gt;frac )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">swap </span>    <span class="c1">( L&gt;&gt;frac H )</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">mask</span> <span class="k">and </span><span class="c1">( L&gt;&gt;frac H_lower_frac_bits )</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">int</span> <span class="k">lshift or </span><span class="c1">\ result is (L&gt;&gt;frac)|(H_lower_frac_bits&lt;&lt;int)
+</span></span></span><span class="line"><span class="cl">   <span class="k">;
+</span></span></span></code></pre></div><p>Multiplication of two fixed-point numbers:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">Q*</span> <span class="c1">( q1 q2 -- q1*q2 )</span> <span class="k">m* </span><span class="nf">qrshift</span> <span class="k">;
+</span></span></span></code></pre></div><p>Print a fixed-point number:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">Q.</span> <span class="c1">( q -- )</span> <span class="k">dup abs </span><span class="c1">( q |q| )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">&lt;#
+</span></span></span><span class="line"><span class="cl">      <span class="k">dup </span><span class="nf">mask</span> <span class="k">and </span><span class="mi">10000</span> <span class="nf">one</span> <span class="nf">*/</span> <span class="mi">0</span> <span class="c1">( q |q| d_|q|_frac_decimal )</span>
+</span></span><span class="line"><span class="cl">      <span class="k"># # # # 2drop </span><span class="c1">\ print frac part in decimal
+</span></span></span><span class="line"><span class="cl">      <span class="k">[char] . hold </span><span class="c1">\ print decimal point
+</span></span></span><span class="line"><span class="cl">      <span class="nf">frac</span> <span class="k">rshift </span><span class="mi">0</span> <span class="c1">( q |q| d_|q|_int )</span> <span class="k">#s </span><span class="c1">\ print int part
+</span></span></span><span class="line"><span class="cl">      <span class="k">rot sign </span> <span class="c1">\ print sign
+</span></span></span><span class="line"><span class="cl">   <span class="k">#&gt; type space ;
+</span></span></span></code></pre></div><p>Test:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">0</span> <span class="nf">q.</span> <span class="mi">0</span><span class="kt">.0000</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">32767</span> <span class="nf">q.</span> <span class="mi">31</span><span class="kt">.9990</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">32768</span> <span class="nf">q.</span> <span class="mi">-32</span><span class="kt">.0000</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">one</span> <span class="nf">one</span> <span class="mi">1</span> <span class="k">rshift + </span><span class="nf">q.</span> <span class="mi">1</span><span class="kt">.5000</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="nf">one</span> <span class="nf">one</span> <span class="mi">1</span> <span class="k">rshift + . </span><span class="mi">1536</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">1536</span> <span class="mi">1536</span> <span class="nf">q*</span> <span class="nf">q.</span> <span class="mi">2</span><span class="kt">.2500</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">1536</span> <span class="mi">-1536</span> <span class="nf">q*</span> <span class="nf">q.</span> <span class="mi">-2</span><span class="kt">.2500</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">-1536</span> <span class="mi">1536</span> <span class="nf">q*</span> <span class="nf">q.</span> <span class="mi">-2</span><span class="kt">.2500</span>  <span class="nf">ok</span>
+</span></span><span class="line"><span class="cl"><span class="mi">-1536</span> <span class="mi">-1536</span> <span class="nf">q*</span> <span class="nf">q.</span> <span class="mi">2</span><span class="kt">.2500</span>  <span class="nf">ok</span>
+</span></span></code></pre></div><h2 id="computation-of-the-mandelbrot-set">Computation of the Mandelbrot Set</h2>
+<p>For a point \(c\) on the complex plane, compute the mapping
+</p>
+\[
+z_{n+1}=z_n^2+c: \quad z, c \in \mathbb{C}, z_0=0
+\]<p>until \(|z|>2\). Set a maximum number of iterations (e.g., 15), and plot a point at the location \(c\) on the complex plane with a color corresponding to the value of \(n\) when either \(|z|>2\) is reached or the maximum iteration count is attained.</p>
+<p>Expressing \(z\) in the form \(z_\mathrm{x} + z_\mathrm{y} \mathrm{i}\), we have:</p>
+\[
+\begin{align*}
+{z_\mathrm{x}}_{n+1} = & {z_\mathrm{x}}_n^2 - {z_\mathrm{y}}_n^2 + c_\mathrm{x}, \\
+{z_\mathrm{y}}_{n+1} = & 2 {z_\mathrm{x}}_n {z_\mathrm{y}}_n + c_\mathrm{y}.
+\end{align*}
+\]<p>Compute the magnitude of a complex number and compare whether it is greater than 2 (to avoid square root, actually compare \(|z|^2>4\)):</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">QSQR</span> <span class="c1">( q -- q*q )</span> <span class="k">dup </span><span class="nf">q*</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">Q-MAG-SQR</span> <span class="c1">( qa qb -- qmag^2 )</span> <span class="nf">qsqr</span> <span class="k">swap </span><span class="nf">qsqr</span> <span class="k">+ ;
+</span></span></span><span class="line"><span class="cl"><span class="mi">4</span> <span class="nf">one</span> <span class="k">* </span><span class="kn">constant</span> <span class="nc">FOUR</span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">MAG2&gt;</span> <span class="c1">( qa qb -- is_mag_&gt;_2 )</span> <span class="nf">q-mag-sqr</span> <span class="nf">four</span> <span class="k">&gt; ;
+</span></span></span></code></pre></div><p>Using <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">ANSI escape sequences</a> to change the background color of characters:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">COLOR-CODE</span> <span class="c1">( c -- )</span> <span class="c1">\ print color escape codes
+</span></span></span><span class="line"><span class="cl">  <span class="mi">0</span> <span class="k">&lt;# [char] </span><span class="nf">m</span> <span class="k">hold #s [char] </span><span class="nf">[</span> <span class="k">hold </span><span class="mi">27</span> <span class="k">hold #&gt; type ;
+</span></span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">COLOR</span> <span class="c1">( 0~15 -- )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">dup </span><span class="mi">8</span> <span class="k">and if
+</span></span></span><span class="line"><span class="cl">      <span class="mi">7</span> <span class="k">and </span><span class="mi">100</span>     <span class="c1">\ 8~15: 100...107
+</span></span></span><span class="line"><span class="cl">   <span class="k">else </span>
+</span></span><span class="line"><span class="cl">      <span class="mi">40</span>            <span class="c1">\ 0~7: 40...47
+</span></span></span><span class="line"><span class="cl">   <span class="k">then </span> 
+</span></span><span class="line"><span class="cl">   <span class="k">+ </span><span class="nf">color-code</span> <span class="k">; </span>
+</span></span></code></pre></div><p>One iteration：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">MANDEL-ITER</span>   <span class="c1">( qzx qzy qcx qcy -- qzx1 qzy1 )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">2swap 2dup </span>  <span class="c1">( qcx qcy qzx qzy qzx qzy )</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">q*</span> <span class="k">2* </span>       <span class="c1">( qcx qcy qzx qzy 2*qzx*qzy )</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">3</span> <span class="k">roll + </span>    <span class="c1">( qcx qzx qzy qzy1=2*qzx*qzy+qcy )</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">-rot</span>         <span class="c1">( qcx qzy1 qzx qzy )</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">qsqr</span> <span class="k">swap </span>   <span class="c1">( qcx qzy1 qzy^2 qzx )</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">qsqr</span> <span class="k">swap </span>   <span class="c1">( qcx qzy1 qzx^2 qzy^2 )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">- </span>           <span class="c1">( qcx qzy1 qzx^2-qzy^2 )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">rot + </span>       <span class="c1">( qzy1 qzx1=qzx^2-qzy^2+qcx )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">swap ; </span>      <span class="c1">( qzx1 qzy1 )</span>
+</span></span></code></pre></div><p>Calculate the value of \(n\) at a certain point \(c\):</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="mi">16</span> <span class="kn">constant</span> <span class="nc">MAX-ITER</span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">MANDEL-POINT</span> <span class="c1">( qcx qcy -- iter )</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>            <span class="c1">( qcx qcy qzx0=0 qzy0=0 iter0=0 )</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">max-iter</span> <span class="mi">0</span> <span class="k">do </span>   <span class="c1">( qcx qcy qzx qzy iter )</span>
+</span></span><span class="line"><span class="cl">      <span class="k">drop </span>         <span class="c1">( qcx qcy qzx qzy )</span>
+</span></span><span class="line"><span class="cl">      <span class="k">2dup </span><span class="nf">mag2&gt;</span>    <span class="c1">( qcx qcy qzx qzy is_mag_&gt;_2 )</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if </span>
+</span></span><span class="line"><span class="cl">         <span class="k">i leave </span>   <span class="c1">( qcx qcy qzx qzy iter )</span> 
+</span></span><span class="line"><span class="cl">      <span class="k">then </span>         <span class="c1">( qcx qcy qzx qzy )</span>
+</span></span><span class="line"><span class="cl">      <span class="k">2over </span>        <span class="c1">( qcx qcy qzx qzy qcx qcy )</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">mandel-iter</span>   <span class="c1">( qcx qcy qzx1 qzy1 )</span> 
+</span></span><span class="line"><span class="cl">      <span class="k">i </span><span class="c1">( qcx qcy qzx1 qzy1 iter )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">loop
+</span></span></span><span class="line"><span class="cl">   <span class="c1">( qcx qcy qzxn qzyn iter )</span> 
+</span></span><span class="line"><span class="cl">   <span class="k">nip nip nip nip </span><span class="c1">( iter )</span> <span class="k">;
+</span></span></span></code></pre></div><p>When plotting the Mandelbrot set, the \(x\) range is \(-2 \cdots 1\), and the \(y\) range is \(-1 \cdots 1.5\) with appropriate margins. The step sizes are set appropriately:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">one</span> <span class="mi">2</span> <span class="k">* negate </span><span class="kn">constant</span> <span class="nc">XMIN</span>
+</span></span><span class="line"><span class="cl"><span class="nf">one</span> <span class="kn">constant</span> <span class="nc">XMAX</span>
+</span></span><span class="line"><span class="cl"><span class="nf">one</span> <span class="mi">24</span> <span class="k">/ </span><span class="kn">constant</span> <span class="nc">XSTEP</span>
+</span></span><span class="line"><span class="cl"><span class="nf">one</span> <span class="mi">8</span> <span class="k">/ </span><span class="kn">constant</span> <span class="nc">YSTEP</span>
+</span></span><span class="line"><span class="cl"><span class="nf">one</span> <span class="k">negate </span><span class="nf">ystep</span> <span class="k">2* - </span><span class="kn">constant</span> <span class="nc">YMIN</span>
+</span></span><span class="line"><span class="cl"><span class="nf">one</span> <span class="nf">one</span> <span class="mi">2</span> <span class="k">rshift + </span><span class="nf">ystep</span> <span class="k">+ </span><span class="kn">constant</span> <span class="nc">YMAX</span>
+</span></span></code></pre></div><p>Plot the Mandelbrot set with a double loop:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">MANDEL</span> <span class="c1">( -- )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">page
+</span></span></span><span class="line"><span class="cl">   <span class="nf">ymax</span> <span class="nf">ymin</span> <span class="k">do
+</span></span></span><span class="line"><span class="cl">      <span class="nf">xmax</span> <span class="nf">xmin</span> <span class="k">do
+</span></span></span><span class="line"><span class="cl">         <span class="k">i j </span><span class="nf">mandel-point</span> <span class="nf">color</span> <span class="k">space
+</span></span></span><span class="line"><span class="cl">      <span class="nf">xstep</span> <span class="k">+loop
+</span></span></span><span class="line"><span class="cl">      <span class="k">cr
+</span></span></span><span class="line"><span class="cl">   <span class="nf">ystep</span> <span class="k">+loop
+</span></span></span><span class="line"><span class="cl">   <span class="mi">0</span> <span class="nf">color-code</span> <span class="k">;
+</span></span></span></code></pre></div><p>Plotting the image below took about 2 minutes and 52 seconds on the <a href="/posts/my4th_faster">My4TH at 22.1184MHz</a>.</p>
+<p><img src="/a/forth_mandelbrot_set/mandelbrot.png" alt="Mandelbrot Set"></p>
+<p>The <a href="/a/forth_mandelbrot_set/mandelbrot.scr.7z">complete program</a> is as follows:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="nf">----[200]-------------------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">\ C Mandelbrot Set
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">\ Qint.frac format fixed-point number
+</span></span></span><span class="line"><span class="cl"><span class="mi">10</span> <span class="kn">constant</span> <span class="nc">FRAC</span>   <span class="mi">1</span> <span class="nf">frac</span> <span class="k">lshift </span><span class="kn">constant</span> <span class="nc">ONE</span>
+</span></span><span class="line"><span class="cl"><span class="nf">one</span> <span class="k">1- </span><span class="kn">constant</span> <span class="nc">MASK</span>  <span class="mi">16</span> <span class="nf">frac</span> <span class="k">- </span><span class="kn">constant</span> <span class="nc">INT</span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">QRSHIFT</span>  <span class="c1">( L H -- H_L&gt;&gt;frac )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">swap </span><span class="nf">frac</span> <span class="k">rshift swap </span><span class="nf">mask</span> <span class="k">and </span><span class="nf">int</span> <span class="k">lshift or ;
+</span></span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">Q*</span> <span class="c1">( q1 q2 -- q1*q2 )</span> <span class="k">m* </span><span class="nf">qrshift</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">Q.</span> <span class="c1">( q -- )</span> <span class="k">dup abs </span> <span class="k">&lt;# dup </span><span class="nf">mask</span> <span class="k">and </span><span class="mi">10000</span> <span class="nf">one</span> <span class="nf">*/</span> <span class="mi">0</span> <span class="k"># # # #
+</span></span></span><span class="line"><span class="cl">   <span class="k">2drop </span> <span class="k">[char] . hold </span> <span class="nf">frac</span> <span class="k">rshift </span><span class="mi">0</span> <span class="k">#s rot sign #&gt;
+</span></span></span><span class="line"><span class="cl">   <span class="k">type space ;
+</span></span></span><span class="line"><span class="cl"><span class="c1">\ utils for Mandelbrot set calculation
+</span></span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">QSQR</span> <span class="c1">( q -- q*q )</span> <span class="k">dup </span><span class="nf">q*</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">Q-MAG-SQR</span> <span class="c1">( qa qb -- qmag^2 )</span> <span class="nf">qsqr</span> <span class="k">swap </span><span class="nf">qsqr</span> <span class="k">+ ;
+</span></span></span><span class="line"><span class="cl"><span class="mi">4</span> <span class="nf">one</span> <span class="k">* </span><span class="kn">constant</span> <span class="nc">FOUR</span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">MAG2&gt;</span> <span class="c1">( qa qb -- is_mag_&gt;_2 )</span> <span class="nf">q-mag-sqr</span> <span class="nf">four</span> <span class="k">&gt; ; </span>          <span class="nf">--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nf">----[201]-------------------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">\ iteration and point calculation for the Mandelbrot set
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">MANDEL-ITER</span> <span class="c1">( qzx qzy qcx qcy -- qzx1 qzy1 )</span>
+</span></span><span class="line"><span class="cl">   <span class="c1">\ qzx1 = qzx^2 - qzy^2 + qcx
+</span></span></span><span class="line"><span class="cl">   <span class="c1">\ qzy1 = 2*qzx*qzy + qcy
+</span></span></span><span class="line"><span class="cl">   <span class="k">2swap 2dup </span><span class="nf">q*</span> <span class="k">2* </span><span class="mi">3</span> <span class="k">roll + </span><span class="c1">( qcx qzx qzy qzy1 )</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">-rot</span> <span class="nf">qsqr</span> <span class="k">swap </span><span class="nf">qsqr</span> <span class="k">swap - rot + swap ; </span><span class="c1">( qzx1 qzy1 )</span>
+</span></span><span class="line"><span class="cl"><span class="mi">16</span> <span class="kn">constant</span> <span class="nc">MAX-ITER</span>
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">MANDEL-POINT</span> <span class="c1">( qcx qcy -- iter )</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="nf">max-iter</span> <span class="mi">0</span> <span class="k">do </span> <span class="k">drop </span><span class="c1">\ drop i in new iter
+</span></span></span><span class="line"><span class="cl">      <span class="k">2dup </span><span class="nf">mag2&gt;</span> <span class="k">if i leave then </span><span class="c1">( qcx qcy qzx qzy )</span>
+</span></span><span class="line"><span class="cl">      <span class="k">2over </span><span class="nf">mandel-iter</span> <span class="c1">( qcx qcy qzx1 qzy1 )</span> <span class="k">i loop
+</span></span></span><span class="line"><span class="cl">   <span class="c1">( qcx qcy qzxn qzyn i )</span> <span class="k">nip nip nip nip </span><span class="c1">( i )</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                                                             <span class="nf">--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nf">----[202]-------------------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="c1">\ plot the Mandelbrot set
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">COLOR-CODE</span> <span class="c1">( c -- )</span> <span class="c1">\ print color escape codes
+</span></span></span><span class="line"><span class="cl">  <span class="mi">0</span> <span class="k">&lt;# [char] </span><span class="nf">m</span> <span class="k">hold #s [char] </span><span class="nf">[</span> <span class="k">hold </span><span class="mi">27</span> <span class="k">hold #&gt; type ;
+</span></span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">COLOR</span> <span class="c1">( 0~15 -- )</span>
+</span></span><span class="line"><span class="cl">   <span class="k">dup </span><span class="mi">8</span> <span class="k">and </span> <span class="k">if </span><span class="mi">7</span> <span class="k">and </span><span class="mi">100</span> <span class="k">else </span><span class="mi">40</span> <span class="k">then </span> <span class="k">+ </span><span class="nf">color-code</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">one</span> <span class="mi">2</span> <span class="k">* negate </span><span class="kn">constant</span> <span class="nc">XMIN</span>  <span class="nf">one</span> <span class="kn">constant</span> <span class="nc">XMAX</span>
+</span></span><span class="line"><span class="cl"><span class="nf">one</span> <span class="mi">24</span> <span class="k">/ </span><span class="kn">constant</span> <span class="nc">XSTEP</span>  <span class="nf">one</span> <span class="mi">8</span> <span class="k">/ </span><span class="kn">constant</span> <span class="nc">YSTEP</span>
+</span></span><span class="line"><span class="cl"><span class="nf">one</span> <span class="k">negate </span><span class="nf">ystep</span> <span class="k">2* - </span><span class="kn">constant</span> <span class="nc">YMIN</span>
+</span></span><span class="line"><span class="cl"><span class="nf">one</span> <span class="nf">one</span> <span class="mi">2</span> <span class="k">rshift + </span><span class="nf">ystep</span> <span class="k">+ </span><span class="kn">constant</span> <span class="nc">YMAX</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">MANDEL</span> <span class="c1">( -- )</span>  <span class="k">page
+</span></span></span><span class="line"><span class="cl">   <span class="nf">ymax</span> <span class="nf">ymin</span> <span class="k">do </span> <span class="nf">xmax</span> <span class="nf">xmin</span> <span class="k">do
+</span></span></span><span class="line"><span class="cl">      <span class="k">i j </span><span class="nf">mandel-point</span> <span class="nf">color</span> <span class="k">space
+</span></span></span><span class="line"><span class="cl">   <span class="nf">xstep</span> <span class="k">+loop </span> <span class="k">cr </span> <span class="nf">ystep</span> <span class="k">+loop </span> <span class="mi">0</span> <span class="nf">color-code</span> <span class="k">;
+</span></span></span><span class="line"><span class="cl"><span class="nf">----[EOF]-------------------------------------------------------</span>
+</span></span></code></pre></div><div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>Division: dividing a fixed-point number by an integer is the same as integer division; when dividing two fixed-point numbers, the dividend is first left-shifted by <code>frac</code> bits (multiplied by \(2^{\mathtt{frac}}\)), and then divided by the divisor. Note that the intermediate result must have sufficient bit width; in Forth, <code>M*/</code> can be used for the calculation.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+         | 
+        <a href="https://qsl.net/bh1phl">qsl.net</a>
+      
+         | 
+        <a href="https://bh1phl.github.io">github.io</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2026
+    <a href="/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.<br>May contain LLM-translated-and-human-proofread materials.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (!(/(qsl.net)|(github.io)/.test(window.location.host)))
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

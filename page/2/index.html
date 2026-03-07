@@ -82,6 +82,53 @@
 		
 		
 			<article class="summary">
+  <a href="/posts/my4th_16mhz/">
+    <h1 class="title">Some experiments on My4TH (1): Running at 16MHz</h1>
+    
+  </a>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2024-12-19</time>
+    
+    
+  </strong>
+ <span> • 823 words</span>
+ <span> • 4 minute read</span>
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/my4th">My4TH</a>
+    </div>
+  
+</div>
+
+  <div class="content">
+    <p><p><a href="http://mynor.org/my4th">My4TH</a> is a minimalist computer designed by Dennis Kuschel. This computer is extremely simplified in its design, employing a serial ALU and utilizing 16 74HC series CMOS logic devices along with microcodes from  ROM for CPU. It runs the Forth system. Here are some experiments related to this computer.</p>
+<h2 id="increasing-the-running-speed">Increasing the running speed</h2>
+<p>To ensure the state of the bus during reset, the original version of My4TH employs 10k resistors to pull down the data bus to GND. This introduces compatibility issues between TTL and HCMOS voltage levels: the outputs of RAM 62256 and ROM 27C256 conform to TTL levels, with a minimum high-level output voltage (\(V_\mathrm{OH}\)) of 2.4V; whereas the minimum high-level input voltage (\(V_\mathrm{IH}\)) for 74HC devices is \(0.7 V_\mathrm{cc}\), which is 3.5 V when powered at 5 V.</p></p>
+    
+      <a href="/posts/my4th_16mhz/">Read more...</a>
+    
+  </div>
+</article>
+
+		
+			<article class="summary">
   <a href="/posts/wbrrecv_2n7002/">
     <h1 class="title">A Wheatstone bridge regenerative (WBR) receiver with 2N7002</h1>
     

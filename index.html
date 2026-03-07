@@ -82,6 +82,56 @@
 		
 		
 			<article class="summary">
+  <a href="/posts/forth_mandelbrot_set/">
+    <h1 class="title">Plotting the Mandelbrot set with Forth</h1>
+    
+  </a>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2026-03-07</time>
+    
+    
+  </strong>
+ <span> • 1419 words</span>
+ <span> • 3 minute read</span>
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/my4th">My4TH</a>, 
+        <a href="/tags/forth">Forth</a>, 
+        <a href="/tags/fractal">Fractal</a>, 
+        <a href="/tags/fixed-point-numbers">Fixed-point numbers</a>
+    </div>
+  
+</div>
+
+  <div class="content">
+    <p><p><a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a> is one of the most famous fractal images. The following Forth program is used to plot the Mandelbrot set.</p>
+<h2 id="representation-of-fixed-point-numbers">Representation of Fixed-Point Numbers</h2>
+<p>Fixed-point numbers in <a href="https://en.wikipedia.org/wiki/Q_%28number_format%29"><code>Qint.frac</code></a> format are used for computation. <code>int</code> is the number of bits for the integer part (including the sign bit, if any), and <code>frac</code> is the number of bits for the fractional part. In the following program, the width of the fixed-point number is 16 bits (the same as a single-precision integer in Forth), i.e., <code>int+frac=16</code>.</p></p>
+    
+      <a href="/posts/forth_mandelbrot_set/">Read more...</a>
+    
+  </div>
+</article>
+
+		
+			<article class="summary">
   <a href="/posts/archlinux_on_visionfive_2_optane/">
     <h1 class="title">Booting Arch Linux on the VisionFive 2 SBC with 16GB Intel Optane M10</h1>
     
@@ -691,53 +741,6 @@ Q_0(t)= & A \sin(\omega t+\psi).
 <p>While My4TH utilizes modern EPROM and SRAM, its bus still generates some electromagnetic radiation. Experiments have shown that a regular AM radio can pick up the electromagnetic radiation caused by status changes in the bus.</p></p>
     
       <a href="/posts/my4th_music/">Read more...</a>
-    
-  </div>
-</article>
-
-		
-			<article class="summary">
-  <a href="/posts/my4th_16mhz/">
-    <h1 class="title">Some experiments on My4TH (1): Running at 16MHz</h1>
-    
-  </a>
-  
-
-
-
-
-
-
-
-
-
-  
-
-
-<div class="post-meta">
-  <strong>
-    <span>Posted on</span>
-    <time>2024-12-19</time>
-    
-    
-  </strong>
- <span> • 823 words</span>
- <span> • 4 minute read</span>
-  
-    <div>
-      <span>Tags:</span>
-      
-        <a href="/tags/my4th">My4TH</a>
-    </div>
-  
-</div>
-
-  <div class="content">
-    <p><p><a href="http://mynor.org/my4th">My4TH</a> is a minimalist computer designed by Dennis Kuschel. This computer is extremely simplified in its design, employing a serial ALU and utilizing 16 74HC series CMOS logic devices along with microcodes from  ROM for CPU. It runs the Forth system. Here are some experiments related to this computer.</p>
-<h2 id="increasing-the-running-speed">Increasing the running speed</h2>
-<p>To ensure the state of the bus during reset, the original version of My4TH employs 10k resistors to pull down the data bus to GND. This introduces compatibility issues between TTL and HCMOS voltage levels: the outputs of RAM 62256 and ROM 27C256 conform to TTL levels, with a minimum high-level output voltage (\(V_\mathrm{OH}\)) of 2.4V; whereas the minimum high-level input voltage (\(V_\mathrm{IH}\)) for 74HC devices is \(0.7 V_\mathrm{cc}\), which is 3.5 V when powered at 5 V.</p></p>
-    
-      <a href="/posts/my4th_16mhz/">Read more...</a>
     
   </div>
 </article>

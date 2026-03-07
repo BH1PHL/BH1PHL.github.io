@@ -6,8 +6,15 @@
     <description>Recent content in Forth on BH1PHL&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-US</language>
-    <lastBuildDate>Tue, 18 Feb 2025 09:30:39 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 07 Mar 2026 14:57:18 +0800</lastBuildDate>
     <atom:link href="https://bh1phl.github.io/tags/forth/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Plotting the Mandelbrot set with Forth</title>
+      <link>https://bh1phl.github.io/posts/forth_mandelbrot_set/</link>
+      <pubDate>Sat, 07 Mar 2026 14:57:18 +0800</pubDate>
+      <guid>https://bh1phl.github.io/posts/forth_mandelbrot_set/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Mandelbrot_set&#34;&gt;Mandelbrot set&lt;/a&gt; is one of the most famous fractal images. The following Forth program is used to plot the Mandelbrot set.&lt;/p&gt;&#xA;&lt;h2 id=&#34;representation-of-fixed-point-numbers&#34;&gt;Representation of Fixed-Point Numbers&lt;/h2&gt;&#xA;&lt;p&gt;Fixed-point numbers in &lt;a href=&#34;https://en.wikipedia.org/wiki/Q_%28number_format%29&#34;&gt;&lt;code&gt;Qint.frac&lt;/code&gt;&lt;/a&gt; format are used for computation. &lt;code&gt;int&lt;/code&gt; is the number of bits for the integer part (including the sign bit, if any), and &lt;code&gt;frac&lt;/code&gt; is the number of bits for the fractional part. In the following program, the width of the fixed-point number is 16 bits (the same as a single-precision integer in Forth), i.e., &lt;code&gt;int+frac=16&lt;/code&gt;.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Some experiments on My4TH (4): Peripherals</title>
       <link>https://bh1phl.github.io/posts/my4th_peripherals/</link>

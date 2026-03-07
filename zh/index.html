@@ -82,6 +82,56 @@
 		
 		
 			<article class="summary">
+  <a href="/zh/posts/forth_mandelbrot_set/">
+    <h1 class="title">使用 Forth 语言绘制 Mandelbrot 集</h1>
+    
+  </a>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2026-03-07</time>
+    
+    
+  </strong>
+ <span> • 1706 words</span>
+ <span> • 4 minute read</span>
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/zh/tags/my4th">My4TH</a>, 
+        <a href="/zh/tags/forth">Forth</a>, 
+        <a href="/zh/tags/%E5%88%86%E5%BD%A2">分形</a>, 
+        <a href="/zh/tags/%E5%AE%9A%E7%82%B9%E6%95%B0">定点数</a>
+    </div>
+  
+</div>
+
+  <div class="content">
+    <p><p><a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot 集</a>是最著名的分形图形之一。下面的 Forth 程序用来绘制 Mandelbrot 集。</p>
+<h2 id="定点数的表示">定点数的表示</h2>
+<p>采用 <a href="https://en.wikipedia.org/wiki/Q_%28number_format%29"><code>Qint.frac</code></a> 格式的定点数进行计算。<code>int</code> 为整数部分（包含符号位，若有）的位数，<code>frac</code> 为小数部分的位数。在下面的程序中，定点数的宽度为 16 位（与 Forth 中的单精度整数相同），即 <code>int+frac=16</code>。</p></p>
+    
+      <a href="/zh/posts/forth_mandelbrot_set/">Read more...</a>
+    
+  </div>
+</article>
+
+		
+			<article class="summary">
   <a href="/zh/posts/archlinux_on_visionfive_2_optane/">
     <h1 class="title">在 VisionFive 2 上用 16GB 傲腾启动 Arch Linux</h1>
     
@@ -756,55 +806,6 @@ Q(t)= & A \sin \omega t.
 <p>Atlast 是一项旨在使软件组件技术和开放式架构应用在主流软件市场普及的尝试。它既是一个可轻松集成到现有应用中的软件组件，为其提供现成的宏语言及用户扩展与定制功能；同时也是一个基础平台，能以开放、面向组件的方式构建新应用。</p></p>
     
       <a href="/zh/posts/atlast/">Read more...</a>
-    
-  </div>
-</article>
-
-		
-			<article class="summary">
-  <a href="/zh/posts/my4th_peripherals/">
-    <h1 class="title">关于 My4TH 的一些试验（四）：一些外设</h1>
-    
-  </a>
-  
-
-
-
-
-
-
-
-
-
-  
-
-
-<div class="post-meta">
-  <strong>
-    <span>Posted on</span>
-    <time>2025-02-18</time>
-    
-    
-  </strong>
- <span> • 746 words</span>
- <span> • 2 minute read</span>
-  
-    <div>
-      <span>Tags:</span>
-      
-        <a href="/zh/tags/my4th">My4TH</a>, 
-        <a href="/zh/tags/forth">Forth</a>
-    </div>
-  
-</div>
-
-  <div class="content">
-    <p><h2 id="存储扩展卡与底板">存储扩展卡与底板</h2>
-<h3 id="存储扩展卡">存储扩展卡</h3>
-<p>为方便使用外接的 EEPROM 存储扩展卡，<a href="https://bh1phl.github.io/zh/posts/my4th_faster/">本站提供的固件</a>中，相邻的块位于同一片 EEPROM 上，且块序号按 EEPROM 地址排列。</p>
-<p>外接存储扩展卡使用 USB 3.0 Type-A 接口，电源触点与标准 USB 接口兼容，信号触点用于 I2C 接口和寻址等：</p></p>
-    
-      <a href="/zh/posts/my4th_peripherals/">Read more...</a>
     
   </div>
 </article>

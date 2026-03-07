@@ -6,8 +6,15 @@
     <description>Recent content in Forth on BH1PHL 的 Blog</description>
     <generator>Hugo</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Mon, 08 Sep 2025 20:07:04 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 07 Mar 2026 14:57:18 +0800</lastBuildDate>
     <atom:link href="https://bh1phl.github.io/zh/tags/forth/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用 Forth 语言绘制 Mandelbrot 集</title>
+      <link>https://bh1phl.github.io/zh/posts/forth_mandelbrot_set/</link>
+      <pubDate>Sat, 07 Mar 2026 14:57:18 +0800</pubDate>
+      <guid>https://bh1phl.github.io/zh/posts/forth_mandelbrot_set/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Mandelbrot_set&#34;&gt;Mandelbrot 集&lt;/a&gt;是最著名的分形图形之一。下面的 Forth 程序用来绘制 Mandelbrot 集。&lt;/p&gt;&#xA;&lt;h2 id=&#34;定点数的表示&#34;&gt;定点数的表示&lt;/h2&gt;&#xA;&lt;p&gt;采用 &lt;a href=&#34;https://en.wikipedia.org/wiki/Q_%28number_format%29&#34;&gt;&lt;code&gt;Qint.frac&lt;/code&gt;&lt;/a&gt; 格式的定点数进行计算。&lt;code&gt;int&lt;/code&gt; 为整数部分（包含符号位，若有）的位数，&lt;code&gt;frac&lt;/code&gt; 为小数部分的位数。在下面的程序中，定点数的宽度为 16 位（与 Forth 中的单精度整数相同），即 &lt;code&gt;int+frac=16&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Atlast 手册</title>
       <link>https://bh1phl.github.io/zh/posts/atlast/</link>
