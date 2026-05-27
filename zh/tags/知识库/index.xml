@@ -48,7 +48,7 @@
       <link>https://bh1phl.github.io/zh/posts/cachyos_install_specify_mirror/</link>
       <pubDate>Tue, 07 Oct 2025 20:46:44 +0800</pubDate>
       <guid>https://bh1phl.github.io/zh/posts/cachyos_install_specify_mirror/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;https://cachyos.org/&#34;&gt;CachyOS&lt;/a&gt; 是一个基于 &lt;a href=&#34;https://archlinux.org/&#34;&gt;Arch Linux&lt;/a&gt; 的不错的 Linux 发行版。安装时，它会寻找全网最快的镜像。由于众所周知的原因，这一步经常会超时，导致安装失败。下面的方法可以在安装时指定镜像：&lt;/p&gt;</description>
+      <description>&lt;p&gt;&lt;strong&gt;2026-05-27 更新&lt;/strong&gt;：26.03 版之后的 CachyOS 安装器的寻找镜像功能已针对网络的实际情况&lt;a href=&#34;https://wiki.cachyos.org/cachyos_basic/changelogs/gui_installer/#2603&#34;&gt;进行优化&lt;/a&gt;。&lt;strong&gt;使用 26.03 版之后的 CachyOS Live ISO 进行安装无须下面的步骤。&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://cachyos.org/&#34;&gt;CachyOS&lt;/a&gt; 是一个基于 &lt;a href=&#34;https://archlinux.org/&#34;&gt;Arch Linux&lt;/a&gt; 的不错的 Linux 发行版。安装时，它会寻找全网最快的镜像。由于众所周知的原因，这一步经常会超时，导致安装失败。下面的方法可以在安装时指定镜像：&lt;/p&gt;</description>
     </item>
     <item>
       <title>两位数字&#43;一位字母的 E96 0603 贴片电阻标记法</title>

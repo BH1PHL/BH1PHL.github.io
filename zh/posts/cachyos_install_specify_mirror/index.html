@@ -88,8 +88,8 @@
     
     
   </strong>
-  <span> • 453 words</span>
-  <span> • 1 minute read</span>
+  <span> • 514 words</span>
+  <span> • 2 minute read</span>
   
   
     <div>
@@ -102,7 +102,9 @@
   
 </div>
 
-      <div class="content"><p><a href="https://cachyos.org/">CachyOS</a> 是一个基于 <a href="https://archlinux.org/">Arch Linux</a> 的不错的 Linux 发行版。安装时，它会寻找全网最快的镜像。由于众所周知的原因，这一步经常会超时，导致安装失败。下面的方法可以在安装时指定镜像：</p>
+      <div class="content"><p><strong>2026-05-27 更新</strong>：26.03 版之后的 CachyOS 安装器的寻找镜像功能已针对网络的实际情况<a href="https://wiki.cachyos.org/cachyos_basic/changelogs/gui_installer/#2603">进行优化</a>。<strong>使用 26.03 版之后的 CachyOS Live ISO 进行安装无须下面的步骤。</strong></p>
+<hr>
+<p><a href="https://cachyos.org/">CachyOS</a> 是一个基于 <a href="https://archlinux.org/">Arch Linux</a> 的不错的 Linux 发行版。安装时，它会寻找全网最快的镜像。由于众所周知的原因，这一步经常会超时，导致安装失败。下面的方法可以在安装时指定镜像：</p>
 <p>首先用 <a href="https://cdn77.cachyos.org/ISO/desktop/250828/cachyos-desktop-linux-250828.iso">Live ISO</a> 启动系统，然后在 root 下（<code>sudo su -</code>）运行下面的：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> /etc/pacman.d/
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Server = https://mirrors.ustc.edu.cn/cachyos/repo/\$arch/\$repo&#34;</span> &gt; cachyos-mirrorlist
