@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+  
+    
+      <title>使用 RTX 2080 Ti 22GiB 部署 Qwen 3.6-27B 语言模型 | BH1PHL 的 Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="android-chrome-512x512.png" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/zh/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/zh/"><h1>BH1PHL 的 Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/zh/"><b>Home</b></a>
+      
+         | 
+        <a href="/zh/about"><b>About</b></a>
+      
+         | 
+        <a href="/zh/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/zh/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/zh/index.xml"><b>RSS</b></a>
+      
+    
+    
+      |
+      
+        <a href="/posts/qwen36_27b_on_2080ti_22g/"><b>English</b></a>
+      
+    
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">使用 RTX 2080 Ti 22GiB 部署 Qwen 3.6-27B 语言模型</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2026-05-31</time>
+    
+    
+  </strong>
+  <span> • 987 words</span>
+  <span> • 2 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/zh/tags/cachyos">CachyOS</a>, 
+        <a href="/zh/tags/linux">Linux</a>, 
+        <a href="/zh/tags/qwen">Qwen</a>, 
+        <a href="/zh/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B">语言模型</a>
+    </div>
+  
+</div>
+
+      <div class="content"><p><a href="https://www.modelscope.cn/models/Qwen/Qwen3.6-27B">Qwen 3.6-27B</a> 是性能强劲、适合本地部署的语言模型。借助<a href="https://www.maartengrootendorst.com/blog/quantization/">量化</a>、<a href="https://github.com/ggml-org/llama.cpp/pull/22673">MTP</a> 和 <a href="https://github.com/TheTom/turboquant_plus">TurboQuant</a> 等技术，该模型可以在 RTX 2080 Ti 22GiB 上部署并流畅运行。</p>
+<p>以下步骤在运行 CachyOS 最新版（使用 <a href="https://cdn77.cachyos.org/ISO/desktop/260426/cachyos-desktop-linux-260426.iso">260426 ISO</a> 安装）的电脑上测试通过。</p>
+<h2 id="安装依赖">安装依赖</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syu cmake cuda nodejs npm
+</span></span><span class="line"><span class="cl">paru -S python-modelscope
+</span></span></code></pre></div><p>必要时配置 <code>npm</code> 镜像：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">npm config <span class="nb">set</span> registry http://mirrors.cloud.tencent.com/npm/
+</span></span><span class="line"><span class="cl">npm config <span class="nb">set</span> strict-ssl <span class="nb">false</span>
+</span></span></code></pre></div><p>安装后建议重启或重新登录，以刷新环境变量。</p>
+<h2 id="编译-llama-cpp-turboquant">编译 <code>llama-cpp-turboquant</code></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span>
+</span></span><span class="line"><span class="cl">git clone https://github.com/TheTom/llama-cpp-turboquant.git
+</span></span><span class="line"><span class="cl"><span class="c1"># 下面三行用于编译 Web UI 前端</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> llama-cpp-turboquant/tools/ui
+</span></span><span class="line"><span class="cl">npm i
+</span></span><span class="line"><span class="cl">npm run build
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ../..
+</span></span><span class="line"><span class="cl">cmake -B build -DGGML_CUDA<span class="o">=</span>ON -DLLAMA_BUILD_WEBUI<span class="o">=</span>ON <span class="o">&amp;&amp;</span> cmake --build build --config Release -j --target llama-server llama-cli
+</span></span></code></pre></div><p>编译产物在 <code>build/bin</code> 目录下。</p>
+<h2 id="下载模型">下载模型</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">modelscope download --model Tariel/Qwen3.6-27B-4bpw-MTP.gguf --local_dir ~/Qwen3.6
+</span></span></code></pre></div><h2 id="部署">部署</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> ~/llama-cpp-turboquant/build/bin
+</span></span><span class="line"><span class="cl">./llama-server -m ~/Qwen3.6/Qwen3.6-27B-4bpw-MTP.gguf <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -mm ~/Qwen3.6/mmproj-Qwen-Qwen3.6-27B-Q6_K.gguf <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -fa on --spec-type draft-mtp --spec-draft-n-max <span class="m">3</span> -np <span class="m">1</span> -kvu <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -c <span class="m">190208</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -ngl all -ctk q8_0 -ctv turbo3 <span class="se">\
+</span></span></span><span class="line"><span class="cl">    --temp 1.0 --top-p 0.95 --top-k <span class="m">20</span> --min-p <span class="m">0</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    --host 0.0.0.0 <span class="se">\
+</span></span></span><span class="line"><span class="cl">    --port <span class="m">22345</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -a qwen3.6:27b
+</span></span></code></pre></div><h2 id="使用">使用</h2>
+<p>此时用浏览器访问主机的 22345 端口（例如 <code>http://127.0.0.1:22345</code>）即可使用 <code>llama.cpp</code> Web UI。 注意如果在其他电脑访问部署了模型的主机，需要打开 CachyOS 自带的防火墙：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo ufw allow <span class="m">22345</span>
+</span></span></code></pre></div><p><code>llama-server</code> 兼容 <code>OpenAI</code> 和 <code>Anthropic</code> 格式的 API，可以直接在常见的 AI 客户端软件中使用。</p>
+<h3 id="使用-cherry-studio-时的注意事项">使用 Cherry Studio 时的注意事项</h3>
+<p>使用 <a href="https://cherry-ai.com">Cherry Studio</a> 时，为正确开关思考模式，建议选择“英伟达”为提供商，API 地址填写 llama-server 的地址（详见 <a href="https://github.com/CherryHQ/cherry-studio/issues/14981">Issue #14981</a>)。</p>
+<h2 id="性能">性能</h2>
+<p>性能测试的环境为：CPU i5-12500H (视频输出使用核显), GPU RTX 2080 Ti 22GiB, 内核 Linux 7.0.10-1-cachyos.</p>
+<p>MTP 以少量的显存占用和略微降低预填充速度为代价，显著提高了模型的解码性能和总体性能。</p>
+<table>
+	<thead>
+			<tr>
+					<th>输入上下文 token 数</th>
+					<th>输出上下文 token 数（无 MTP）</th>
+					<th>预填充时间/速度（无 MTP）</th>
+					<th>解码时间/速度（无 MTP）</th>
+					<th>总时间（无 MTP）</th>
+					<th>输出上下文 token 数（有 MTP）</th>
+					<th>预填充时间/速度（有 MTP）</th>
+					<th>解码时间/速度（有 MTP）</th>
+					<th>总时间（有 MTP）</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>30667</td>
+					<td>1666</td>
+					<td>52.9 s, 1.72 ms/token, 580.16 token/s</td>
+					<td>116.6 s, 70.02 ms/token, 14.28 token/s</td>
+					<td>169.5 s</td>
+					<td>1556</td>
+					<td>64.4 s, 2.10 ms/token, 476.14 token/s (speed -17.9%)</td>
+					<td>53.3 s, 34.22 ms/token, 29.22 token/s (speed +104.6%)</td>
+					<td>117.7 s</td>
+			</tr>
+			<tr>
+					<td>159283</td>
+					<td>1679</td>
+					<td>500.8 s, 3.14 ms/token,  318.04 token/s</td>
+					<td>381.4 s, 227.17 ms/token, 4.40 token/s</td>
+					<td>882.3 s</td>
+					<td>1337</td>
+					<td>579.6 s, 3.64 ms/token,   274.80 token/s (speed -13.6%)</td>
+					<td>87.4 s, 65.37 ms/token,    15.30 token/s (speed +247.7%)</td>
+					<td>667.0 s</td>
+			</tr>
+	</tbody>
+</table>
+<p>使用 MTP、思考模式关闭时，不同任务类型的性能如下：</p>
+<table>
+	<thead>
+			<tr>
+					<th>输入上下文长度 (token)</th>
+					<th>输出长度 (token)</th>
+					<th>显存占用 (MiB)</th>
+					<th>预填充速度 (token/s)</th>
+					<th>解码速度 (token/s)</th>
+					<th>任务类型</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>0</td>
+					<td>/</td>
+					<td>20270</td>
+					<td>/</td>
+					<td>/</td>
+					<td>/</td>
+			</tr>
+			<tr>
+					<td>41</td>
+					<td>1632</td>
+					<td>29296</td>
+					<td>158.78</td>
+					<td>41.15</td>
+					<td>解题</td>
+			</tr>
+			<tr>
+					<td>75</td>
+					<td>1260</td>
+					<td>20298</td>
+					<td>204.50</td>
+					<td>39.02</td>
+					<td>解题</td>
+			</tr>
+			<tr>
+					<td>15202</td>
+					<td>15422</td>
+					<td>20526</td>
+					<td>513.91</td>
+					<td>38.69</td>
+					<td>翻译</td>
+			</tr>
+			<tr>
+					<td>30667</td>
+					<td>1556</td>
+					<td>20538</td>
+					<td>476.14</td>
+					<td>29.22</td>
+					<td>长文本总结</td>
+			</tr>
+			<tr>
+					<td>53108</td>
+					<td>2058</td>
+					<td>20731</td>
+					<td>419.84</td>
+					<td>25.17</td>
+					<td>长文本总结</td>
+			</tr>
+			<tr>
+					<td>83743</td>
+					<td>1612</td>
+					<td>20954</td>
+					<td>364.67</td>
+					<td>20.50</td>
+					<td>长文本总结</td>
+			</tr>
+			<tr>
+					<td>106196</td>
+					<td>1486</td>
+					<td>21126</td>
+					<td>333.72</td>
+					<td>19.39</td>
+					<td>长文本总结</td>
+			</tr>
+			<tr>
+					<td>136828</td>
+					<td>1721</td>
+					<td>21370</td>
+					<td>296.02</td>
+					<td>16.11</td>
+					<td>长文本总结</td>
+			</tr>
+			<tr>
+					<td>159283</td>
+					<td>1337</td>
+					<td>21542</td>
+					<td>274.80</td>
+					<td>15.30</td>
+					<td>长文本总结</td>
+			</tr>
+			<tr>
+					<td>189915</td>
+					<td>293</td>
+					<td>21770</td>
+					<td>249.99</td>
+					<td>14.50</td>
+					<td>长文本总结（输出被截断）</td>
+			</tr>
+	</tbody>
+</table>
+<p>思考模式打开时：</p>
+<table>
+	<thead>
+			<tr>
+					<th>输入上下文长度 (token)</th>
+					<th>输出长度 (token)</th>
+					<th>显存占用 (MiB)</th>
+					<th>预填充速度 (token/s)</th>
+					<th>解码速度 (token/s)</th>
+					<th>任务类型</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>0</td>
+					<td>/</td>
+					<td>20270</td>
+					<td>/</td>
+					<td>/</td>
+					<td>/</td>
+			</tr>
+			<tr>
+					<td>39</td>
+					<td>7887</td>
+					<td>20344</td>
+					<td>131.31</td>
+					<td>38.94</td>
+					<td>解题</td>
+			</tr>
+			<tr>
+					<td>73</td>
+					<td>10436</td>
+					<td>20370</td>
+					<td>207.27</td>
+					<td>36.13</td>
+					<td>解题</td>
+			</tr>
+			<tr>
+					<td>15200</td>
+					<td>18345</td>
+					<td>20550</td>
+					<td>518.64</td>
+					<td>35.71</td>
+					<td>翻译</td>
+			</tr>
+			<tr>
+					<td>30665</td>
+					<td>3043</td>
+					<td>20550</td>
+					<td>478.33</td>
+					<td>28.10</td>
+					<td>长文本总结</td>
+			</tr>
+			<tr>
+					<td>53106</td>
+					<td>3150</td>
+					<td>20726</td>
+					<td>422.29</td>
+					<td>24.45</td>
+					<td>长文本总结</td>
+			</tr>
+			<tr>
+					<td>83741</td>
+					<td>3715</td>
+					<td>20970</td>
+					<td>364.77</td>
+					<td>21.54</td>
+					<td>长文本总结</td>
+			</tr>
+			<tr>
+					<td>106194</td>
+					<td>3330</td>
+					<td>21142</td>
+					<td>333.43</td>
+					<td>19.65</td>
+					<td>长文本总结</td>
+			</tr>
+			<tr>
+					<td>136826</td>
+					<td>3860</td>
+					<td>21386</td>
+					<td>297.03</td>
+					<td>16.79</td>
+					<td>长文本总结</td>
+			</tr>
+			<tr>
+					<td>159281</td>
+					<td>3039</td>
+					<td>21554</td>
+					<td>273.92</td>
+					<td>15.35</td>
+					<td>长文本总结</td>
+			</tr>
+			<tr>
+					<td>189913</td>
+					<td>294</td>
+					<td>21770</td>
+					<td>249.73</td>
+					<td>15.70</td>
+					<td>长文本总结（输出被截断）</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+         | 
+        <a href="https://qsl.net/bh1phl">qsl.net</a>
+      
+         | 
+        <a href="https://bh1phl.github.io">github.io</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2026
+    <a href="/zh/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.<br>May contain LLM-translated-and-human-proofread materials.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (!(/(qsl.net)|(github.io)/.test(window.location.host)))
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

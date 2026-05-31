@@ -65,12 +65,7 @@
         <a href="/zh/index.xml"><b>RSS</b></a>
       
     
-    |
     
-      
-        <a href="/"><b>English</b></a>
-      
-	
   </nav>
   <hr />
 </header>
@@ -214,58 +209,58 @@
 </span></span></code></pre></div><p>本文档中会广泛使用栈表示法来描述一个词及其执行过程。</p>
 <p>栈表示法中元素的符号，一般采用如下约定：</p>
 <table>
-  <thead>
-      <tr>
-          <th>符号</th>
-          <th>意义</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>n</code></td>
-          <td>有符号整数；一般的占 1 个单元的元素（有时用 x 表示）</td>
-      </tr>
-      <tr>
-          <td><code>+n</code></td>
-          <td>正整数（大于 0 的整数）</td>
-      </tr>
-      <tr>
-          <td><code>u</code></td>
-          <td>无符号整数</td>
-      </tr>
-      <tr>
-          <td><code>c</code>,<code>char</code></td>
-          <td>字符</td>
-      </tr>
-      <tr>
-          <td><code>f</code>,<code>flag</code></td>
-          <td>标志，取值为真（<code>true</code>，非零）/假（<code>false</code>，零）</td>
-      </tr>
-      <tr>
-          <td><code>addr</code></td>
-          <td>地址</td>
-      </tr>
-      <tr>
-          <td><code>a-addr</code></td>
-          <td>按单元对齐的地址</td>
-      </tr>
-      <tr>
-          <td><code>c-addr</code></td>
-          <td>按字符对齐的地址</td>
-      </tr>
-      <tr>
-          <td><code>xt</code></td>
-          <td>执行标记（execution token），在大部分 Forth 系统中占 1 个单元，对应一个词执行时的行为</td>
-      </tr>
-      <tr>
-          <td><code>d</code></td>
-          <td>双精度有符号整数；一般的占 2 个单元的元素</td>
-      </tr>
-      <tr>
-          <td><code>ud</code></td>
-          <td>双精度无符号整数</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>符号</th>
+					<th>意义</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>n</code></td>
+					<td>有符号整数；一般的占 1 个单元的元素（有时用 x 表示）</td>
+			</tr>
+			<tr>
+					<td><code>+n</code></td>
+					<td>正整数（大于 0 的整数）</td>
+			</tr>
+			<tr>
+					<td><code>u</code></td>
+					<td>无符号整数</td>
+			</tr>
+			<tr>
+					<td><code>c</code>,<code>char</code></td>
+					<td>字符</td>
+			</tr>
+			<tr>
+					<td><code>f</code>,<code>flag</code></td>
+					<td>标志，取值为真（<code>true</code>，非零）/假（<code>false</code>，零）</td>
+			</tr>
+			<tr>
+					<td><code>addr</code></td>
+					<td>地址</td>
+			</tr>
+			<tr>
+					<td><code>a-addr</code></td>
+					<td>按单元对齐的地址</td>
+			</tr>
+			<tr>
+					<td><code>c-addr</code></td>
+					<td>按字符对齐的地址</td>
+			</tr>
+			<tr>
+					<td><code>xt</code></td>
+					<td>执行标记（execution token），在大部分 Forth 系统中占 1 个单元，对应一个词执行时的行为</td>
+			</tr>
+			<tr>
+					<td><code>d</code></td>
+					<td>双精度有符号整数；一般的占 2 个单元的元素</td>
+			</tr>
+			<tr>
+					<td><code>ud</code></td>
+					<td>双精度无符号整数</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="基本的栈操作">基本的栈操作</h2>
 <p>基本的栈操作用到的词如下：</p>
@@ -603,50 +598,50 @@
 </span></span></span></code></pre></div><p><code>*/</code> 和 <code>/MOD</code> 的中间结果是双精度整数；<code>M*/</code> 的中间结果占据 3 个单元<sup id="fnref:9"><a href="#fn:9" class="footnote-ref" role="doc-noteref">9</a></sup>。</p>
 <p>下取整除法和对称除法在除数和被除数之一为负数且有余数时有区别，例子见下表：</p>
 <table>
-  <thead>
-      <tr>
-          <th>被除数 <em>a</em></th>
-          <th>除数 <em>b</em></th>
-          <th>余数 <em>r</em>（下取整除法）</th>
-          <th>商 <em>q</em>（下取整除法）</th>
-          <th>余数 <em>r</em>（对称除法）</th>
-          <th>商 <em>q</em>（对称除法）</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>10</td>
-          <td>7</td>
-          <td>3</td>
-          <td>1</td>
-          <td>3</td>
-          <td>1</td>
-      </tr>
-      <tr>
-          <td>-10</td>
-          <td>7</td>
-          <td>4</td>
-          <td>-2</td>
-          <td>-3</td>
-          <td>-1</td>
-      </tr>
-      <tr>
-          <td>10</td>
-          <td>-7</td>
-          <td>-4</td>
-          <td>-2</td>
-          <td>3</td>
-          <td>-1</td>
-      </tr>
-      <tr>
-          <td>-10</td>
-          <td>-7</td>
-          <td>-3</td>
-          <td>1</td>
-          <td>-3</td>
-          <td>1</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>被除数 <em>a</em></th>
+					<th>除数 <em>b</em></th>
+					<th>余数 <em>r</em>（下取整除法）</th>
+					<th>商 <em>q</em>（下取整除法）</th>
+					<th>余数 <em>r</em>（对称除法）</th>
+					<th>商 <em>q</em>（对称除法）</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>10</td>
+					<td>7</td>
+					<td>3</td>
+					<td>1</td>
+					<td>3</td>
+					<td>1</td>
+			</tr>
+			<tr>
+					<td>-10</td>
+					<td>7</td>
+					<td>4</td>
+					<td>-2</td>
+					<td>-3</td>
+					<td>-1</td>
+			</tr>
+			<tr>
+					<td>10</td>
+					<td>-7</td>
+					<td>-4</td>
+					<td>-2</td>
+					<td>3</td>
+					<td>-1</td>
+			</tr>
+			<tr>
+					<td>-10</td>
+					<td>-7</td>
+					<td>-3</td>
+					<td>1</td>
+					<td>-3</td>
+					<td>1</td>
+			</tr>
+	</tbody>
 </table>
 <p>两种除法都满足 <em>b</em> × <em>q</em> + <em>r</em> = <em>a</em>。进一步的解释参见 <a href="https://forth-standard.org/standard/usage#subsubsection.3.2.2.1">Forth 2012 标准 3.2.2.1 节</a>。</p>
 <h3 id="常用的位运算词">常用的位运算词</h3>
@@ -1153,106 +1148,106 @@
 </span></span></span><span class="line"><span class="cl"><span class="nf">S\&#34;</span> <span class="nf">string&#34;</span>	<span class="c1">( -- c-addr u )</span>	<span class="c1">\ 作用与 S&#34; 相同，允许转义字符`\`的使用。
 </span></span></span></code></pre></div><p><code>S\&quot;</code> 使用的转义字符如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th>转义字符</th>
-          <th>名称</th>
-          <th>作用</th>
-          <th>ASCII码</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>\a</code></td>
-          <td>BEL</td>
-          <td>响铃</td>
-          <td>7</td>
-      </tr>
-      <tr>
-          <td><code>\b</code></td>
-          <td>BS</td>
-          <td>退格</td>
-          <td>8</td>
-      </tr>
-      <tr>
-          <td><code>\e</code></td>
-          <td>ESC</td>
-          <td>转义</td>
-          <td>27</td>
-      </tr>
-      <tr>
-          <td><code>\f</code></td>
-          <td>FF</td>
-          <td>另起一页</td>
-          <td>12</td>
-      </tr>
-      <tr>
-          <td><code>\l</code></td>
-          <td>LF</td>
-          <td>另起一行</td>
-          <td>10</td>
-      </tr>
-      <tr>
-          <td><code>\m</code></td>
-          <td>CR/LF</td>
-          <td>换行加回车</td>
-          <td>13, 10</td>
-      </tr>
-      <tr>
-          <td><code>\n</code></td>
-          <td>newline</td>
-          <td>换行</td>
-          <td>与实现相关，可能是CR/LF, CR, LF, LF/CR 等</td>
-      </tr>
-      <tr>
-          <td><code>\q</code></td>
-          <td>double-quote</td>
-          <td>双引号</td>
-          <td>34</td>
-      </tr>
-      <tr>
-          <td><code>\r</code></td>
-          <td>CR</td>
-          <td>回车</td>
-          <td>13</td>
-      </tr>
-      <tr>
-          <td><code>\t</code></td>
-          <td>HT</td>
-          <td>横向制表符(TAB)</td>
-          <td>8</td>
-      </tr>
-      <tr>
-          <td><code>\v</code></td>
-          <td>VT</td>
-          <td>纵向制表符</td>
-          <td>11</td>
-      </tr>
-      <tr>
-          <td><code>\z</code></td>
-          <td>NUL</td>
-          <td>空字符</td>
-          <td>0</td>
-      </tr>
-      <tr>
-          <td><code>\&quot;</code></td>
-          <td>double-quote</td>
-          <td>双引号</td>
-          <td>34</td>
-      </tr>
-      <tr>
-          <td>\xaf</td>
-          <td></td>
-          <td>任意字符。af 是一个 16 进制数字（00&hellip;ff）</td>
-          <td>ASCII 十六进制为 af 的字符</td>
-      </tr>
-      <tr>
-          <td><code>\\</code></td>
-          <td>backslash</td>
-          <td>反斜线</td>
-          <td>92</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>转义字符</th>
+					<th>名称</th>
+					<th>作用</th>
+					<th>ASCII码</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>\a</code></td>
+					<td>BEL</td>
+					<td>响铃</td>
+					<td>7</td>
+			</tr>
+			<tr>
+					<td><code>\b</code></td>
+					<td>BS</td>
+					<td>退格</td>
+					<td>8</td>
+			</tr>
+			<tr>
+					<td><code>\e</code></td>
+					<td>ESC</td>
+					<td>转义</td>
+					<td>27</td>
+			</tr>
+			<tr>
+					<td><code>\f</code></td>
+					<td>FF</td>
+					<td>另起一页</td>
+					<td>12</td>
+			</tr>
+			<tr>
+					<td><code>\l</code></td>
+					<td>LF</td>
+					<td>另起一行</td>
+					<td>10</td>
+			</tr>
+			<tr>
+					<td><code>\m</code></td>
+					<td>CR/LF</td>
+					<td>换行加回车</td>
+					<td>13, 10</td>
+			</tr>
+			<tr>
+					<td><code>\n</code></td>
+					<td>newline</td>
+					<td>换行</td>
+					<td>与实现相关，可能是CR/LF, CR, LF, LF/CR 等</td>
+			</tr>
+			<tr>
+					<td><code>\q</code></td>
+					<td>double-quote</td>
+					<td>双引号</td>
+					<td>34</td>
+			</tr>
+			<tr>
+					<td><code>\r</code></td>
+					<td>CR</td>
+					<td>回车</td>
+					<td>13</td>
+			</tr>
+			<tr>
+					<td><code>\t</code></td>
+					<td>HT</td>
+					<td>横向制表符(TAB)</td>
+					<td>8</td>
+			</tr>
+			<tr>
+					<td><code>\v</code></td>
+					<td>VT</td>
+					<td>纵向制表符</td>
+					<td>11</td>
+			</tr>
+			<tr>
+					<td><code>\z</code></td>
+					<td>NUL</td>
+					<td>空字符</td>
+					<td>0</td>
+			</tr>
+			<tr>
+					<td><code>\&quot;</code></td>
+					<td>double-quote</td>
+					<td>双引号</td>
+					<td>34</td>
+			</tr>
+			<tr>
+					<td>\xaf</td>
+					<td></td>
+					<td>任意字符。af 是一个 16 进制数字（00&hellip;ff）</td>
+					<td>ASCII 十六进制为 af 的字符</td>
+			</tr>
+			<tr>
+					<td><code>\\</code></td>
+					<td>backslash</td>
+					<td>反斜线</td>
+					<td>92</td>
+			</tr>
+	</tbody>
 </table>
 <p>使用 <code>TYPE</code> 可打印 <code>( c-addr u )</code> 二元组对应的字符串。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="k">TYPE	</span><span class="c1">( c-addr u -- )</span>		<span class="c1">\ 打印 ( c-addr u ) 二元组对应的字符串。
@@ -1370,30 +1365,30 @@
 </span></span></span></code></pre></div><p>注意 <code>#</code>、<code>#S</code>、<code>SIGN</code>、<code>HOLD</code> 和 <code>HOLDS</code> 只能在 <code>&lt;#</code>&hellip;<code>#&gt;</code> 中间使用。</p>
 <p>一般情况下，可以这样为格式化输出准备栈的内容：</p>
 <table>
-  <thead>
-      <tr>
-          <th>需要输出的数字</th>
-          <th>准备方法</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>单精度无符号整数</td>
-          <td><code>0</code> （<code>#</code> 等词需要双精度整数，用 <code>0</code> 补齐高 16 位）</td>
-      </tr>
-      <tr>
-          <td>单精度有符号整数</td>
-          <td><code>DUP ABS 0</code></td>
-      </tr>
-      <tr>
-          <td>双精度无符号整数</td>
-          <td>（不需要特别准备）</td>
-      </tr>
-      <tr>
-          <td>双精度有符号整数</td>
-          <td><code>SWAP OVER DABS</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>需要输出的数字</th>
+					<th>准备方法</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>单精度无符号整数</td>
+					<td><code>0</code> （<code>#</code> 等词需要双精度整数，用 <code>0</code> 补齐高 16 位）</td>
+			</tr>
+			<tr>
+					<td>单精度有符号整数</td>
+					<td><code>DUP ABS 0</code></td>
+			</tr>
+			<tr>
+					<td>双精度无符号整数</td>
+					<td>（不需要特别准备）</td>
+			</tr>
+			<tr>
+					<td>双精度有符号整数</td>
+					<td><code>SWAP OVER DABS</code></td>
+			</tr>
+	</tbody>
 </table>
 <p>输出单精度有符号整数的 <code>.</code> 可这样定义：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="kn">:</span> <span class="nc">.</span> <span class="c1">( n -- )</span>
@@ -1525,88 +1520,88 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="s">s&#34;</span> <span class="s">max-n</span><span class="nf">&#34;</span> <span class="k">environment? </span><span class="kt">.</span><span class="nf">s↵</span> <span class="nf">&lt;2&gt;</span> <span class="mi">32767</span> <span class="mi">-1</span>  <span class="nf">ok</span>
 </span></span></code></pre></div><p>标准的系统环境字符串有下面一些：</p>
 <table>
-  <thead>
-      <tr>
-          <th>字符串</th>
-          <th>返回值类型</th>
-          <th>意义</th>
-          <th>My4TH Forth 中的值</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>/COUNTED-STRING</code></td>
-          <td>n</td>
-          <td>带长度的字符串的最长长度</td>
-          <td>255</td>
-      </tr>
-      <tr>
-          <td><code>/HOLD</code></td>
-          <td>n</td>
-          <td>数字格式化输出使用的缓冲区的大小（字符数）</td>
-          <td>112</td>
-      </tr>
-      <tr>
-          <td><code>/PAD</code></td>
-          <td>n</td>
-          <td>缓冲区 <code>PAD</code> 的大小（字符数）</td>
-          <td>96</td>
-      </tr>
-      <tr>
-          <td><code>ADDRESS-UNIT-BITS</code></td>
-          <td>n</td>
-          <td>一个寻址单位的位数<sup id="fnref:34"><a href="#fn:34" class="footnote-ref" role="doc-noteref">34</a></sup></td>
-          <td>8</td>
-      </tr>
-      <tr>
-          <td><code>FLOORED</code></td>
-          <td>flag</td>
-          <td><code>/MOD</code> 使用下取整除法时为真，使用对称除法时为假</td>
-          <td>false</td>
-      </tr>
-      <tr>
-          <td><code>MAX-CHAR</code></td>
-          <td>u</td>
-          <td>最大的字符型量值</td>
-          <td>255</td>
-      </tr>
-      <tr>
-          <td><code>MAX-D</code></td>
-          <td>d</td>
-          <td>最大的双精度有符号整数</td>
-          <td>2147483647</td>
-      </tr>
-      <tr>
-          <td><code>MAX-N</code></td>
-          <td>n</td>
-          <td>最大的单精度有符号整数</td>
-          <td>32767</td>
-      </tr>
-      <tr>
-          <td><code>MAX-U</code></td>
-          <td>u</td>
-          <td>最大的单精度无符号整数</td>
-          <td>65535</td>
-      </tr>
-      <tr>
-          <td><code>MAX-UD</code></td>
-          <td>ud</td>
-          <td>最大的双精度无符号整数</td>
-          <td>4294967295</td>
-      </tr>
-      <tr>
-          <td><code>RETURN-STACK-CELLS</code></td>
-          <td>n</td>
-          <td>返回栈的最大深度（以单元数为单位）</td>
-          <td>50</td>
-      </tr>
-      <tr>
-          <td><code>STACK-CELLS</code></td>
-          <td>n</td>
-          <td>栈的最大深度（以单元数为单位）</td>
-          <td>128</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>字符串</th>
+					<th>返回值类型</th>
+					<th>意义</th>
+					<th>My4TH Forth 中的值</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>/COUNTED-STRING</code></td>
+					<td>n</td>
+					<td>带长度的字符串的最长长度</td>
+					<td>255</td>
+			</tr>
+			<tr>
+					<td><code>/HOLD</code></td>
+					<td>n</td>
+					<td>数字格式化输出使用的缓冲区的大小（字符数）</td>
+					<td>112</td>
+			</tr>
+			<tr>
+					<td><code>/PAD</code></td>
+					<td>n</td>
+					<td>缓冲区 <code>PAD</code> 的大小（字符数）</td>
+					<td>96</td>
+			</tr>
+			<tr>
+					<td><code>ADDRESS-UNIT-BITS</code></td>
+					<td>n</td>
+					<td>一个寻址单位的位数<sup id="fnref:34"><a href="#fn:34" class="footnote-ref" role="doc-noteref">34</a></sup></td>
+					<td>8</td>
+			</tr>
+			<tr>
+					<td><code>FLOORED</code></td>
+					<td>flag</td>
+					<td><code>/MOD</code> 使用下取整除法时为真，使用对称除法时为假</td>
+					<td>false</td>
+			</tr>
+			<tr>
+					<td><code>MAX-CHAR</code></td>
+					<td>u</td>
+					<td>最大的字符型量值</td>
+					<td>255</td>
+			</tr>
+			<tr>
+					<td><code>MAX-D</code></td>
+					<td>d</td>
+					<td>最大的双精度有符号整数</td>
+					<td>2147483647</td>
+			</tr>
+			<tr>
+					<td><code>MAX-N</code></td>
+					<td>n</td>
+					<td>最大的单精度有符号整数</td>
+					<td>32767</td>
+			</tr>
+			<tr>
+					<td><code>MAX-U</code></td>
+					<td>u</td>
+					<td>最大的单精度无符号整数</td>
+					<td>65535</td>
+			</tr>
+			<tr>
+					<td><code>MAX-UD</code></td>
+					<td>ud</td>
+					<td>最大的双精度无符号整数</td>
+					<td>4294967295</td>
+			</tr>
+			<tr>
+					<td><code>RETURN-STACK-CELLS</code></td>
+					<td>n</td>
+					<td>返回栈的最大深度（以单元数为单位）</td>
+					<td>50</td>
+			</tr>
+			<tr>
+					<td><code>STACK-CELLS</code></td>
+					<td>n</td>
+					<td>栈的最大深度（以单元数为单位）</td>
+					<td>128</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="进一步的读物及参考文献">进一步的读物及参考文献</h2>
 <p>下面是 Forth 2012 的参考资料。</p>

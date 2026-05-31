@@ -1,40 +1,45 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>My4TH on BH1PHL&#39;s Blog</title>
-    <link>https://bh1phl.github.io/tags/my4th/</link>
-    <description>Recent content in My4TH on BH1PHL&#39;s Blog</description>
-    <generator>Hugo</generator>
-    <language>en-US</language>
-    <lastBuildDate>Sat, 07 Mar 2026 14:57:18 +0800</lastBuildDate>
-    <atom:link href="https://bh1phl.github.io/tags/my4th/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Plotting the Mandelbrot set with Forth</title>
-      <link>https://bh1phl.github.io/posts/forth_mandelbrot_set/</link>
-      <pubDate>Sat, 07 Mar 2026 14:57:18 +0800</pubDate>
-      <guid>https://bh1phl.github.io/posts/forth_mandelbrot_set/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Mandelbrot_set&#34;&gt;Mandelbrot set&lt;/a&gt; is one of the most famous fractal images. The following Forth program is used to plot the Mandelbrot set.&lt;/p&gt;&#xA;&lt;h2 id=&#34;representation-of-fixed-point-numbers&#34;&gt;Representation of Fixed-Point Numbers&lt;/h2&gt;&#xA;&lt;p&gt;Fixed-point numbers in &lt;a href=&#34;https://en.wikipedia.org/wiki/Q_%28number_format%29&#34;&gt;&lt;code&gt;Qint.frac&lt;/code&gt;&lt;/a&gt; format are used for computation. &lt;code&gt;int&lt;/code&gt; is the number of bits for the integer part (including the sign bit, if any), and &lt;code&gt;frac&lt;/code&gt; is the number of bits for the fractional part. In the following program, the width of the fixed-point number is 16 bits (the same as a single-precision integer in Forth), i.e., &lt;code&gt;int+frac=16&lt;/code&gt;.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Some experiments on My4TH (4): Peripherals</title>
-      <link>https://bh1phl.github.io/posts/my4th_peripherals/</link>
-      <pubDate>Tue, 18 Feb 2025 09:30:39 +0800</pubDate>
-      <guid>https://bh1phl.github.io/posts/my4th_peripherals/</guid>
-      <description>&lt;h2 id=&#34;eeprom-card-and-backplane&#34;&gt;EEPROM Card and Backplane&lt;/h2&gt;&#xA;&lt;h3 id=&#34;eeprom-card&#34;&gt;EEPROM Card&lt;/h3&gt;&#xA;&lt;p&gt;For EEPROM cards, &lt;a href=&#34;https://bh1phl.github.io/posts/my4th_faster/&#34;&gt;firmware provided on this website&lt;/a&gt; arranges adjacent blocks on the same EEPROM chip, with block numbers ordered according to EEPROM addresses.&lt;/p&gt;&#xA;&lt;p&gt;The EEPROM card card uses a USB 3.0 Type-A interface, where the power contacts are compatible with standard USB interfaces, and the signal contacts are used for I2C interface and addressing:&lt;/p&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://bh1phl.github.io/a/my4th_peripherals/eeprom-card-interface.png&#34; alt=&#34;EEPROM Card Interface&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;SOCKET&lt;/code&gt; connects to EEPROM address line &lt;code&gt;A1&lt;/code&gt;：&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Some experiments on My4TH (3): Faster speed</title>
-      <link>https://bh1phl.github.io/posts/my4th_faster/</link>
-      <pubDate>Thu, 26 Dec 2024 22:40:42 +0800</pubDate>
-      <guid>https://bh1phl.github.io/posts/my4th_faster/</guid>
-      <description>&lt;h2 id=&#34;working-at-20mhz-and-221184mhz&#34;&gt;Working at 20MHz and 22.1184MHz&lt;/h2&gt;&#xA;&lt;p&gt;Tests have shown that My4TH can operate stably at 20MHz (using the 10MHz ROM image file provided by the original author at baud rate 9600) by increasing Vcc to 5.2V with 74HC series logic circuits and AM27H256-45/35DC.&lt;/p&gt;&#xA;&lt;p&gt;This configuation can work at 22.1184MHz with Vcc=5.4V:&lt;/p&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;U2 U3&lt;/th&gt;&#xA;          &lt;th&gt;U4&lt;/th&gt;&#xA;          &lt;th&gt;U9&lt;/th&gt;&#xA;          &lt;th&gt;U15&lt;/th&gt;&#xA;          &lt;th&gt;U16&lt;/th&gt;&#xA;          &lt;th&gt;Others&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;74F161A(TI)/ 74AC161(TI)&lt;/td&gt;&#xA;          &lt;td&gt;74LVC541A(TI)&lt;/td&gt;&#xA;          &lt;td&gt;74ACT08/ 74LVC08&lt;/td&gt;&#xA;          &lt;td&gt;AM27H256-45/35DC (needs to be selected)&lt;/td&gt;&#xA;          &lt;td&gt;IS61C256AL-12T(L)I/ CY7C199(L)-15ZC&lt;/td&gt;&#xA;          &lt;td&gt;74HC series&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;h2 id=&#34;higher-baud-rate&#34;&gt;Higher baud rate&lt;/h2&gt;&#xA;&lt;p&gt;By adjusting the delays in serial subroutines, the system can operate at 14400 baud above 16MHz and 19200 at 22.1184MHz.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Some experiments on My4TH (1): Running at 16MHz</title>
-      <link>https://bh1phl.github.io/posts/my4th_16mhz/</link>
-      <pubDate>Thu, 19 Dec 2024 21:19:39 +0800</pubDate>
-      <guid>https://bh1phl.github.io/posts/my4th_16mhz/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;http://mynor.org/my4th&#34;&gt;My4TH&lt;/a&gt; is a minimalist computer designed by Dennis Kuschel. This computer is extremely simplified in its design, employing a serial ALU and utilizing 16 74HC series CMOS logic devices along with microcodes from  ROM for CPU. It runs the Forth system. Here are some experiments related to this computer.&lt;/p&gt;&#xA;&lt;h2 id=&#34;increasing-the-running-speed&#34;&gt;Increasing the running speed&lt;/h2&gt;&#xA;&lt;p&gt;To ensure the state of the bus during reset, the original version of My4TH employs 10k resistors to pull down the data bus to GND. This introduces compatibility issues between TTL and HCMOS voltage levels: the outputs of RAM 62256 and ROM 27C256 conform to TTL levels, with a minimum high-level output voltage (\(V_\mathrm{OH}\)) of 2.4V; whereas the minimum high-level input voltage (\(V_\mathrm{IH}\)) for 74HC devices is \(0.7 V_\mathrm{cc}\), which is 3.5 V when powered at 5 V.&lt;/p&gt;</description>
-    </item>
-  </channel>
+	<channel>
+		<title>My4TH on BH1PHL&#39;s Blog</title>
+		<link>https://bh1phl.github.io/tags/my4th/</link>
+		<description>Recent content in My4TH on BH1PHL&#39;s Blog</description>
+		<generator>Hugo</generator>
+		<language>en-US</language>
+		
+		
+		
+		
+			<lastBuildDate>Sat, 07 Mar 2026 14:57:18 +0800</lastBuildDate>
+		
+			<atom:link href="https://bh1phl.github.io/tags/my4th/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Mandelbrot set in Forth</title>
+				<link>https://bh1phl.github.io/posts/forth_mandelbrot_set/</link>
+				<pubDate>Sat, 07 Mar 2026 14:57:18 +0800</pubDate>
+				<guid>https://bh1phl.github.io/posts/forth_mandelbrot_set/</guid>
+				<description>&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Mandelbrot_set&#34;&gt;Mandelbrot set&lt;/a&gt; is one of the most famous fractal images. It can be plotted with a simple Forth program.&lt;/p&gt;&#xA;&lt;h2 id=&#34;representation-of-fixed-point-numbers&#34;&gt;Representation of Fixed-Point Numbers&lt;/h2&gt;&#xA;&lt;p&gt;Fixed-point numbers in &lt;a href=&#34;https://en.wikipedia.org/wiki/Q_%28number_format%29&#34;&gt;&lt;code&gt;Qint.frac&lt;/code&gt;&lt;/a&gt; format are used for computation. &lt;code&gt;int&lt;/code&gt; is the number of bits for the integer part (including the sign bit, if any), and &lt;code&gt;frac&lt;/code&gt; is the number of bits for the fractional part. In the following program, the width of the fixed-point number is 16 bits (the same as a single-precision integer in Forth), i.e., &lt;code&gt;int+frac=16&lt;/code&gt;.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Some experiments on My4TH (4): Peripherals</title>
+				<link>https://bh1phl.github.io/posts/my4th_peripherals/</link>
+				<pubDate>Tue, 18 Feb 2025 09:30:39 +0800</pubDate>
+				<guid>https://bh1phl.github.io/posts/my4th_peripherals/</guid>
+				<description>&lt;h2 id=&#34;eeprom-card-and-backplane&#34;&gt;EEPROM Card and Backplane&lt;/h2&gt;&#xA;&lt;h3 id=&#34;eeprom-card&#34;&gt;EEPROM Card&lt;/h3&gt;&#xA;&lt;p&gt;For EEPROM cards, &lt;a href=&#34;https://bh1phl.github.io/posts/my4th_faster/&#34;&gt;firmware provided on this website&lt;/a&gt; arranges adjacent blocks on the same EEPROM chip, with block numbers ordered according to EEPROM addresses.&lt;/p&gt;&#xA;&lt;p&gt;The EEPROM card card uses a USB 3.0 Type-A interface, where the power contacts are compatible with standard USB interfaces, and the signal contacts are used for I2C interface and addressing:&lt;/p&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://bh1phl.github.io/a/my4th_peripherals/eeprom-card-interface.png&#34; alt=&#34;EEPROM Card Interface&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;SOCKET&lt;/code&gt; connects to EEPROM address line &lt;code&gt;A1&lt;/code&gt;：&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Some experiments on My4TH (3): Faster speed</title>
+				<link>https://bh1phl.github.io/posts/my4th_faster/</link>
+				<pubDate>Thu, 26 Dec 2024 22:40:42 +0800</pubDate>
+				<guid>https://bh1phl.github.io/posts/my4th_faster/</guid>
+				<description>&lt;h2 id=&#34;working-at-20mhz-and-221184mhz&#34;&gt;Working at 20MHz and 22.1184MHz&lt;/h2&gt;&#xA;&lt;p&gt;Tests have shown that My4TH can operate stably at 20MHz (using the 10MHz ROM image file provided by the original author at baud rate 9600) by increasing Vcc to 5.2V with 74HC series logic circuits and AM27H256-45/35DC.&lt;/p&gt;&#xA;&lt;p&gt;This configuation can work at 22.1184MHz with Vcc=5.4V:&lt;/p&gt;&#xA;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;U2 U3&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;U4&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;U9&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;U15&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;U16&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;Others&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;74F161A(TI)/ 74AC161(TI)&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;74LVC541A(TI)&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;74ACT08/ 74LVC08&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;AM27H256-45/35DC (needs to be selected)&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;IS61C256AL-12T(L)I/ CY7C199(L)-15ZC&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;74HC series&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;h2 id=&#34;higher-baud-rate&#34;&gt;Higher baud rate&lt;/h2&gt;&#xA;&lt;p&gt;By adjusting the delays in serial subroutines, the system can operate at 14400 baud above 16MHz and 19200 at 22.1184MHz.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Some experiments on My4TH (1): Running at 16MHz</title>
+				<link>https://bh1phl.github.io/posts/my4th_16mhz/</link>
+				<pubDate>Thu, 19 Dec 2024 21:19:39 +0800</pubDate>
+				<guid>https://bh1phl.github.io/posts/my4th_16mhz/</guid>
+				<description>&lt;p&gt;&lt;a href=&#34;http://mynor.org/my4th&#34;&gt;My4TH&lt;/a&gt; is a minimalist computer designed by Dennis Kuschel. This computer is extremely simplified in its design, employing a serial ALU and utilizing 16 74HC series CMOS logic devices along with microcodes from  ROM for CPU. It runs the Forth system. Here are some experiments related to this computer.&lt;/p&gt;&#xA;&lt;h2 id=&#34;increasing-the-running-speed&#34;&gt;Increasing the running speed&lt;/h2&gt;&#xA;&lt;p&gt;To ensure the state of the bus during reset, the original version of My4TH employs 10k resistors to pull down the data bus to GND. This introduces compatibility issues between TTL and HCMOS voltage levels: the outputs of RAM 62256 and ROM 27C256 conform to TTL levels, with a minimum high-level output voltage (\(V_\mathrm{OH}\)) of 2.4V; whereas the minimum high-level input voltage (\(V_\mathrm{IH}\)) for 74HC devices is \(0.7 V_\mathrm{cc}\), which is 3.5 V when powered at 5 V.&lt;/p&gt;</description>
+			</item>
+	</channel>
 </rss>

@@ -27,7 +27,7 @@
   
   
     
-      <title>Plotting the Mandelbrot set with Forth | BH1PHL&#39;s Blog</title>
+      <title>Mandelbrot set in Forth | BH1PHL&#39;s Blog</title>
     
   
   <link rel="stylesheet" href="/css/reset.css"/>
@@ -82,8 +82,8 @@
         <a href="/index.xml"><b>RSS</b></a>
       
     
-    |
     
+      |
       
         <a href="/zh/posts/forth_mandelbrot_set/"><b>中文</b></a>
       
@@ -96,7 +96,7 @@
         
   <main>
     <article>
-      <h1 class="title">Plotting the Mandelbrot set with Forth</h1>
+      <h1 class="title">Mandelbrot set in Forth</h1>
       
       <div class="post-meta">
   <strong>
@@ -105,7 +105,7 @@
     
     
   </strong>
-  <span> • 1419 words</span>
+  <span> • 1417 words</span>
   <span> • 3 minute read</span>
   
   
@@ -120,7 +120,7 @@
   
 </div>
 
-      <div class="content"><p><a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a> is one of the most famous fractal images. The following Forth program is used to plot the Mandelbrot set.</p>
+      <div class="content"><p><a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a> is one of the most famous fractal images. It can be plotted with a simple Forth program.</p>
 <h2 id="representation-of-fixed-point-numbers">Representation of Fixed-Point Numbers</h2>
 <p>Fixed-point numbers in <a href="https://en.wikipedia.org/wiki/Q_%28number_format%29"><code>Qint.frac</code></a> format are used for computation. <code>int</code> is the number of bits for the integer part (including the sign bit, if any), and <code>frac</code> is the number of bits for the fractional part. In the following program, the width of the fixed-point number is 16 bits (the same as a single-precision integer in Forth), i.e., <code>int+frac=16</code>.</p>
 <p>Fixed-point numbers in <code>Qint.frac</code> format are essentially <a href="https://ozendumh.miraheze.org/%E5%88%86%E6%95%B0">fractions</a> with a denominator of \(2^{\mathtt{frac}}\), storing only the numerator. Addition and subtraction of fixed-point numbers in this format are the same as integer operations, and multiplication of a fixed-point number by an integer is also the same as multiplication of two integers. When multiplying two fixed-point numbers, they are first multiplied as integers (the intermediate result is a <a href="/zh/posts/forth_primer_1">double-precision integer</a>), and then right-shifted by <code>frac</code> bits (i.e., divided by \(2^{\mathtt{frac}}\)). If the multiplied result does not overflow, the lower 16 bits are retained as the result.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>

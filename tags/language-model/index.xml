@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Language Model on BH1PHL&#39;s Blog</title>
+		<link>https://bh1phl.github.io/tags/language-model/</link>
+		<description>Recent content in Language Model on BH1PHL&#39;s Blog</description>
+		<generator>Hugo</generator>
+		<language>en-US</language>
+		
+		
+		
+		
+			<lastBuildDate>Sun, 31 May 2026 09:19:41 +0800</lastBuildDate>
+		
+			<atom:link href="https://bh1phl.github.io/tags/language-model/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Qwen 3.6-27B language model on RTX 2080 Ti 22GiB</title>
+				<link>https://bh1phl.github.io/posts/qwen36_27b_on_2080ti_22g/</link>
+				<pubDate>Sun, 31 May 2026 09:19:41 +0800</pubDate>
+				<guid>https://bh1phl.github.io/posts/qwen36_27b_on_2080ti_22g/</guid>
+				<description>&lt;p&gt;&lt;a href=&#34;https://www.modelscope.cn/models/Qwen/Qwen3.6-27B&#34;&gt;Qwen 3.6-27B&lt;/a&gt; is a state-of-the-art large language model suitable for local deployment. With technologies such as &lt;a href=&#34;https://www.maartengrootendorst.com/blog/quantization/&#34;&gt;quantization&lt;/a&gt;, &lt;a href=&#34;https://github.com/ggml-org/llama.cpp/pull/22673&#34;&gt;MTP&lt;/a&gt;, and &lt;a href=&#34;https://github.com/TheTom/turboquant_plus&#34;&gt;TurboQuant&lt;/a&gt;, this language model can be deployed and run smoothly on an RTX 2080 Ti with 22GiB VRAM.&lt;/p&gt;&#xA;&lt;p&gt;The following steps have been successfully tested on the latest version of CachyOS (installed using the &lt;a href=&#34;https://cdn77.cachyos.org/ISO/desktop/260426/cachyos-desktop-linux-260426.iso&#34;&gt;260426 ISO&lt;/a&gt;).&lt;/p&gt;&#xA;&lt;h2 id=&#34;installing-dependencies&#34;&gt;Installing dependencies&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo pacman -Syu cmake cuda nodejs npm&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;paru -S python-modelscope&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Configure &lt;code&gt;npm&lt;/code&gt; mirror if necessary:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;npm config &lt;span class=&#34;nb&#34;&gt;set&lt;/span&gt; registry http://mirrors.cloud.tencent.com/npm/&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;npm config &lt;span class=&#34;nb&#34;&gt;set&lt;/span&gt; strict-ssl &lt;span class=&#34;nb&#34;&gt;false&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Rebooting or relogging in is recommended for refreshing environment variables.&lt;/p&gt;</description>
+			</item>
+	</channel>
+</rss>

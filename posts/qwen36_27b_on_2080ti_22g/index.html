@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+  
+    
+      <title>Qwen 3.6-27B language model on RTX 2080 Ti 22GiB | BH1PHL&#39;s Blog</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
+  <link rel="stylesheet" href="/css/codecolor.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="mask-icon" href="android-chrome-512x512.png" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="/">
+      
+        <img
+          class="icon"
+          src="/images/china_ar.svg"
+        />
+      
+    </a>
+    <div class="text">
+      <a href="/"><h1>BH1PHL&#39;s Blog</h1></a>
+      
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/"><b>Home</b></a>
+      
+         | 
+        <a href="/about"><b>About</b></a>
+      
+         | 
+        <a href="/posts"><b>Posts</b></a>
+      
+         | 
+        <a href="/tags"><b>Tags</b></a>
+      
+         | 
+        <a href="/index.xml"><b>RSS</b></a>
+      
+    
+    
+      |
+      
+        <a href="/zh/posts/qwen36_27b_on_2080ti_22g/"><b>中文</b></a>
+      
+    
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">Qwen 3.6-27B language model on RTX 2080 Ti 22GiB</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2026-05-31</time>
+    
+    
+  </strong>
+  <span> • 610 words</span>
+  <span> • 3 minute read</span>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/cachyos">CachyOS</a>, 
+        <a href="/tags/linux">Linux</a>, 
+        <a href="/tags/qwen">Qwen</a>, 
+        <a href="/tags/ai">AI</a>, 
+        <a href="/tags/language-model">Language model</a>
+    </div>
+  
+</div>
+
+      <div class="content"><p><a href="https://www.modelscope.cn/models/Qwen/Qwen3.6-27B">Qwen 3.6-27B</a> is a state-of-the-art large language model suitable for local deployment. With technologies such as <a href="https://www.maartengrootendorst.com/blog/quantization/">quantization</a>, <a href="https://github.com/ggml-org/llama.cpp/pull/22673">MTP</a>, and <a href="https://github.com/TheTom/turboquant_plus">TurboQuant</a>, this language model can be deployed and run smoothly on an RTX 2080 Ti with 22GiB VRAM.</p>
+<p>The following steps have been successfully tested on the latest version of CachyOS (installed using the <a href="https://cdn77.cachyos.org/ISO/desktop/260426/cachyos-desktop-linux-260426.iso">260426 ISO</a>).</p>
+<h2 id="installing-dependencies">Installing dependencies</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syu cmake cuda nodejs npm
+</span></span><span class="line"><span class="cl">paru -S python-modelscope
+</span></span></code></pre></div><p>Configure <code>npm</code> mirror if necessary:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">npm config <span class="nb">set</span> registry http://mirrors.cloud.tencent.com/npm/
+</span></span><span class="line"><span class="cl">npm config <span class="nb">set</span> strict-ssl <span class="nb">false</span>
+</span></span></code></pre></div><p>Rebooting or relogging in is recommended for refreshing environment variables.</p>
+<h2 id="compiling-llama-cpp-turboquant">Compiling <code>llama-cpp-turboquant</code></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span>
+</span></span><span class="line"><span class="cl">git clone https://github.com/TheTom/llama-cpp-turboquant.git
+</span></span><span class="line"><span class="cl"><span class="c1"># Following three lines for compiling Web UI frontend</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> llama-cpp-turboquant/tools/ui
+</span></span><span class="line"><span class="cl">npm i
+</span></span><span class="line"><span class="cl">npm run build
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ../..
+</span></span><span class="line"><span class="cl">cmake -B build -DGGML_CUDA<span class="o">=</span>ON -DLLAMA_BUILD_WEBUI<span class="o">=</span>ON <span class="o">&amp;&amp;</span> cmake --build build --config Release -j --target llama-server llama-cli
+</span></span></code></pre></div><p>Executables are in <code>build/bin</code> directory.</p>
+<h2 id="downloading-the-model">Downloading the model</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">modelscope download --model Tariel/Qwen3.6-27B-4bpw-MTP.gguf --local_dir ~/Qwen3.6
+</span></span></code></pre></div><h2 id="deploying">Deploying</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> ~/llama-cpp-turboquant/build/bin
+</span></span><span class="line"><span class="cl">./llama-server -m ~/Qwen3.6/Qwen3.6-27B-4bpw-MTP.gguf <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -mm ~/Qwen3.6/mmproj-Qwen-Qwen3.6-27B-Q6_K.gguf <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -fa on --spec-type draft-mtp --spec-draft-n-max <span class="m">3</span> -np <span class="m">1</span> -kvu <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -c <span class="m">190208</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -ngl all -ctk q8_0 -ctv turbo3 <span class="se">\
+</span></span></span><span class="line"><span class="cl">    --temp 1.0 --top-p 0.95 --top-k <span class="m">20</span> --min-p <span class="m">0</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    --host 0.0.0.0 <span class="se">\
+</span></span></span><span class="line"><span class="cl">    --port <span class="m">22345</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -a qwen3.6:27b
+</span></span></code></pre></div><h2 id="usage">Usage</h2>
+<p>Visit port 22345 (e.g., <code>http://127.0.0.1:22345</code>) in the Web browser for <code>llama.cpp</code> Web UI.</p>
+<p>Allow port 22345 in the <code>ufw</code> firewall in CachyOS for visiting from other machines in the network:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo ufw allow <span class="m">22345</span>
+</span></span></code></pre></div><p><code>llama-server</code> supports <code>OpenAI</code> and <code>Anthropic</code> APIs, allowing user to use many AI clients with it.</p>
+<h3 id="notes-on-cherry-studio">Notes on Cherry Studio</h3>
+<p>To turn on/off thinking mode properly in <a href="https://cherry-ai.com">Cherry Studio</a>, use &ldquo;nvidia&rdquo; provider and config API Host to <code>llama.cpp</code> address (see <a href="https://github.com/CherryHQ/cherry-studio/issues/14981">Issue #14981</a>).</p>
+<h2 id="performance">Performance</h2>
+<p>The environment for performance testing is: CPU i5-12500H (using integrated graphics for video output), GPU RTX 2080 Ti 22GiB, Kernel Linux 7.0.10-1-cachyos.</p>
+<p>MTP significantly improves the decoding performance and overall performance of the model at the cost of slightly increased VRAM usage and a small reduction in prefill speed.</p>
+<table>
+	<thead>
+			<tr>
+					<th>Input tokens</th>
+					<th>Output tokens (without MTP)</th>
+					<th>Prefill time/speed (w/o MTP)</th>
+					<th>Decode time/speed (w/o MTP)</th>
+					<th>Overall time (w/o MTP)</th>
+					<th>Output tokens (with MTP)</th>
+					<th>Prefill time/speed (w MTP)</th>
+					<th>Decode time/speed (w MTP)</th>
+					<th>Overall time (w MTP)</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>30667</td>
+					<td>1666</td>
+					<td>52.9 s, 1.72 ms/token, 580.16 token/s</td>
+					<td>116.6 s, 70.02 ms/token, 14.28 token/s</td>
+					<td>169.5 s</td>
+					<td>1556</td>
+					<td>64.4 s, 2.10 ms/token, 476.14 token/s (speed -17.9%)</td>
+					<td>53.3 s, 34.22 ms/token, 29.22 token/s (speed +104.6%)</td>
+					<td>117.7 s</td>
+			</tr>
+			<tr>
+					<td>159283</td>
+					<td>1679</td>
+					<td>500.8 s, 3.14 ms/token,  318.04 token/s</td>
+					<td>381.4 s, 227.17 ms/token, 4.40 token/s</td>
+					<td>882.3 s</td>
+					<td>1337</td>
+					<td>579.6 s, 3.64 ms/token,   274.80 token/s (speed -13.6%)</td>
+					<td>87.4 s, 65.37 ms/token,    15.30 token/s (speed +247.7%)</td>
+					<td>667.0 s</td>
+			</tr>
+	</tbody>
+</table>
+<p>Performance on non-thinking mode:</p>
+<table>
+	<thead>
+			<tr>
+					<th>Input tokens</th>
+					<th>Output tokens</th>
+					<th>VRAM (MiB)</th>
+					<th>Prefill speed (token/s)</th>
+					<th>Decode speed (token/s)</th>
+					<th>Task</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>0</td>
+					<td>/</td>
+					<td>20270</td>
+					<td>/</td>
+					<td>/</td>
+					<td>/</td>
+			</tr>
+			<tr>
+					<td>41</td>
+					<td>1632</td>
+					<td>29296</td>
+					<td>158.78</td>
+					<td>41.15</td>
+					<td>Problem solving</td>
+			</tr>
+			<tr>
+					<td>75</td>
+					<td>1260</td>
+					<td>20298</td>
+					<td>204.50</td>
+					<td>39.02</td>
+					<td>Problem solving</td>
+			</tr>
+			<tr>
+					<td>15202</td>
+					<td>15422</td>
+					<td>20526</td>
+					<td>513.91</td>
+					<td>38.69</td>
+					<td>Translation</td>
+			</tr>
+			<tr>
+					<td>30667</td>
+					<td>1556</td>
+					<td>20538</td>
+					<td>476.14</td>
+					<td>29.22</td>
+					<td>Text summary</td>
+			</tr>
+			<tr>
+					<td>53108</td>
+					<td>2058</td>
+					<td>20731</td>
+					<td>419.84</td>
+					<td>25.17</td>
+					<td>Text summary</td>
+			</tr>
+			<tr>
+					<td>83743</td>
+					<td>1612</td>
+					<td>20954</td>
+					<td>364.67</td>
+					<td>20.50</td>
+					<td>Text summary</td>
+			</tr>
+			<tr>
+					<td>106196</td>
+					<td>1486</td>
+					<td>21126</td>
+					<td>333.72</td>
+					<td>19.39</td>
+					<td>Text summary</td>
+			</tr>
+			<tr>
+					<td>136828</td>
+					<td>1721</td>
+					<td>21370</td>
+					<td>296.02</td>
+					<td>16.11</td>
+					<td>Text summary</td>
+			</tr>
+			<tr>
+					<td>159283</td>
+					<td>1337</td>
+					<td>21542</td>
+					<td>274.80</td>
+					<td>15.30</td>
+					<td>Text summary</td>
+			</tr>
+			<tr>
+					<td>189915</td>
+					<td>293</td>
+					<td>21770</td>
+					<td>249.99</td>
+					<td>14.50</td>
+					<td>Text summary (output truncated)</td>
+			</tr>
+	</tbody>
+</table>
+<p>Performance on thinking mode:</p>
+<table>
+	<thead>
+			<tr>
+					<th>Input tokens</th>
+					<th>Output tokens</th>
+					<th>VRAM (MiB)</th>
+					<th>Prefill speed (token/s)</th>
+					<th>Decode speed (token/s)</th>
+					<th>Task</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>0</td>
+					<td>/</td>
+					<td>20270</td>
+					<td>/</td>
+					<td>/</td>
+					<td>/</td>
+			</tr>
+			<tr>
+					<td>39</td>
+					<td>7887</td>
+					<td>20344</td>
+					<td>131.31</td>
+					<td>38.94</td>
+					<td>Problem solving</td>
+			</tr>
+			<tr>
+					<td>73</td>
+					<td>10436</td>
+					<td>20370</td>
+					<td>207.27</td>
+					<td>36.13</td>
+					<td>Problem solving</td>
+			</tr>
+			<tr>
+					<td>15200</td>
+					<td>18345</td>
+					<td>20550</td>
+					<td>518.64</td>
+					<td>35.71</td>
+					<td>Translation</td>
+			</tr>
+			<tr>
+					<td>30665</td>
+					<td>3043</td>
+					<td>20550</td>
+					<td>478.33</td>
+					<td>28.10</td>
+					<td>Text summary</td>
+			</tr>
+			<tr>
+					<td>53106</td>
+					<td>3150</td>
+					<td>20726</td>
+					<td>422.29</td>
+					<td>24.45</td>
+					<td>Text summary</td>
+			</tr>
+			<tr>
+					<td>83741</td>
+					<td>3715</td>
+					<td>20970</td>
+					<td>364.77</td>
+					<td>21.54</td>
+					<td>Text summary</td>
+			</tr>
+			<tr>
+					<td>106194</td>
+					<td>3330</td>
+					<td>21142</td>
+					<td>333.43</td>
+					<td>19.65</td>
+					<td>Text summary</td>
+			</tr>
+			<tr>
+					<td>136826</td>
+					<td>3860</td>
+					<td>21386</td>
+					<td>297.03</td>
+					<td>16.79</td>
+					<td>Text summary</td>
+			</tr>
+			<tr>
+					<td>159281</td>
+					<td>3039</td>
+					<td>21554</td>
+					<td>273.92</td>
+					<td>15.35</td>
+					<td>Text summary</td>
+			</tr>
+			<tr>
+					<td>189913</td>
+					<td>294</td>
+					<td>21770</td>
+					<td>249.73</td>
+					<td>15.70</td>
+					<td>Text summary (output truncated)</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+    </article>
+  </main>
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="mailto:bh1phl%20[at]%20hotmail.com">email</a>
+      
+         | 
+        <a href="http://www.qrz.com/db/BH1PHL">qrz.com</a>
+      
+         | 
+        <a href="https://qsl.net/bh1phl">qsl.net</a>
+      
+         | 
+        <a href="https://bh1phl.github.io">github.io</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2014-2026
+    <a href="/"><strong>BH1PHL</strong></a>.
+    Licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license unless otherwise noted.<br>May contain LLM-translated-and-human-proofread materials.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+  <script>
+    
+    if (!(/(qsl.net)|(github.io)/.test(window.location.host)))
+        window.goatcounter = {no_onload: true}
+  </script>
+  <script data-goatcounter="https://bh1phl.goatcounter.com/count"
+    async src="https://qsl.net/bh1phl/count.js"></script>
+</footer>
+
+    </div>
+  </body>
+</html>

@@ -65,12 +65,7 @@
         <a href="/zh/index.xml"><b>RSS</b></a>
       
     
-    |
     
-      
-        <a href="/"><b>English</b></a>
-      
-	
   </nav>
   <hr />
 </header>
@@ -1314,335 +1309,335 @@
 </ul>
 <h2 id="词的前后缀约定">词的前后缀约定</h2>
 <table>
-  <thead>
-      <tr>
-          <th>格式</th>
-          <th>意义</th>
-          <th>例子</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>!name</code></td>
-          <td>存储到 <code>name</code></td>
-          <td><code>!DATA</code></td>
-      </tr>
-      <tr>
-          <td><code>#name</code></td>
-          <td>大小或数量</td>
-          <td><code>#PIXELS</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>输出数字</td>
-          <td><code>#S</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>缓冲区名称</td>
-          <td><code>#I</code></td>
-      </tr>
-      <tr>
-          <td><code>'name</code></td>
-          <td><code>name</code> 的地址</td>
-          <td><code>'S</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>指向 <code>name</code> 的指针的地址</td>
-          <td><code>'TYPE</code></td>
-      </tr>
-      <tr>
-          <td><code>(name)</code></td>
-          <td><code>name</code> 是内部组成部分，通常不希望用户直接使用</td>
-          <td><code>(IF)</code> <code>(FIND)</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td><code>name</code> 的运行时过程（实例行为对应的程序入口）</td>
-          <td><code>(DOES&gt;)</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>文件索引</td>
-          <td><code>(PEOPLE)</code></td>
-      </tr>
-      <tr>
-          <td><code>*name</code></td>
-          <td>乘</td>
-          <td><code>*DIGIT</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>词需要缩放过的参数</td>
-          <td><code>*DRAW</code></td>
-      </tr>
-      <tr>
-          <td><code>+name</code></td>
-          <td>加</td>
-          <td><code>+LOOP</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>向前移动指针</td>
-          <td><code>+BUF</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>使能</td>
-          <td><code>+CLOCK</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>更强大的</td>
-          <td><code>+INITIALIZE</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>词需要相对的参数</td>
-          <td><code>+DRAW</code></td>
-      </tr>
-      <tr>
-          <td><code>-name</code></td>
-          <td>减、移除</td>
-          <td><code>-TRAILING</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>禁止</td>
-          <td><code>-CLOCK</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>与 <code>name</code> 的作用相反</td>
-          <td><code>-DONE</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>返回取反的标志（非零代表条件不成立，零代表条件成立）</td>
-          <td><code>-MATCH</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>文件中的指针</td>
-          <td><code>-JOB</code></td>
-      </tr>
-      <tr>
-          <td><code>.name</code></td>
-          <td>打印 <code>name</code> 提示的内容</td>
-          <td><code>.S</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>按 <code>name</code> 提示的格式打印栈中内容</td>
-          <td><code>.R</code> <code>.$</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>打印后面的字符串</td>
-          <td><code>.&quot; string&quot;</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>（可以前缀类型提示）</td>
-          <td><code>D.</code> <code>U.</code> <code>U.R</code></td>
-      </tr>
-      <tr>
-          <td><code>/name</code></td>
-          <td>除</td>
-          <td><code>/DIGIT</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>初始化程序或设备</td>
-          <td><code>/COUNTER</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>“每”</td>
-          <td><code>/SIDE</code></td>
-      </tr>
-      <tr>
-          <td><code>1name</code></td>
-          <td>一组元素的第一个</td>
-          <td><code>1SWITCH</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>整数 1</td>
-          <td><code>1+</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>大小为 1 字节</td>
-          <td><code>1@</code></td>
-      </tr>
-      <tr>
-          <td>2name</td>
-          <td>一组元素的第二个</td>
-          <td><code>2SWITCH</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>整数 2</td>
-          <td><code>2/</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>大小为 2 个单元</td>
-          <td><code>2@</code></td>
-      </tr>
-      <tr>
-          <td><code>;name</code></td>
-          <td>结束一部分内容</td>
-          <td><code>;S</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>结束一部分内容，开始另一部分内容</td>
-          <td><code>;CODE</code></td>
-      </tr>
-      <tr>
-          <td><code>&lt;name</code></td>
-          <td>小于</td>
-          <td><code>&lt;LIMIT</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>左括弧</td>
-          <td><code>&lt;#</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>来自设备</td>
-          <td><code>&lt;TAPE</code></td>
-      </tr>
-      <tr>
-          <td><code>&lt;name&gt;</code></td>
-          <td>设备驱动的内部组成部分的名称</td>
-          <td><code>&lt;TYPE&gt;</code></td>
-      </tr>
-      <tr>
-          <td><code>&gt;name</code></td>
-          <td>数据去到 <code>name</code></td>
-          <td><code>&gt;R</code> <code>&gt;TAPE</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>索引指针</td>
-          <td><code>&gt;IN</code></td>
-      </tr>
-      <tr>
-          <td><code>&gt;name&lt;</code></td>
-          <td>交换（尤其指字节）</td>
-          <td><code>&gt;&lt;</code>：交换字节； <code>&gt;MOVE&lt;</code>：移动并交换字节</td>
-      </tr>
-      <tr>
-          <td><code>?name</code></td>
-          <td>检查 <code>name</code> 代表的条件，如果满足则返回真</td>
-          <td><code>?TERMINAL</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>条件满足时执行操作</td>
-          <td><code>?DUP</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>检查 <code>name</code> 代表的条件，如果不满足则中止程序</td>
-          <td><code>?STACK</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>取出 <code>name</code> 的内容并打印</td>
-          <td><code>?N</code></td>
-      </tr>
-      <tr>
-          <td><code>@name</code></td>
-          <td>取出 <code>name</code> 的内容</td>
-          <td><code>@INDEX</code></td>
-      </tr>
-      <tr>
-          <td><code>Cname</code></td>
-          <td>大小为 1 字节</td>
-          <td><code>C@</code></td>
-      </tr>
-      <tr>
-          <td><code>Dname</code></td>
-          <td>大小为 2 个单元</td>
-          <td><code>D+</code></td>
-      </tr>
-      <tr>
-          <td><code>Mname</code></td>
-          <td>单精度与双精度整数的混合运算</td>
-          <td><code>M*</code></td>
-      </tr>
-      <tr>
-          <td><code>Tname</code></td>
-          <td>大小为 3 个单元</td>
-          <td><code>T*</code></td>
-      </tr>
-      <tr>
-          <td><code>Uname</code></td>
-          <td>无符号整数</td>
-          <td><code>U.</code></td>
-      </tr>
-      <tr>
-          <td>[name]</td>
-          <td>在编译时执行（与执行时使用的 name 作用相同的立即词）</td>
-          <td><code>[']</code></td>
-      </tr>
-      <tr>
-          <td>\name</td>
-          <td>无符号减</td>
-          <td><code>\LOOP</code></td>
-      </tr>
-      <tr>
-          <td><code>name!</code></td>
-          <td>存储到 <code>name</code></td>
-          <td><code>B!</code></td>
-      </tr>
-      <tr>
-          <td><code>name&quot;</code></td>
-          <td>后跟字符串，以 <code>&quot;</code> 结束</td>
-          <td><code>ABORT&quot; string&quot;</code></td>
-      </tr>
-      <tr>
-          <td><code>name,</code></td>
-          <td>将内容存入堆中</td>
-          <td><code>C,</code></td>
-      </tr>
-      <tr>
-          <td><code>name:</code></td>
-          <td>开始编译</td>
-          <td><code>NONAME:</code></td>
-      </tr>
-      <tr>
-          <td><code>name&gt;</code></td>
-          <td>右括弧</td>
-          <td><code>#&gt;</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>数据来自 <code>name</code></td>
-          <td><code>R&gt;</code></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>结束一部分内容，开始另一部分内容</td>
-          <td><code>DOES&gt;</code></td>
-      </tr>
-      <tr>
-          <td><code>name?</code></td>
-          <td>与 <code>?name</code> 相同</td>
-          <td><code>B?</code></td>
-      </tr>
-      <tr>
-          <td><code>name@</code></td>
-          <td>取出 <code>name</code> 的内容</td>
-          <td><code>B@</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>格式</th>
+					<th>意义</th>
+					<th>例子</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>!name</code></td>
+					<td>存储到 <code>name</code></td>
+					<td><code>!DATA</code></td>
+			</tr>
+			<tr>
+					<td><code>#name</code></td>
+					<td>大小或数量</td>
+					<td><code>#PIXELS</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>输出数字</td>
+					<td><code>#S</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>缓冲区名称</td>
+					<td><code>#I</code></td>
+			</tr>
+			<tr>
+					<td><code>'name</code></td>
+					<td><code>name</code> 的地址</td>
+					<td><code>'S</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>指向 <code>name</code> 的指针的地址</td>
+					<td><code>'TYPE</code></td>
+			</tr>
+			<tr>
+					<td><code>(name)</code></td>
+					<td><code>name</code> 是内部组成部分，通常不希望用户直接使用</td>
+					<td><code>(IF)</code> <code>(FIND)</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td><code>name</code> 的运行时过程（实例行为对应的程序入口）</td>
+					<td><code>(DOES&gt;)</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>文件索引</td>
+					<td><code>(PEOPLE)</code></td>
+			</tr>
+			<tr>
+					<td><code>*name</code></td>
+					<td>乘</td>
+					<td><code>*DIGIT</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>词需要缩放过的参数</td>
+					<td><code>*DRAW</code></td>
+			</tr>
+			<tr>
+					<td><code>+name</code></td>
+					<td>加</td>
+					<td><code>+LOOP</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>向前移动指针</td>
+					<td><code>+BUF</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>使能</td>
+					<td><code>+CLOCK</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>更强大的</td>
+					<td><code>+INITIALIZE</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>词需要相对的参数</td>
+					<td><code>+DRAW</code></td>
+			</tr>
+			<tr>
+					<td><code>-name</code></td>
+					<td>减、移除</td>
+					<td><code>-TRAILING</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>禁止</td>
+					<td><code>-CLOCK</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>与 <code>name</code> 的作用相反</td>
+					<td><code>-DONE</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>返回取反的标志（非零代表条件不成立，零代表条件成立）</td>
+					<td><code>-MATCH</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>文件中的指针</td>
+					<td><code>-JOB</code></td>
+			</tr>
+			<tr>
+					<td><code>.name</code></td>
+					<td>打印 <code>name</code> 提示的内容</td>
+					<td><code>.S</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>按 <code>name</code> 提示的格式打印栈中内容</td>
+					<td><code>.R</code> <code>.$</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>打印后面的字符串</td>
+					<td><code>.&quot; string&quot;</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>（可以前缀类型提示）</td>
+					<td><code>D.</code> <code>U.</code> <code>U.R</code></td>
+			</tr>
+			<tr>
+					<td><code>/name</code></td>
+					<td>除</td>
+					<td><code>/DIGIT</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>初始化程序或设备</td>
+					<td><code>/COUNTER</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>“每”</td>
+					<td><code>/SIDE</code></td>
+			</tr>
+			<tr>
+					<td><code>1name</code></td>
+					<td>一组元素的第一个</td>
+					<td><code>1SWITCH</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>整数 1</td>
+					<td><code>1+</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>大小为 1 字节</td>
+					<td><code>1@</code></td>
+			</tr>
+			<tr>
+					<td>2name</td>
+					<td>一组元素的第二个</td>
+					<td><code>2SWITCH</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>整数 2</td>
+					<td><code>2/</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>大小为 2 个单元</td>
+					<td><code>2@</code></td>
+			</tr>
+			<tr>
+					<td><code>;name</code></td>
+					<td>结束一部分内容</td>
+					<td><code>;S</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>结束一部分内容，开始另一部分内容</td>
+					<td><code>;CODE</code></td>
+			</tr>
+			<tr>
+					<td><code>&lt;name</code></td>
+					<td>小于</td>
+					<td><code>&lt;LIMIT</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>左括弧</td>
+					<td><code>&lt;#</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>来自设备</td>
+					<td><code>&lt;TAPE</code></td>
+			</tr>
+			<tr>
+					<td><code>&lt;name&gt;</code></td>
+					<td>设备驱动的内部组成部分的名称</td>
+					<td><code>&lt;TYPE&gt;</code></td>
+			</tr>
+			<tr>
+					<td><code>&gt;name</code></td>
+					<td>数据去到 <code>name</code></td>
+					<td><code>&gt;R</code> <code>&gt;TAPE</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>索引指针</td>
+					<td><code>&gt;IN</code></td>
+			</tr>
+			<tr>
+					<td><code>&gt;name&lt;</code></td>
+					<td>交换（尤其指字节）</td>
+					<td><code>&gt;&lt;</code>：交换字节； <code>&gt;MOVE&lt;</code>：移动并交换字节</td>
+			</tr>
+			<tr>
+					<td><code>?name</code></td>
+					<td>检查 <code>name</code> 代表的条件，如果满足则返回真</td>
+					<td><code>?TERMINAL</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>条件满足时执行操作</td>
+					<td><code>?DUP</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>检查 <code>name</code> 代表的条件，如果不满足则中止程序</td>
+					<td><code>?STACK</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>取出 <code>name</code> 的内容并打印</td>
+					<td><code>?N</code></td>
+			</tr>
+			<tr>
+					<td><code>@name</code></td>
+					<td>取出 <code>name</code> 的内容</td>
+					<td><code>@INDEX</code></td>
+			</tr>
+			<tr>
+					<td><code>Cname</code></td>
+					<td>大小为 1 字节</td>
+					<td><code>C@</code></td>
+			</tr>
+			<tr>
+					<td><code>Dname</code></td>
+					<td>大小为 2 个单元</td>
+					<td><code>D+</code></td>
+			</tr>
+			<tr>
+					<td><code>Mname</code></td>
+					<td>单精度与双精度整数的混合运算</td>
+					<td><code>M*</code></td>
+			</tr>
+			<tr>
+					<td><code>Tname</code></td>
+					<td>大小为 3 个单元</td>
+					<td><code>T*</code></td>
+			</tr>
+			<tr>
+					<td><code>Uname</code></td>
+					<td>无符号整数</td>
+					<td><code>U.</code></td>
+			</tr>
+			<tr>
+					<td>[name]</td>
+					<td>在编译时执行（与执行时使用的 name 作用相同的立即词）</td>
+					<td><code>[']</code></td>
+			</tr>
+			<tr>
+					<td>\name</td>
+					<td>无符号减</td>
+					<td><code>\LOOP</code></td>
+			</tr>
+			<tr>
+					<td><code>name!</code></td>
+					<td>存储到 <code>name</code></td>
+					<td><code>B!</code></td>
+			</tr>
+			<tr>
+					<td><code>name&quot;</code></td>
+					<td>后跟字符串，以 <code>&quot;</code> 结束</td>
+					<td><code>ABORT&quot; string&quot;</code></td>
+			</tr>
+			<tr>
+					<td><code>name,</code></td>
+					<td>将内容存入堆中</td>
+					<td><code>C,</code></td>
+			</tr>
+			<tr>
+					<td><code>name:</code></td>
+					<td>开始编译</td>
+					<td><code>NONAME:</code></td>
+			</tr>
+			<tr>
+					<td><code>name&gt;</code></td>
+					<td>右括弧</td>
+					<td><code>#&gt;</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>数据来自 <code>name</code></td>
+					<td><code>R&gt;</code></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>结束一部分内容，开始另一部分内容</td>
+					<td><code>DOES&gt;</code></td>
+			</tr>
+			<tr>
+					<td><code>name?</code></td>
+					<td>与 <code>?name</code> 相同</td>
+					<td><code>B?</code></td>
+			</tr>
+			<tr>
+					<td><code>name@</code></td>
+					<td>取出 <code>name</code> 的内容</td>
+					<td><code>B@</code></td>
+			</tr>
+	</tbody>
 </table>
 <div class="footnotes" role="doc-endnotes">
 <hr>

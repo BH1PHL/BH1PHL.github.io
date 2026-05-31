@@ -1,26 +1,38 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Linux on BH1PHL 的 Blog</title>
-    <link>https://bh1phl.github.io/zh/tags/linux/</link>
-    <description>Recent content in Linux on BH1PHL 的 Blog</description>
-    <generator>Hugo</generator>
-    <language>zh-Hans</language>
-    <lastBuildDate>Wed, 25 Feb 2026 22:50:02 +0800</lastBuildDate>
-    <atom:link href="https://bh1phl.github.io/zh/tags/linux/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>在 VisionFive 2 上用 16GB 傲腾启动 Arch Linux</title>
-      <link>https://bh1phl.github.io/zh/posts/archlinux_on_visionfive_2_optane/</link>
-      <pubDate>Wed, 25 Feb 2026 22:50:02 +0800</pubDate>
-      <guid>https://bh1phl.github.io/zh/posts/archlinux_on_visionfive_2_optane/</guid>
-      <description>&lt;p&gt;cwt 为 &lt;a href=&#34;https://doc.rvspace.org/Doc_Center/visionfive_2.html&#34;&gt;VisionFive 2&lt;/a&gt; RISC-V 单板计算机提供了 &lt;a href=&#34;https://forum.rvspace.org/t/arch-linux-image-for-visionfive-2/1459&#34;&gt;Arch Linux 镜像&lt;/a&gt;。这一镜像中，U-Boot 采用主线版本，与 StarFive 提供的版本相比，在启动时无法识别 16GB 傲腾 M10（MEMPEK1J016GAL）。以下是使用 StarFive 提供的 U-Boot 在 VisionFive 2 上用 16GB 傲腾启动 Arch Linux 的方法。&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>在安装 CachyOS 时指定镜像</title>
-      <link>https://bh1phl.github.io/zh/posts/cachyos_install_specify_mirror/</link>
-      <pubDate>Tue, 07 Oct 2025 20:46:44 +0800</pubDate>
-      <guid>https://bh1phl.github.io/zh/posts/cachyos_install_specify_mirror/</guid>
-      <description>&lt;p&gt;&lt;strong&gt;2026-05-27 更新&lt;/strong&gt;：26.03 版之后的 CachyOS 安装器的寻找镜像功能已针对网络的实际情况&lt;a href=&#34;https://wiki.cachyos.org/cachyos_basic/changelogs/gui_installer/#2603&#34;&gt;进行优化&lt;/a&gt;。&lt;strong&gt;使用 26.03 版之后的 CachyOS Live ISO 进行安装无须下面的步骤。&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://cachyos.org/&#34;&gt;CachyOS&lt;/a&gt; 是一个基于 &lt;a href=&#34;https://archlinux.org/&#34;&gt;Arch Linux&lt;/a&gt; 的不错的 Linux 发行版。安装时，它会寻找全网最快的镜像。由于众所周知的原因，这一步经常会超时，导致安装失败。下面的方法可以在安装时指定镜像：&lt;/p&gt;</description>
-    </item>
-  </channel>
+	<channel>
+		<title>Linux on BH1PHL 的 Blog</title>
+		<link>https://bh1phl.github.io/zh/tags/linux/</link>
+		<description>Recent content in Linux on BH1PHL 的 Blog</description>
+		<generator>Hugo</generator>
+		<language>zh-Hans</language>
+		
+		
+		
+		
+			<lastBuildDate>Sun, 31 May 2026 09:19:41 +0800</lastBuildDate>
+		
+			<atom:link href="https://bh1phl.github.io/zh/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>使用 RTX 2080 Ti 22GiB 部署 Qwen 3.6-27B 语言模型</title>
+				<link>https://bh1phl.github.io/zh/posts/qwen36_27b_on_2080ti_22g/</link>
+				<pubDate>Sun, 31 May 2026 09:19:41 +0800</pubDate>
+				<guid>https://bh1phl.github.io/zh/posts/qwen36_27b_on_2080ti_22g/</guid>
+				<description>&lt;p&gt;&lt;a href=&#34;https://www.modelscope.cn/models/Qwen/Qwen3.6-27B&#34;&gt;Qwen 3.6-27B&lt;/a&gt; 是性能强劲、适合本地部署的语言模型。借助&lt;a href=&#34;https://www.maartengrootendorst.com/blog/quantization/&#34;&gt;量化&lt;/a&gt;、&lt;a href=&#34;https://github.com/ggml-org/llama.cpp/pull/22673&#34;&gt;MTP&lt;/a&gt; 和 &lt;a href=&#34;https://github.com/TheTom/turboquant_plus&#34;&gt;TurboQuant&lt;/a&gt; 等技术，该模型可以在 RTX 2080 Ti 22GiB 上部署并流畅运行。&lt;/p&gt;&#xA;&lt;p&gt;以下步骤在运行 CachyOS 最新版（使用 &lt;a href=&#34;https://cdn77.cachyos.org/ISO/desktop/260426/cachyos-desktop-linux-260426.iso&#34;&gt;260426 ISO&lt;/a&gt; 安装）的电脑上测试通过。&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>在 VisionFive 2 上用 16GB 傲腾启动 Arch Linux</title>
+				<link>https://bh1phl.github.io/zh/posts/archlinux_on_visionfive_2_optane/</link>
+				<pubDate>Wed, 25 Feb 2026 22:50:02 +0800</pubDate>
+				<guid>https://bh1phl.github.io/zh/posts/archlinux_on_visionfive_2_optane/</guid>
+				<description>&lt;p&gt;cwt 为 &lt;a href=&#34;https://doc.rvspace.org/Doc_Center/visionfive_2.html&#34;&gt;VisionFive 2&lt;/a&gt; RISC-V 单板计算机提供了 &lt;a href=&#34;https://forum.rvspace.org/t/arch-linux-image-for-visionfive-2/1459&#34;&gt;Arch Linux 镜像&lt;/a&gt;。这一镜像中，U-Boot 采用主线版本，与 StarFive 提供的版本相比，在启动时无法识别 16GB 傲腾 M10（MEMPEK1J016GAL）。以下是使用 StarFive 提供的 U-Boot 在 VisionFive 2 上用 16GB 傲腾启动 Arch Linux 的方法。&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>在安装 CachyOS 时指定镜像</title>
+				<link>https://bh1phl.github.io/zh/posts/cachyos_install_specify_mirror/</link>
+				<pubDate>Tue, 07 Oct 2025 20:46:44 +0800</pubDate>
+				<guid>https://bh1phl.github.io/zh/posts/cachyos_install_specify_mirror/</guid>
+				<description>&lt;p&gt;&lt;strong&gt;2026-05-27 更新&lt;/strong&gt;：26.03 版之后的 CachyOS 安装器的寻找镜像功能已针对网络的实际情况&lt;a href=&#34;https://wiki.cachyos.org/cachyos_basic/changelogs/gui_installer/#2603&#34;&gt;进行优化&lt;/a&gt;。&lt;strong&gt;使用 26.03 版之后的 CachyOS Live ISO 进行安装无须下面的步骤。&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://cachyos.org/&#34;&gt;CachyOS&lt;/a&gt; 是一个基于 &lt;a href=&#34;https://archlinux.org/&#34;&gt;Arch Linux&lt;/a&gt; 的不错的 Linux 发行版。安装时，它会寻找全网最快的镜像。由于众所周知的原因，这一步经常会超时，导致安装失败。下面的方法可以在安装时指定镜像：&lt;/p&gt;</description>
+			</item>
+	</channel>
 </rss>

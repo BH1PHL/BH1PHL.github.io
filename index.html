@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-	<meta name="generator" content="Hugo 0.161.1">
+	<meta name="generator" content="Hugo 0.162.0">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
@@ -66,8 +66,8 @@
         <a href="/index.xml"><b>RSS</b></a>
       
     
-    |
     
+      |
       
         <a href="/zh/"><b>中文</b></a>
       
@@ -82,8 +82,65 @@
 		
 		
 			<article class="summary">
+  <a href="/posts/qwen36_27b_on_2080ti_22g/">
+    <h1 class="title">Qwen 3.6-27B language model on RTX 2080 Ti 22GiB</h1>
+    
+  </a>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2026-05-31</time>
+    
+    
+  </strong>
+ <span> • 610 words</span>
+ <span> • 3 minute read</span>
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/cachyos">CachyOS</a>, 
+        <a href="/tags/linux">Linux</a>, 
+        <a href="/tags/qwen">Qwen</a>, 
+        <a href="/tags/ai">AI</a>, 
+        <a href="/tags/language-model">Language model</a>
+    </div>
+  
+</div>
+
+  <div class="content">
+    <p><p><a href="https://www.modelscope.cn/models/Qwen/Qwen3.6-27B">Qwen 3.6-27B</a> is a state-of-the-art large language model suitable for local deployment. With technologies such as <a href="https://www.maartengrootendorst.com/blog/quantization/">quantization</a>, <a href="https://github.com/ggml-org/llama.cpp/pull/22673">MTP</a>, and <a href="https://github.com/TheTom/turboquant_plus">TurboQuant</a>, this language model can be deployed and run smoothly on an RTX 2080 Ti with 22GiB VRAM.</p>
+<p>The following steps have been successfully tested on the latest version of CachyOS (installed using the <a href="https://cdn77.cachyos.org/ISO/desktop/260426/cachyos-desktop-linux-260426.iso">260426 ISO</a>).</p>
+<h2 id="installing-dependencies">Installing dependencies</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syu cmake cuda nodejs npm
+</span></span><span class="line"><span class="cl">paru -S python-modelscope
+</span></span></code></pre></div><p>Configure <code>npm</code> mirror if necessary:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">npm config <span class="nb">set</span> registry http://mirrors.cloud.tencent.com/npm/
+</span></span><span class="line"><span class="cl">npm config <span class="nb">set</span> strict-ssl <span class="nb">false</span>
+</span></span></code></pre></div><p>Rebooting or relogging in is recommended for refreshing environment variables.</p></p>
+    
+      <a href="/posts/qwen36_27b_on_2080ti_22g/">Read more...</a>
+    
+  </div>
+</article>
+
+		
+			<article class="summary">
   <a href="/posts/forth_mandelbrot_set/">
-    <h1 class="title">Plotting the Mandelbrot set with Forth</h1>
+    <h1 class="title">Mandelbrot set in Forth</h1>
     
   </a>
   
@@ -106,7 +163,7 @@
     
     
   </strong>
- <span> • 1419 words</span>
+ <span> • 1417 words</span>
  <span> • 3 minute read</span>
   
     <div>
@@ -121,7 +178,7 @@
 </div>
 
   <div class="content">
-    <p><p><a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a> is one of the most famous fractal images. The following Forth program is used to plot the Mandelbrot set.</p>
+    <p><p><a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a> is one of the most famous fractal images. It can be plotted with a simple Forth program.</p>
 <h2 id="representation-of-fixed-point-numbers">Representation of Fixed-Point Numbers</h2>
 <p>Fixed-point numbers in <a href="https://en.wikipedia.org/wiki/Q_%28number_format%29"><code>Qint.frac</code></a> format are used for computation. <code>int</code> is the number of bits for the integer part (including the sign bit, if any), and <code>frac</code> is the number of bits for the fractional part. In the following program, the width of the fixed-point number is 16 bits (the same as a single-precision integer in Forth), i.e., <code>int+frac=16</code>.</p></p>
     
@@ -223,122 +280,122 @@
   <div class="content">
     <p><p>It is often necessary to calibrate the shutter speed when repairing cameras. The table below provides the upper and lower limits of exposure time calculated according to the method specified in ISO 516:2019 &ldquo;Camera shutters — Timing — General definition and mechanical shutter measurements&rdquo;.</p>
 <table>
-  <thead>
-      <tr>
-          <th>Nominal exposure time values/s</th>
-          <th>Calculated exposure time values/s</th>
-          <th>Calculated exposure time values/ms</th>
-          <th>Upper admissible values of exposure times/ms</th>
-          <th>Lower admissible values of exposure times/ms</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>8</td>
-          <td>8</td>
-          <td>8000</td>
-          <td>9850</td>
-          <td>6500</td>
-      </tr>
-      <tr>
-          <td>4</td>
-          <td>4</td>
-          <td>4000</td>
-          <td>4920</td>
-          <td>3250</td>
-      </tr>
-      <tr>
-          <td>2</td>
-          <td>2</td>
-          <td>2000</td>
-          <td>2460</td>
-          <td>1625</td>
-      </tr>
-      <tr>
-          <td>1</td>
-          <td>1</td>
-          <td>1000</td>
-          <td>1231</td>
-          <td>812</td>
-      </tr>
-      <tr>
-          <td>1/2</td>
-          <td>1/2</td>
-          <td>500</td>
-          <td>616</td>
-          <td>406</td>
-      </tr>
-      <tr>
-          <td>1/4</td>
-          <td>1/4</td>
-          <td>250</td>
-          <td>308</td>
-          <td>203</td>
-      </tr>
-      <tr>
-          <td>1/8</td>
-          <td>1/8</td>
-          <td>125</td>
-          <td>154</td>
-          <td>102</td>
-      </tr>
-      <tr>
-          <td>1/15</td>
-          <td>1/16</td>
-          <td>62.5</td>
-          <td>76.9</td>
-          <td>50.8</td>
-      </tr>
-      <tr>
-          <td>1/30</td>
-          <td>1/32</td>
-          <td>31.3</td>
-          <td>38.5</td>
-          <td>25.4</td>
-      </tr>
-      <tr>
-          <td>1/60</td>
-          <td>1/64</td>
-          <td>15.6</td>
-          <td>19.2</td>
-          <td>12.7</td>
-      </tr>
-      <tr>
-          <td>1/125</td>
-          <td>1/128</td>
-          <td>7.81</td>
-          <td>9.62</td>
-          <td>6.35</td>
-      </tr>
-      <tr>
-          <td>1/250</td>
-          <td>1/256</td>
-          <td>3.91</td>
-          <td>5.34</td>
-          <td>2.86</td>
-      </tr>
-      <tr>
-          <td>1/500</td>
-          <td>1/512</td>
-          <td>1.95</td>
-          <td>2.67</td>
-          <td>1.43</td>
-      </tr>
-      <tr>
-          <td>1/1000</td>
-          <td>1/1024</td>
-          <td>0.98</td>
-          <td>1.33</td>
-          <td>0.71</td>
-      </tr>
-      <tr>
-          <td>1/2000</td>
-          <td>1/2048</td>
-          <td>0.49</td>
-          <td>0.67</td>
-          <td>0.36</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>Nominal exposure time values/s</th>
+					<th>Calculated exposure time values/s</th>
+					<th>Calculated exposure time values/ms</th>
+					<th>Upper admissible values of exposure times/ms</th>
+					<th>Lower admissible values of exposure times/ms</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>8</td>
+					<td>8</td>
+					<td>8000</td>
+					<td>9850</td>
+					<td>6500</td>
+			</tr>
+			<tr>
+					<td>4</td>
+					<td>4</td>
+					<td>4000</td>
+					<td>4920</td>
+					<td>3250</td>
+			</tr>
+			<tr>
+					<td>2</td>
+					<td>2</td>
+					<td>2000</td>
+					<td>2460</td>
+					<td>1625</td>
+			</tr>
+			<tr>
+					<td>1</td>
+					<td>1</td>
+					<td>1000</td>
+					<td>1231</td>
+					<td>812</td>
+			</tr>
+			<tr>
+					<td>1/2</td>
+					<td>1/2</td>
+					<td>500</td>
+					<td>616</td>
+					<td>406</td>
+			</tr>
+			<tr>
+					<td>1/4</td>
+					<td>1/4</td>
+					<td>250</td>
+					<td>308</td>
+					<td>203</td>
+			</tr>
+			<tr>
+					<td>1/8</td>
+					<td>1/8</td>
+					<td>125</td>
+					<td>154</td>
+					<td>102</td>
+			</tr>
+			<tr>
+					<td>1/15</td>
+					<td>1/16</td>
+					<td>62.5</td>
+					<td>76.9</td>
+					<td>50.8</td>
+			</tr>
+			<tr>
+					<td>1/30</td>
+					<td>1/32</td>
+					<td>31.3</td>
+					<td>38.5</td>
+					<td>25.4</td>
+			</tr>
+			<tr>
+					<td>1/60</td>
+					<td>1/64</td>
+					<td>15.6</td>
+					<td>19.2</td>
+					<td>12.7</td>
+			</tr>
+			<tr>
+					<td>1/125</td>
+					<td>1/128</td>
+					<td>7.81</td>
+					<td>9.62</td>
+					<td>6.35</td>
+			</tr>
+			<tr>
+					<td>1/250</td>
+					<td>1/256</td>
+					<td>3.91</td>
+					<td>5.34</td>
+					<td>2.86</td>
+			</tr>
+			<tr>
+					<td>1/500</td>
+					<td>1/512</td>
+					<td>1.95</td>
+					<td>2.67</td>
+					<td>1.43</td>
+			</tr>
+			<tr>
+					<td>1/1000</td>
+					<td>1/1024</td>
+					<td>0.98</td>
+					<td>1.33</td>
+					<td>0.71</td>
+			</tr>
+			<tr>
+					<td>1/2000</td>
+					<td>1/2048</td>
+					<td>0.49</td>
+					<td>0.67</td>
+					<td>0.36</td>
+			</tr>
+	</tbody>
 </table>
 <p>Excel spreadsheet can be downloaded <a href="/a/exposure_times/exposure_times.xlsx">here</a>.</p></p>
     
@@ -481,35 +538,35 @@
   <div class="content">
     <p><p>The most common marking system for chip resistors is the three/four-digit marking system, where the first two/three digits are the significant figures, and the last digit is the order of magnitude (in ohms, indicating the number of zeros added after the significant figures). For resistors less than 10 Ω or 100 Ω, the decimal point is represented by the letter R. For example:</p>
 <table>
-  <thead>
-      <tr>
-          <th>Marking 1</th>
-          <th>Marking 2</th>
-          <th>Value</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>681</td>
-          <td>6800</td>
-          <td>680 Ω</td>
-      </tr>
-      <tr>
-          <td>914</td>
-          <td>9103</td>
-          <td>910 kΩ</td>
-      </tr>
-      <tr>
-          <td>R01</td>
-          <td>010, R010</td>
-          <td>10 mΩ</td>
-      </tr>
-      <tr>
-          <td>6R8</td>
-          <td>6R80</td>
-          <td>6.8 Ω</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>Marking 1</th>
+					<th>Marking 2</th>
+					<th>Value</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>681</td>
+					<td>6800</td>
+					<td>680 Ω</td>
+			</tr>
+			<tr>
+					<td>914</td>
+					<td>9103</td>
+					<td>910 kΩ</td>
+			</tr>
+			<tr>
+					<td>R01</td>
+					<td>010, R010</td>
+					<td>10 mΩ</td>
+			</tr>
+			<tr>
+					<td>6R8</td>
+					<td>6R80</td>
+					<td>6.8 Ω</td>
+			</tr>
+	</tbody>
 </table>
 <p>Due to the limited printable area on 0603 chip resistors (0402 and smaller packages generally have no markings), some E96 (1%) 0603 chip resistors use the two-digit plus one-letter marking method described below to save one character. This method is also known as the <strong>EIA-96 SMD Resistor Code</strong>.</p></p>
     
@@ -676,71 +733,31 @@ Q_0(t)= & A \sin(\omega t+\psi).
 <p>Tests have shown that My4TH can operate stably at 20MHz (using the 10MHz ROM image file provided by the original author at baud rate 9600) by increasing Vcc to 5.2V with 74HC series logic circuits and AM27H256-45/35DC.</p>
 <p>This configuation can work at 22.1184MHz with Vcc=5.4V:</p>
 <table>
-  <thead>
-      <tr>
-          <th>U2 U3</th>
-          <th>U4</th>
-          <th>U9</th>
-          <th>U15</th>
-          <th>U16</th>
-          <th>Others</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>74F161A(TI)/ 74AC161(TI)</td>
-          <td>74LVC541A(TI)</td>
-          <td>74ACT08/ 74LVC08</td>
-          <td>AM27H256-45/35DC (needs to be selected)</td>
-          <td>IS61C256AL-12T(L)I/ CY7C199(L)-15ZC</td>
-          <td>74HC series</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>U2 U3</th>
+					<th>U4</th>
+					<th>U9</th>
+					<th>U15</th>
+					<th>U16</th>
+					<th>Others</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>74F161A(TI)/ 74AC161(TI)</td>
+					<td>74LVC541A(TI)</td>
+					<td>74ACT08/ 74LVC08</td>
+					<td>AM27H256-45/35DC (needs to be selected)</td>
+					<td>IS61C256AL-12T(L)I/ CY7C199(L)-15ZC</td>
+					<td>74HC series</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="higher-baud-rate">Higher baud rate</h2>
 <p>By adjusting the delays in serial subroutines, the system can operate at 14400 baud above 16MHz and 19200 at 22.1184MHz.</p></p>
     
       <a href="/posts/my4th_faster/">Read more...</a>
-    
-  </div>
-</article>
-
-		
-			<article class="summary">
-  <a href="/posts/my4th_music/">
-    <h1 class="title">Some experiments on My4TH (2): Playing music</h1>
-    
-  </a>
-  
-
-
-
-
-
-
-
-
-
-  
-
-
-<div class="post-meta">
-  <strong>
-    <span>Posted on</span>
-    <time>2024-12-22</time>
-    
-    
-  </strong>
- <span> • 450 words</span>
- <span> • 3 minute read</span>
-  
-</div>
-
-  <div class="content">
-    <p><p>In the 1960s and 1970s, Broadcast radio receiver was an <a href="https://mp.weixin.qq.com/s/vhCskYx1rM5PPwvGXrFDcw">essential tool</a> for debugging computer memory. Users could use an ordinary broadcast radio to monitor the electromagnetic radiation emitted by the computer, confirming the operational status of magnetic core memory and the bus. Users quickly discovered that this phenomenon could be used to play music (e.g. <a href="https://mp.weixin.qq.com/s/_qp-S85hQ-MsK3NrkBqjlw">here</a> and <a href="https://www.honest-broker.com/p/how-an-ibm-computer-learned-to-sing/comment/13966958">here</a>).</p>
-<p>While My4TH utilizes modern EPROM and SRAM, its bus still generates some electromagnetic radiation. Experiments have shown that a regular AM radio can pick up the electromagnetic radiation caused by status changes in the bus.</p></p>
-    
-      <a href="/posts/my4th_music/">Read more...</a>
     
   </div>
 </article>

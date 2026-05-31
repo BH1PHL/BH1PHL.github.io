@@ -65,12 +65,7 @@
         <a href="/zh/index.xml"><b>RSS</b></a>
       
     
-    |
     
-      
-        <a href="/"><b>English</b></a>
-      
-	
   </nav>
   <hr />
 </header>
@@ -441,70 +436,70 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">stat</span> <span class="o">=</span> <span class="nf">atl_eval</span><span class="p">(</span><span class="n">string</span><span class="p">);</span>
 </span></span></code></pre></div><p>其中 <code>string</code> 是待求值的字符串，<code>stat</code> 为整数，表示求值器的状态。状态码的助记符定义于 <code>atlast.h</code> 中，其含义如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th>状态码</th>
-          <th>意义</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>ATL_SNORM</code></td>
-          <td>无错误</td>
-      </tr>
-      <tr>
-          <td><code>ATL_STACKOVER</code></td>
-          <td>栈溢出</td>
-      </tr>
-      <tr>
-          <td><code>ATL_STACKUNDER</code></td>
-          <td>栈下溢</td>
-      </tr>
-      <tr>
-          <td><code>ATL_RSTACKOVER</code></td>
-          <td>返回栈溢出</td>
-      </tr>
-      <tr>
-          <td><code>ATL_RSTACKUNDER</code></td>
-          <td>返回栈下溢</td>
-      </tr>
-      <tr>
-          <td><code>ATL_HEAPOVER</code></td>
-          <td>堆溢出</td>
-      </tr>
-      <tr>
-          <td><code>ATL_BADPOINTER</code></td>
-          <td>无效堆指针</td>
-      </tr>
-      <tr>
-          <td><code>ATL_UNDEFINED</code></td>
-          <td>未定义词</td>
-      </tr>
-      <tr>
-          <td><code>ATL_FORGETPROT</code></td>
-          <td>尝试 <code>FORGET</code> 受保护符号</td>
-      </tr>
-      <tr>
-          <td><code>ATL_NOTINDEF</code></td>
-          <td>只能在编译模式下使用的词在定义之外出现</td>
-      </tr>
-      <tr>
-          <td><code>ATL_RUNSTRING</code></td>
-          <td>字符串没有结束符</td>
-      </tr>
-      <tr>
-          <td><code>ATL_RUNCOMM</code></td>
-          <td>文件中的注释没有结束符</td>
-      </tr>
-      <tr>
-          <td><code>ATL_BREAK</code></td>
-          <td>接收到异步中断信号</td>
-      </tr>
-      <tr>
-          <td><code>ATL_DIVZERO</code></td>
-          <td>尝试除以零</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>状态码</th>
+					<th>意义</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>ATL_SNORM</code></td>
+					<td>无错误</td>
+			</tr>
+			<tr>
+					<td><code>ATL_STACKOVER</code></td>
+					<td>栈溢出</td>
+			</tr>
+			<tr>
+					<td><code>ATL_STACKUNDER</code></td>
+					<td>栈下溢</td>
+			</tr>
+			<tr>
+					<td><code>ATL_RSTACKOVER</code></td>
+					<td>返回栈溢出</td>
+			</tr>
+			<tr>
+					<td><code>ATL_RSTACKUNDER</code></td>
+					<td>返回栈下溢</td>
+			</tr>
+			<tr>
+					<td><code>ATL_HEAPOVER</code></td>
+					<td>堆溢出</td>
+			</tr>
+			<tr>
+					<td><code>ATL_BADPOINTER</code></td>
+					<td>无效堆指针</td>
+			</tr>
+			<tr>
+					<td><code>ATL_UNDEFINED</code></td>
+					<td>未定义词</td>
+			</tr>
+			<tr>
+					<td><code>ATL_FORGETPROT</code></td>
+					<td>尝试 <code>FORGET</code> 受保护符号</td>
+			</tr>
+			<tr>
+					<td><code>ATL_NOTINDEF</code></td>
+					<td>只能在编译模式下使用的词在定义之外出现</td>
+			</tr>
+			<tr>
+					<td><code>ATL_RUNSTRING</code></td>
+					<td>字符串没有结束符</td>
+			</tr>
+			<tr>
+					<td><code>ATL_RUNCOMM</code></td>
+					<td>文件中的注释没有结束符</td>
+			</tr>
+			<tr>
+					<td><code>ATL_BREAK</code></td>
+					<td>接收到异步中断信号</td>
+			</tr>
+			<tr>
+					<td><code>ATL_DIVZERO</code></td>
+					<td>尝试除以零</td>
+			</tr>
+	</tbody>
 </table>
 <p>除这些状态码外，调用 <code>atl_eval()</code> 的程序可通过检查外部变量确定 Atlast 的当前状态。若正在等待以“<code>)</code>”终止的多行注释，<code>atl_comment</code> 非零。若当前有待处理的词定义（冒号定义），变量 <code>state</code>（仅在定义了 <code>EXPORT</code> 且包含 <code>atldef.h</code> 时可访问）非零。</p>
 <h3 id="加载文件atl_load">加载文件：<code>atl_load()</code></h3>
@@ -817,34 +812,34 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-forth" data-lang="forth"><span class="line"><span class="cl"><span class="c1">\ *area size
 </span></span></span></code></pre></div><p>为了允许处理序言，请勿显式调用 <code>atl_init()</code>，该函数会在序言解析后由<code>atl_eval()</code> 自动触发。序言中支持以下区域定义：</p>
 <table>
-  <thead>
-      <tr>
-          <th>区域</th>
-          <th>意义</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>STACK</code></td>
-          <td>栈的尺寸（<code>long</code> 类型的栈项个数）</td>
-      </tr>
-      <tr>
-          <td><code>RSTACK</code></td>
-          <td>返回栈的尺寸（返回栈指针项的个数）</td>
-      </tr>
-      <tr>
-          <td><code>HEAP</code></td>
-          <td>堆的尺寸（<code>long</code> 类型的项目个数）</td>
-      </tr>
-      <tr>
-          <td><code>TEMPSTRL</code></td>
-          <td>临时字符串缓冲区的长度（字符个数）</td>
-      </tr>
-      <tr>
-          <td><code>TEMPSTRN</code></td>
-          <td>临时字符串缓冲区的数量</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>区域</th>
+					<th>意义</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>STACK</code></td>
+					<td>栈的尺寸（<code>long</code> 类型的栈项个数）</td>
+			</tr>
+			<tr>
+					<td><code>RSTACK</code></td>
+					<td>返回栈的尺寸（返回栈指针项的个数）</td>
+			</tr>
+			<tr>
+					<td><code>HEAP</code></td>
+					<td>堆的尺寸（<code>long</code> 类型的项目个数）</td>
+			</tr>
+			<tr>
+					<td><code>TEMPSTRL</code></td>
+					<td>临时字符串缓冲区的长度（字符个数）</td>
+			</tr>
+			<tr>
+					<td><code>TEMPSTRN</code></td>
+					<td>临时字符串缓冲区的数量</td>
+			</tr>
+	</tbody>
 </table>
 </li>
 <li>
@@ -894,28 +889,28 @@
 <p>第一项基准测试 <code>CSQRT</code> 采用 AutoCAD 的 <code>hmath.c</code> 模块中使用的牛顿-拉夫逊迭代算法计算 2 的平方根，该算法也用于 AutoLISP 示例程序 <code>sqr.lsp</code>。这项测试代表了极端计算密集型代码——这实际上是对宏语言的误用，此类计算通常应转移到用 C 编写的原生函数中。不过了解最坏情况下的表现仍具参考价值。</p>
 <p>第二项基准测试 <code>SSQRT</code> 与 <code>CSQRT</code> 相同，区别在于调用的是系统数学库的 <code>sqrt()</code> 函数而非测试语言自实现的函数。由于三种语言都调用相同的底层系统函数，该测试展示了在比典型宏语言应用更受计算限制、但语言开销低于 100% 的环境中的相对性能。所有测试均在 Sun 3/260 工作站（运行 SunOS 4.0.3 系统）上完成，测试程序清单附于本文末尾。Atlast 的计时数据来自使用“<code>-O4 -f68881</code>”编译选项并禁用堆栈检查的版本；C 程序同样采用“<code>-O4 -f68881</code>”编译；AutoLISP 测试则在 Z.0.65 非生产（<code>NONPRODUCTION</code>）版本（使用“<code>-O -f68881</code>”构建）上运行。下表所有时间数据均已标准化，以 C 语言执行时间为基准值 1。</p>
 <table>
-  <thead>
-      <tr>
-          <th></th>
-          <th>C 语言</th>
-          <th>Atlast</th>
-          <th>AutoLISP</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>CSQRT</code></td>
-          <td>1.00</td>
-          <td>7.41</td>
-          <td>67.08</td>
-      </tr>
-      <tr>
-          <td><code>SSQRT</code></td>
-          <td>1.00</td>
-          <td>1.00</td>
-          <td>1.52</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th></th>
+					<th>C 语言</th>
+					<th>Atlast</th>
+					<th>AutoLISP</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>CSQRT</code></td>
+					<td>1.00</td>
+					<td>7.41</td>
+					<td>67.08</td>
+			</tr>
+			<tr>
+					<td><code>SSQRT</code></td>
+					<td>1.00</td>
+					<td>1.00</td>
+					<td>1.52</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="总结与结论">总结与结论</h2>
 <p><strong>万物</strong>皆应可编程！我得出结论：以封闭方式编写几乎任何程序都是错误的，这会导致在其生命周期中耗费无数时间进行“增强”。后续的调整、“增加功能”和“修复”往往会使产品变得臃肿难懂，最终导致无法学习、无法维护乃至无法使用。</p>

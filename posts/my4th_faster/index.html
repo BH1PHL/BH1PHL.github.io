@@ -65,8 +65,8 @@
         <a href="/index.xml"><b>RSS</b></a>
       
     
-    |
     
+      |
       
         <a href="/zh/posts/my4th_faster/"><b>中文</b></a>
       
@@ -105,26 +105,26 @@
 <p>Tests have shown that My4TH can operate stably at 20MHz (using the 10MHz ROM image file provided by the original author at baud rate 9600) by increasing Vcc to 5.2V with 74HC series logic circuits and AM27H256-45/35DC.</p>
 <p>This configuation can work at 22.1184MHz with Vcc=5.4V:</p>
 <table>
-  <thead>
-      <tr>
-          <th>U2 U3</th>
-          <th>U4</th>
-          <th>U9</th>
-          <th>U15</th>
-          <th>U16</th>
-          <th>Others</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>74F161A(TI)/ 74AC161(TI)</td>
-          <td>74LVC541A(TI)</td>
-          <td>74ACT08/ 74LVC08</td>
-          <td>AM27H256-45/35DC (needs to be selected)</td>
-          <td>IS61C256AL-12T(L)I/ CY7C199(L)-15ZC</td>
-          <td>74HC series</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>U2 U3</th>
+					<th>U4</th>
+					<th>U9</th>
+					<th>U15</th>
+					<th>U16</th>
+					<th>Others</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>74F161A(TI)/ 74AC161(TI)</td>
+					<td>74LVC541A(TI)</td>
+					<td>74ACT08/ 74LVC08</td>
+					<td>AM27H256-45/35DC (needs to be selected)</td>
+					<td>IS61C256AL-12T(L)I/ CY7C199(L)-15ZC</td>
+					<td>74HC series</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="higher-baud-rate">Higher baud rate</h2>
 <p>By adjusting the delays in serial subroutines, the system can operate at 14400 baud above 16MHz and 19200 at 22.1184MHz.</p>

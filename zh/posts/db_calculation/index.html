@@ -82,8 +82,8 @@
         <a href="/zh/index.xml"><b>RSS</b></a>
       
     
-    |
     
+      |
       
         <a href="/posts/db_calculation/"><b>English</b></a>
       
@@ -124,40 +124,40 @@
 <p>一个容易混乱的点是，为什么计算功率（能量）比例的时候分贝数是 \(10 \lg\) 比例，计算电压比例的时候就变成了 \(20 \lg\) 比例？这是因为 \(P=U^2/R\)，电压比例 \(10\)  倍<strong>就是</strong>功率比例 \(100\) 倍。记住这一点就不会引起混乱了。</p>
 <p>口算时，需要知道几个常见的 dB 数和比例的关系，至少记住 3 dB 是 \(2\) 倍，10 dB 是 \(10\) 倍两个：</p>
 <table>
-  <thead>
-      <tr>
-          <th>dB（功率）</th>
-          <th>dB（电压）</th>
-          <th>倍数（大约）</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>1</td>
-          <td>2</td>
-          <td>\(5/4\)</td>
-      </tr>
-      <tr>
-          <td>3</td>
-          <td>6</td>
-          <td>\(2\)</td>
-      </tr>
-      <tr>
-          <td>5</td>
-          <td>10</td>
-          <td>\(3\)</td>
-      </tr>
-      <tr>
-          <td>7</td>
-          <td>14</td>
-          <td>\(5\)</td>
-      </tr>
-      <tr>
-          <td>10</td>
-          <td>20</td>
-          <td>\(10\)</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>dB（功率）</th>
+					<th>dB（电压）</th>
+					<th>倍数（大约）</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>1</td>
+					<td>2</td>
+					<td>\(5/4\)</td>
+			</tr>
+			<tr>
+					<td>3</td>
+					<td>6</td>
+					<td>\(2\)</td>
+			</tr>
+			<tr>
+					<td>5</td>
+					<td>10</td>
+					<td>\(3\)</td>
+			</tr>
+			<tr>
+					<td>7</td>
+					<td>14</td>
+					<td>\(5\)</td>
+			</tr>
+			<tr>
+					<td>10</td>
+					<td>20</td>
+					<td>\(10\)</td>
+			</tr>
+	</tbody>
 </table>
 <p>再知道分贝加减相当于倍数乘除，负分贝数相当于多少分之一，通过将分贝数拆成表中数字之和以及内插，就可以实现口算了。</p>
 <p>例如：</p>

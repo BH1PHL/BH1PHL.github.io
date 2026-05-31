@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Qwen on BH1PHL 的 Blog</title>
+		<link>https://bh1phl.github.io/zh/tags/qwen/</link>
+		<description>Recent content in Qwen on BH1PHL 的 Blog</description>
+		<generator>Hugo</generator>
+		<language>zh-Hans</language>
+		
+		
+		
+		
+			<lastBuildDate>Sun, 31 May 2026 09:19:41 +0800</lastBuildDate>
+		
+			<atom:link href="https://bh1phl.github.io/zh/tags/qwen/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>使用 RTX 2080 Ti 22GiB 部署 Qwen 3.6-27B 语言模型</title>
+				<link>https://bh1phl.github.io/zh/posts/qwen36_27b_on_2080ti_22g/</link>
+				<pubDate>Sun, 31 May 2026 09:19:41 +0800</pubDate>
+				<guid>https://bh1phl.github.io/zh/posts/qwen36_27b_on_2080ti_22g/</guid>
+				<description>&lt;p&gt;&lt;a href=&#34;https://www.modelscope.cn/models/Qwen/Qwen3.6-27B&#34;&gt;Qwen 3.6-27B&lt;/a&gt; 是性能强劲、适合本地部署的语言模型。借助&lt;a href=&#34;https://www.maartengrootendorst.com/blog/quantization/&#34;&gt;量化&lt;/a&gt;、&lt;a href=&#34;https://github.com/ggml-org/llama.cpp/pull/22673&#34;&gt;MTP&lt;/a&gt; 和 &lt;a href=&#34;https://github.com/TheTom/turboquant_plus&#34;&gt;TurboQuant&lt;/a&gt; 等技术，该模型可以在 RTX 2080 Ti 22GiB 上部署并流畅运行。&lt;/p&gt;&#xA;&lt;p&gt;以下步骤在运行 CachyOS 最新版（使用 &lt;a href=&#34;https://cdn77.cachyos.org/ISO/desktop/260426/cachyos-desktop-linux-260426.iso&#34;&gt;260426 ISO&lt;/a&gt; 安装）的电脑上测试通过。&lt;/p&gt;</description>
+			</item>
+	</channel>
+</rss>

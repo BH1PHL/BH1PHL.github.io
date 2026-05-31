@@ -65,8 +65,8 @@
         <a href="/zh/index.xml"><b>RSS</b></a>
       
     
-    |
     
+      |
       
         <a href="/posts/my4th_faster/"><b>English</b></a>
       
@@ -105,26 +105,26 @@
 <p>试验表明，使用 74HC 系列逻辑电路和 AM27H256-45/35DC，把电源电压提高到 5.2V，系统就可以稳定工作在 20MHz（使用原作者提供的 10MHz ROM 镜像文件，波特率 9600）。</p>
 <p>电源电压进一步提高到 5.4V，下面的配置可以让系统工作在 22.1184MHz：</p>
 <table>
-  <thead>
-      <tr>
-          <th>U2 U3</th>
-          <th>U4</th>
-          <th>U9</th>
-          <th>U15</th>
-          <th>U16</th>
-          <th>其他</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>74F161A(TI)/ 74AC161(TI)</td>
-          <td>74LVC541A(TI)</td>
-          <td>74ACT08/ 74LVC08</td>
-          <td>AM27H256-45/35DC （需筛选）</td>
-          <td>IS61C256AL-12T(L)I/ CY7C199(L)-15ZC</td>
-          <td>74HC系列</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>U2 U3</th>
+					<th>U4</th>
+					<th>U9</th>
+					<th>U15</th>
+					<th>U16</th>
+					<th>其他</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>74F161A(TI)/ 74AC161(TI)</td>
+					<td>74LVC541A(TI)</td>
+					<td>74ACT08/ 74LVC08</td>
+					<td>AM27H256-45/35DC （需筛选）</td>
+					<td>IS61C256AL-12T(L)I/ CY7C199(L)-15ZC</td>
+					<td>74HC系列</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="更高的波特率">更高的波特率</h2>
 <p>通过调整串口操作子例程中的延迟，系统在 16MHz 以上可以工作在 14400 波特率，在 22.1184MHz 可以工作在 19200 波特率。</p>
