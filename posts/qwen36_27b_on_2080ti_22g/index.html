@@ -88,7 +88,7 @@
     
     
   </strong>
-  <span> • 760 words</span>
+  <span> • 765 words</span>
   <span> • 4 minute read</span>
   
   
@@ -131,14 +131,15 @@
 </span></span><span class="line"><span class="cl">./llama-server -m ~/Qwen3.6/Qwen3.6-27B-4bpw-MTP.gguf <span class="se">\
 </span></span></span><span class="line"><span class="cl">    -mm ~/Qwen3.6/mmproj-Qwen-Qwen3.6-27B-Q6_K.gguf <span class="se">\
 </span></span></span><span class="line"><span class="cl">    -ngl all -fa on --spec-type draft-mtp --spec-draft-n-max <span class="m">3</span> -np <span class="m">1</span> -kvu <span class="se">\
+</span></span></span><span class="line"><span class="cl">    --ctx-checkpoints <span class="m">64</span> --threads-http <span class="m">2</span> <span class="se">\
 </span></span></span><span class="line"><span class="cl">    -ctk q8_0 -ctv turbo3 <span class="se">\
 </span></span></span><span class="line"><span class="cl">    -c <span class="m">190208</span> <span class="se">\
 </span></span></span><span class="line"><span class="cl">    --temp 0.6 --top-p 0.95 --top-k <span class="m">20</span> --min-p <span class="m">0</span> <span class="se">\
 </span></span></span><span class="line"><span class="cl">    --host 0.0.0.0 --port <span class="m">22345</span> <span class="se">\
 </span></span></span><span class="line"><span class="cl">    --api-key <span class="s2">&#34;sk-jintianshifengkuangxingqisivivo50&#34;</span> <span class="se">\
 </span></span></span><span class="line"><span class="cl">    -a qwen3.6:27b <span class="se">\
-</span></span></span><span class="line"><span class="cl">    --jinja --chat-template-file ~/Qwen3.6/3.6_chat_template-v10.jinja <span class="se">\
-</span></span></span><span class="line"><span class="cl">    --reasoning auto --reasoning-format deepseek
+</span></span></span><span class="line"><span class="cl">    --jinja --chat-template-file ~/Qwen3.6/chat_template.jinja <span class="se">\
+</span></span></span><span class="line"><span class="cl">    --reasoning on --reasoning-format deepseek
 </span></span></code></pre></div><p>Please modify API key followed by <code>--api-key</code>. If authentication is not needed, just delete <code>--api-key</code> argument.</p>
 <h2 id="usage">Usage</h2>
 <p>Visit port 22345 (e.g., <code>http://127.0.0.1:22345</code>) in the Web browser for <code>llama.cpp</code> Web UI.</p>
@@ -146,7 +147,7 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo ufw allow <span class="m">22345</span>
 </span></span></code></pre></div><p><code>llama-server</code> supports <code>OpenAI</code> and <code>Anthropic</code> APIs, allowing user to use many AI clients with it.</p>
 <h3 id="turning-onoff-thinking-with-the-chat-template">Turning on/off Thinking with the Chat Template</h3>
-<p>Chat template <code>3.6_chat_template-v10.jinja</code> (from <a href="https://github.com/BoFan-tunning/llama.cpp-MTP-TurboQuant">BoFan-tunning/llama.cpp-MTP-TurboQuant</a>) provides on-the-fly thinking mode switch by adding <code>&lt;|think_on|&gt;</code> or <code>&lt;|think_off|&gt;</code> in the input stream to turn on/off thinking. This template can also automatically turn off/on thinking if the input length ≤30 / ≥300 characters.</p>
+<p>Chat template <code>chat_template.jinja</code> in the model repo (modified from <a href="https://github.com/BoFan-tunning/llama.cpp-MTP-TurboQuant">BoFan-tunning/llama.cpp-MTP-TurboQuant</a>, removed auto think switch for stable context cache reuse in <code>opencode</code>) provides on-the-fly thinking mode switching by adding <code>&lt;|think_on|&gt;</code> or <code>&lt;|think_off|&gt;</code> in the input stream to turn on/off thinking.</p>
 <h3 id="configuring-opencode">Configuring OpenCode</h3>
 <p>Install <code>opencode</code>. <code>rtk</code> is recommended for reducing token consumption.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">paru -S opencode-bin rtk
