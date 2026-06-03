@@ -88,7 +88,7 @@
     
     
   </strong>
-  <span> • 973 words</span>
+  <span> • 975 words</span>
   <span> • 5 minute read</span>
   
   
@@ -189,7 +189,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ttl</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">filters</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">setParamsByID</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="s2">&#34;${MODEL_ID}&#34;</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="s2">&#34;${MODEL_ID}:thinking&#34;</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">chat_template_kwargs</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">enable_thinking</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="s2">&#34;${MODEL_ID}:instruct&#34;</span><span class="p">:</span><span class="w">
@@ -211,7 +211,7 @@
 <p>Modify <code>~/.config/opencode/opencode.json</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="nt">&#34;$schema&#34;</span><span class="p">:</span> <span class="s2">&#34;https://opencode.ai/config.json&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;model&#34;</span><span class="p">:</span> <span class="s2">&#34;llama.cpp/qwen3.6-27b&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;model&#34;</span><span class="p">:</span> <span class="s2">&#34;llama.cpp/qwen3.6-27b:thinking&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="nt">&#34;small_model&#34;</span><span class="p">:</span> <span class="s2">&#34;llama.cpp/qwen3.6-27b:instruct&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="nt">&#34;provider&#34;</span><span class="p">:</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&#34;llama.cpp&#34;</span><span class="p">:</span> <span class="p">{</span>
@@ -222,8 +222,8 @@
 </span></span><span class="line"><span class="cl">        <span class="nt">&#34;apiKey&#34;</span><span class="p">:</span> <span class="s2">&#34;sk-jintianshifengkuangxingqisivivo50&#34;</span>
 </span></span><span class="line"><span class="cl">      <span class="p">},</span>
 </span></span><span class="line"><span class="cl">      <span class="nt">&#34;models&#34;</span><span class="p">:</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="nt">&#34;qwen3.6-27b&#34;</span><span class="p">:</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">          <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Qwen3.6 27B&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;qwen3.6-27b:thinking&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Qwen3.6 27B (thinking mode)&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">          <span class="nt">&#34;modalities&#34;</span><span class="p">:</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="nt">&#34;input&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;text&#34;</span><span class="p">,</span> <span class="s2">&#34;image&#34;</span><span class="p">],</span>
 </span></span><span class="line"><span class="cl">            <span class="nt">&#34;output&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;text&#34;</span><span class="p">]</span>
