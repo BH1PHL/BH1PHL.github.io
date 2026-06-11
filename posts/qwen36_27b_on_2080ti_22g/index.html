@@ -88,7 +88,7 @@
     
     
   </strong>
-  <span> • 975 words</span>
+  <span> • 1030 words</span>
   <span> • 5 minute read</span>
   
   
@@ -117,12 +117,21 @@
 <h2 id="compiling-llama-cpp-turboquant">Compiling <code>llama-cpp-turboquant</code></h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span>
 </span></span><span class="line"><span class="cl">git clone https://github.com/TheTom/llama-cpp-turboquant.git
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Updated 2016/06/11: The latest version of llama-cpp-turboquant (9450 73eb521)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># has some performance issues on decoding with MTP.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># It is recommended to use version 9438 ab11a71, which has slightly improved</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># prefilling performance compared to version 9418 2cbfdc6 in the performance test.</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> llama-cpp-turboquant
+</span></span><span class="line"><span class="cl">git checkout ab11a71
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># Following three lines for compiling Web UI frontend</span>
-</span></span><span class="line"><span class="cl"><span class="nb">cd</span> llama-cpp-turboquant/tools/ui
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> tools/ui
 </span></span><span class="line"><span class="cl">npm i
 </span></span><span class="line"><span class="cl">npm run build
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> ../..
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">CUDACXX</span><span class="o">=</span><span class="s2">&#34;/opt/cuda/bin/nvcc&#34;</span>
 </span></span><span class="line"><span class="cl">cmake -B build -DGGML_CUDA<span class="o">=</span>ON -DLLAMA_BUILD_WEBUI<span class="o">=</span>ON <span class="o">&amp;&amp;</span> cmake --build build --config Release -j --target llama-server llama-cli
 </span></span></code></pre></div><p>Executables are in <code>build/bin</code> directory.</p>
 <h2 id="downloading-the-model">Downloading the Model</h2>
@@ -259,7 +268,7 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">llama-swap --config llama-swap-config.yaml --listen 0.0.0.0:22345
 </span></span></code></pre></div><p>Now <code>opencode</code> is configured. Lightweight tasks like title generation use the non-thinking variant of the model.</p>
 <h2 id="performance">Performance</h2>
-<p>The environment for performance testing is: CPU i5-12500H (using integrated graphics for video output), GPU RTX 2080 Ti 22GiB, Kernel Linux 7.0.10-1-cachyos.</p>
+<p>The environment for performance testing is: CPU i5-12500H (using integrated graphics for video output), GPU RTX 2080 Ti 22GiB, Kernel Linux 7.0.10-1-cachyos, <code>llama-cpp-turboquant</code> version 9418 2cbfdc6.</p>
 <p>MTP significantly improves the decoding performance and overall performance of the model at the cost of slightly increased VRAM usage and a small reduction in prefill speed.</p>
 <table>
 	<thead>

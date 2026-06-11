@@ -88,7 +88,7 @@
     
     
   </strong>
-  <span> • 1586 words</span>
+  <span> • 1703 words</span>
   <span> • 4 minute read</span>
   
   
@@ -116,12 +116,19 @@
 <h2 id="编译-llama-cpp-turboquant">编译 <code>llama-cpp-turboquant</code></h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span>
 </span></span><span class="line"><span class="cl">git clone https://github.com/TheTom/llama-cpp-turboquant.git
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2026/06/11 更新：llama-cpp-turboquant 最新版（9450 73eb521）的 MTP 解码存在一定的性能问题。</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 建议使用 9438 ab11a71 版，该版的预填充性能比性能测试中使用的 9418 2cbfdc6 版略有提升。</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> llama-cpp-turboquant
+</span></span><span class="line"><span class="cl">git checkout ab11a71
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 下面三行用于编译 Web UI 前端</span>
-</span></span><span class="line"><span class="cl"><span class="nb">cd</span> llama-cpp-turboquant/tools/ui
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> tools/ui
 </span></span><span class="line"><span class="cl">npm i
 </span></span><span class="line"><span class="cl">npm run build
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> ../..
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">CUDACXX</span><span class="o">=</span><span class="s2">&#34;/opt/cuda/bin/nvcc&#34;</span>
 </span></span><span class="line"><span class="cl">cmake -B build -DGGML_CUDA<span class="o">=</span>ON -DLLAMA_BUILD_WEBUI<span class="o">=</span>ON <span class="o">&amp;&amp;</span> cmake --build build --config Release -j --target llama-server llama-cli
 </span></span></code></pre></div><p>编译产物在 <code>build/bin</code> 目录下。</p>
 <h2 id="下载模型">下载模型</h2>
@@ -257,7 +264,7 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">llama-swap --config llama-swap-config.yaml --listen 0.0.0.0:22345
 </span></span></code></pre></div><p>此时 <code>opencode</code> 可正常使用。创建标题等使用 <code>small_model</code> 的简单任务会调用模型的非思考变体。</p>
 <h2 id="性能">性能</h2>
-<p>性能测试的环境为：CPU i5-12500H (视频输出使用核显), GPU RTX 2080 Ti 22GiB, 内核 Linux 7.0.10-1-cachyos.</p>
+<p>性能测试的环境为：CPU i5-12500H (视频输出使用核显), GPU RTX 2080 Ti 22GiB, 内核 Linux 7.0.10-1-cachyos， <code>llama-cpp-turboquant</code> 9418 2cbfdc6 版。</p>
 <p>MTP 以少量的显存占用和略微降低预填充速度为代价，显著提高了模型的解码性能和总体性能。</p>
 <table>
 	<thead>
