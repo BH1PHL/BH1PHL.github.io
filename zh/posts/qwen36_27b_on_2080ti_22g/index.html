@@ -108,7 +108,7 @@
 <p>以下步骤在运行 CachyOS 最新版（使用 <a href="https://cdn77.cachyos.org/ISO/desktop/260426/cachyos-desktop-linux-260426.iso">260426 ISO</a> 安装）的电脑上测试通过。</p>
 <h2 id="安装依赖">安装依赖</h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syu cmake cuda nodejs npm
-</span></span><span class="line"><span class="cl">paru -S python-modelscope
+</span></span><span class="line"><span class="cl">paru -Sy python-modelscope
 </span></span></code></pre></div><p>必要时配置 <code>npm</code> 镜像：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">npm config <span class="nb">set</span> registry https://mirrors.cloud.tencent.com/npm/
 </span></span><span class="line"><span class="cl">npm config <span class="nb">set</span> strict-ssl <span class="nb">false</span>
@@ -158,7 +158,7 @@
 <p>使用 <a href="https://cherry-ai.com">Cherry Studio</a> 时，为正确开关思考模式，建议选择“英伟达”为提供商，API 地址填写 llama-server 的地址（详见 <a href="https://github.com/CherryHQ/cherry-studio/issues/14981">Issue #14981</a>)。</p>
 <h2 id="配置-opencode">配置 OpenCode</h2>
 <p>首先安装 <code>opencode</code>。安装 <code>llama-swap</code> 来给模型创建思考和非思考的两个变体。建议同时安装 <code>rtk</code> 以节约 token 使用。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">paru -S opencode-bin llama-swap-bin rtk
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">paru -Sy opencode-bin llama-swap-bin rtk
 </span></span><span class="line"><span class="cl">rtk init -g --opencode	<span class="c1"># 为 opencode 初始化 rtk</span>
 </span></span></code></pre></div><p>创建 <code>llama-swap-config.yaml</code>：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">captureBuffer</span><span class="p">:</span><span class="w"> </span><span class="m">20</span><span class="w">
