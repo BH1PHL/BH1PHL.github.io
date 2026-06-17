@@ -88,8 +88,8 @@
     
     
   </strong>
-  <span> • 1028 words</span>
-  <span> • 5 minute read</span>
+  <span> • 1066 words</span>
+  <span> • 6 minute read</span>
   
   
     <div>
@@ -117,13 +117,18 @@
 <h2 id="compiling-llama-cpp-turboquant">Compiling <code>llama-cpp-turboquant</code></h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span>
 </span></span><span class="line"><span class="cl">git clone https://github.com/TheTom/llama-cpp-turboquant.git
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> llama-cpp-turboquant
 </span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Updated 2026-06-17: The latest version of llama-cpp-turboquant (9901 35ac80d)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># fixed the performance issue on decoding with a slightly larger GPU memory footprint</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># (see https://github.com/TheTom/llama-cpp-turboquant/issues/177).</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># The context length may need to be adjusted.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># Updated 2026-06-11: The latest version of llama-cpp-turboquant (9450 73eb521)</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># has some performance issues on decoding.</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># It is recommended to use version 9438 ab11a71, which has slightly improved</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># prefilling performance compared to version 9418 2cbfdc6 in the performance test.</span>
-</span></span><span class="line"><span class="cl"><span class="nb">cd</span> llama-cpp-turboquant
-</span></span><span class="line"><span class="cl">git checkout ab11a71
+</span></span><span class="line"><span class="cl"><span class="c1"># git checkout ab11a71</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># Following three lines for compiling Web UI frontend</span>
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> tools/ui

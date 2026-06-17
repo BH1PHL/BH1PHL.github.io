@@ -88,7 +88,7 @@
     
     
   </strong>
-  <span> • 1702 words</span>
+  <span> • 1847 words</span>
   <span> • 4 minute read</span>
   
   
@@ -116,11 +116,15 @@
 <h2 id="编译-llama-cpp-turboquant">编译 <code>llama-cpp-turboquant</code></h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span>
 </span></span><span class="line"><span class="cl">git clone https://github.com/TheTom/llama-cpp-turboquant.git
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 2026-06-11 更新：llama-cpp-turboquant 最新版（9450 73eb521）的解码存在一定的性能问题。</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 建议使用 9438 ab11a71 版，该版的预填充性能比性能测试中使用的 9418 2cbfdc6 版略有提升。</span>
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> llama-cpp-turboquant
-</span></span><span class="line"><span class="cl">git checkout ab11a71
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2026-06-17 更新：llama-cpp-turboquant 的当前最新版（9901 35ac80d）的解码性能问题已经修复。</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 该版本显存占用稍高（参见 https://github.com/TheTom/llama-cpp-turboquant/issues/177），</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 上下文长度可能需要调整。</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 2026-06-11 更新：llama-cpp-turboquant 的当前最新版（9450 73eb521）的解码存在一定的性能问题。</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 建议使用 9438 ab11a71 版，该版的预填充性能比性能测试中使用的 9418 2cbfdc6 版略有提升。</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># git checkout ab11a71</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 下面三行用于编译 Web UI 前端</span>
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> tools/ui
@@ -128,8 +132,7 @@
 </span></span><span class="line"><span class="cl">npm run build
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> ../..
-</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">CUDACXX</span><span class="o">=</span><span class="s2">&#34;/opt/cuda/bin/nvcc&#34;</span>
-</span></span><span class="line"><span class="cl">cmake -B build -DGGML_CUDA<span class="o">=</span>ON -DLLAMA_BUILD_WEBUI<span class="o">=</span>ON <span class="o">&amp;&amp;</span> cmake --build build --config Release -j --target llama-server llama-cli
+</span></span><span class="line"><span class="cl"><span class="nv">CUDACXX</span><span class="o">=</span><span class="s2">&#34;/opt/cuda/bin/nvcc&#34;</span> cmake -B build -DGGML_CUDA<span class="o">=</span>ON -DLLAMA_BUILD_WEBUI<span class="o">=</span>ON <span class="o">&amp;&amp;</span> cmake --build build --config Release -j --target llama-server llama-cli
 </span></span></code></pre></div><p>编译产物在 <code>build/bin</code> 目录下。</p>
 <h2 id="下载模型">下载模型</h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">modelscope download --model Tariel/Qwen3.6-27B-4bpw-MTP.gguf --local_dir ~/Qwen3.6
